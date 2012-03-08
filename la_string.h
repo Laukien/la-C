@@ -21,7 +21,7 @@
 char *string_toLower(char *str);
 char *string_toUpper(char *str);
 char *string_trim(char *str);
-char *string_replace_first(char *string, char *from, char *to);
+char *string_replaceFirst(char *string, char *from, char *to);
 char *string_replace(char *string, char *from, char *to);
 
 #endif

@@ -78,7 +78,7 @@ char *string_trim(char *str) {
 	return trim;
 }
 
-char *string_replace_first(char *string, char *from, char *to) {
+char *string_replaceFirst(char *string, char *from, char *to) {
 	int string_size = strlen(string);
 	int from_size = strlen(from);
 	int to_size = strlen(to);
