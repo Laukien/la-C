@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  la_file.c
+ *       Filename:  la_common.h
  *
- *    Description:  Input-/Output...file-operations
+ *    Description:  common definitions
  *
  *        Version:  1.0
- *        Created:  11/11/2011 02:25:56 PM
+ *        Created:  03/09/2012 09:40:12 AM
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -16,15 +16,12 @@
  * =====================================================================================
  */
 
-#include "la_file.h"
+#ifndef LA_COMMON_H
+#define LA_COMMON_H
 
-#include <stdio.h>
-#include <stdlib.h>
+/* boolean type */
+#define BOOL int
+#define TRUE 1
+#define FALSE 0 
 
-int file_exists(char *filename) {
-	FILE *pFile = fopen(filename, "r");
-	if ( pFile == NULL) return 0;
-
-	fclose(pFile);
-	return 1;
-}
+#endif
