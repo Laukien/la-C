@@ -26,14 +26,14 @@
 char *string_toLower(char *str) {
 	int len = strlen(str);	
 
-	char *result = malloc ( len );
+	char *result = malloc ( len + 1);
 	if ( result==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (str_tolower)\n" );
 		exit (EXIT_FAILURE);
 	}
 
 	int i;
-	for ( i=0; i<len; i++ ) {
+	for ( i = 0; i < len; ++i ) {
 		result[i] = tolower(str[i]);
 	}
 
@@ -43,14 +43,14 @@ char *string_toLower(char *str) {
 char *string_toUpper(char *str) {
 	int len = strlen(str);	
 
-	char *result = malloc ( len );
+	char *result = malloc ( len + 1 );
 	if ( result==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (str_toupper)\n" );
 		exit (EXIT_FAILURE);
 	}
 
 	int i;
-	for ( i=0; i<len; i++ ) {
+	for ( i = 0; i <= len; ++i ) {
 		result[i] = toupper(str[i]);
 	}
 
@@ -113,7 +113,7 @@ char *string_replace(char *string, char *from, char *to) {
 	int string_size = strlen(string);
 	int from_size = strlen(from);
 	int to_size = strlen(to);
-	int result_size = string_size - from_size + to_size;
+	int result_size = string_size;
 	char *result;
 	result = malloc(string_size + 1);
 	if (result == NULL) {
@@ -125,6 +125,7 @@ char *string_replace(char *string, char *from, char *to) {
 	if (begin == NULL) {                        /* 'from' doesn't exists */
 		strcpy(result, string);                 /* copy  */
 	} else {
+		int count = 0;
 		int idx = begin - string;
 		memcpy(result, string, idx);
 		while (begin != NULL) {
@@ -134,14 +135,15 @@ char *string_replace(char *string, char *from, char *to) {
 				printf ( "ERROR: Unable to get memory.\n" );
 				exit(EXIT_FAILURE);
 			}
+//			memset(result, '\0', result_size);
 			memcpy(result + idx, to, to_size);
-			memcpy(result + idx + to_size, begin + from_size, string_size - from_size - idx);
+			memcpy(result + idx + to_size, begin + from_size, string_size - idx+(count * (to_size - from_size)));
 			begin = strstr(begin + from_size, from);
-			idx = begin - string;
+			++count;
+			idx = begin - string + (count * (to_size - from_size));
 		}
 		result[result_size] = '\0';
 	}
 
 	return result;
 }
-
