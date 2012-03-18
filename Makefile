@@ -27,6 +27,7 @@ all: 32bit 64bit example clean
 example:
 	@echo EXAMPLE
 	$(CC) $(CFLAGS) -m32 -o example_string_1 example_string_1.c la_32.a
+	$(CC) $(CFLAGS) -m32 -o example_parameter_1 example_parameter_1.c la_32.a
 
 clean:
 	@echo CLEAN

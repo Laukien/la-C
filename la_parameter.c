@@ -19,19 +19,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include "la_parameter.h"
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  newParameter
+ *         Name:  new
  *  Description:  
  * =====================================================================================
  */
-PARAMETER *newParameter ()
-{
-	PARAMETER *param = (PARAMETER*)malloc ( sizeof(PARAMETER) );
+LA_PARAMETER *parameter_new () {
+	LA_PARAMETER *param = (LA_PARAMETER*) malloc ( sizeof(LA_PARAMETER) );
 	if ( param==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);
@@ -42,26 +40,23 @@ PARAMETER *newParameter ()
 	param->next = NULL;
 
 	return param;
-}		/* -----  end of function newParameter  ----- */
+}		/* -----  end of function new  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  addParameter
+ *         Name:  add
  *  Description:  
  * =====================================================================================
  */
-void addParameter (PARAMETER *param, char *key, char *value)
-{
-	assert(param != NULL);
-
-	struct parameter *node = (PARAMETER*)malloc (sizeof(PARAMETER) );
+void parameter_add (LA_PARAMETER *param, char *key, char *value) {
+	LA_PARAMETER *node = (LA_PARAMETER*) malloc (sizeof(LA_PARAMETER) );
 	if ( node==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);
 	}
 
 	/* create key */
-	node->key = malloc (strlen(key)+1);
+	node->key = (char *) malloc (strlen(key)+1);
 	if ( node->key==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);
@@ -69,7 +64,7 @@ void addParameter (PARAMETER *param, char *key, char *value)
 	strcpy(node->key, key);
 
 	/* create value */
-	node->value = malloc (strlen(value)+1);
+	node->value = (char *) malloc (strlen(value)+1);
 	if ( node->value==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);
@@ -79,20 +74,17 @@ void addParameter (PARAMETER *param, char *key, char *value)
 	/* set pointer */
 	node->next = param->next;
 	param->next = node;
-}		/* -----  end of function addParameter  ----- */
+}		/* -----  end of function add  ----- */
 
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  getParameterValue
+ *         Name:  get
  *  Description:  
  * =====================================================================================
  */
-char *getParameterValue (PARAMETER *param, char *key)
-{
-	assert(param != NULL);
-
-	PARAMETER *node = param;
+char *parameter_get (LA_PARAMETER *param, char *key) {
+	LA_PARAMETER *node = param;
 	do {
 		node = node->next;
 
@@ -100,42 +92,36 @@ char *getParameterValue (PARAMETER *param, char *key)
 	} while (node->next != NULL);
 
 	return NULL;
-}		/* -----  end of function getParameterValue  ----- */
+}		/* -----  end of function get  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  getParameterSize
+ *         Name:  size
  *  Description:  
  * =====================================================================================
  */
-int getParameterSize (PARAMETER *param)
-{
-	assert(param != NULL);
-
+unsigned int size (LA_PARAMETER *param) {
 	if ( param->next == NULL) return 0;
-	PARAMETER *node = param;
-	int i=0;
+	LA_PARAMETER *node = param;
+	unsigned int i=0;
 	do {
 		node = node->next;
 		i++;
 	} while (node->next != NULL);
 
 	return i;
-}		/* -----  end of function getParameterSize  ----- */
+}		/* -----  end of function size  ----- */
 
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  destroyParameter
+ *         Name:  free
  *  Description:  
  * =====================================================================================
  */
-void destroyParameter (PARAMETER *param)
-{
-	assert(param != NULL);
-
-	PARAMETER *node;
-	PARAMETER *next;
+void parameter_free (LA_PARAMETER *param) {
+	LA_PARAMETER *node;
+	LA_PARAMETER *next;
 
 	node = param;
 	while (node->next != NULL) {
@@ -154,4 +140,4 @@ void destroyParameter (PARAMETER *param)
 
 	param->next = NULL;
 	param = NULL;
-}		/* -----  end of function destroyParameter  ----- */
+}		/* -----  end of function free  ----- */
