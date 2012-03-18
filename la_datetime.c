@@ -21,9 +21,8 @@
 #include <stdlib.h>
 
 #include "la_datetime.h"
-
-DATETIME datetime_now() {
-        DATETIME now;
+LA_DATETIME datetime_now() {
+        LA_DATETIME now;
         time_t ltime;
         struct tm *Tm;
 
@@ -51,7 +50,7 @@ char *datetime_getTimestampAsString() {
 		exit (EXIT_FAILURE);
 	}
 
-	DATETIME now = datetime_now();
+	LA_DATETIME now = datetime_now();
 	sprintf(date, "%4d%02d%02d%02d%02d%02d", now.year, now.month, now.monthday, now.hour, now.minute, now.second);
 
 	return date;
