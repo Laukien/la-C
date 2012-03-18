@@ -23,6 +23,89 @@
 #include <string.h>
 #include <ctype.h>
 
+LA_STRING *string_new() {
+	LA_STRING *ptr = (LA_STRING *)malloc(sizeof(LA_STRING));
+	if (ptr == NULL) {
+		printf ( "ERROR: Unable to get memory.\n" );
+		exit(EXIT_FAILURE);
+	}
+
+	ptr->pointer = (char *)malloc(1);
+	ptr->pointer[0] = '\0';
+	ptr->size = 0;
+
+	return ptr;
+}
+
+void string_free(LA_STRING *ptr) {
+	if (ptr == NULL) {
+		printf ( "ERROR: Pointer is NULL.\n" );
+		exit(EXIT_FAILURE);
+	}
+
+	free(ptr->pointer);
+	ptr->size = 0;
+	free(ptr);
+}
+
+unsigned int string_size(LA_STRING *ptr) {
+	if (ptr == NULL) {
+		printf ( "ERROR: Pointer is NULL.\n" );
+		exit(EXIT_FAILURE);
+	}
+
+	return ptr->size;
+}
+
+void string_append(LA_STRING *ptr, char *str) {
+	if (ptr == NULL) {
+		printf ( "ERROR: Pointer is NULL.\n" );
+		exit(EXIT_FAILURE);
+	}
+
+    ptr->size = ptr->size + strlen(str);        /* set new length */
+	ptr->pointer = (char *) realloc(ptr->pointer, ptr->size + 1);
+	if (ptr->pointer == NULL) {
+		printf ( "ERROR: Unable to get more memory.\n" );
+		exit(EXIT_FAILURE);
+	}
+	memcpy(ptr->pointer+strlen(ptr->pointer), str, strlen(str)); 
+	ptr->pointer[ptr->size] = '\0';             /* end string */
+}
+
+void string_insert(LA_STRING *ptr, char *str, unsigned int pos) {
+	if (ptr == NULL) {
+		printf ( "ERROR: Pointer is NULL.\n" );
+		exit(EXIT_FAILURE);
+	}
+
+    ptr->size = ptr->size + strlen(str);        /* set new length */
+	char *tmp = (char*) malloc(ptr->size + 1);
+	if (tmp == NULL) {
+		printf ( "ERROR: Unable to get more memory.\n" );
+		exit(EXIT_FAILURE);
+	}
+	if (pos != 0) {
+		memcpy(tmp, ptr->pointer, pos); 
+	}
+	memcpy(tmp + pos, str, strlen(str));
+	if(pos != strlen(ptr->pointer)) {
+		memcpy(tmp + pos + strlen(str), ptr->pointer + pos, strlen(ptr->pointer) - pos);
+	}
+
+	free(ptr->pointer);
+	ptr->pointer = tmp;
+}
+
+char *string_pointer(LA_STRING *ptr) {
+	if (ptr == NULL) {
+		printf ( "ERROR: Pointer is NULL.\n" );
+		exit(EXIT_FAILURE);
+	}
+
+	return ptr->pointer;
+}
+
 char *string_toLower(char *str) {
 	int len = strlen(str);	
 
