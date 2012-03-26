@@ -1,6 +1,7 @@
 #CC = gcc
 CFLAGS += -O3 -Wall
 #AR = ar
+ARFLAGS = -rcs
 
 all: 32bit 64bit example clean
 
@@ -8,6 +9,7 @@ all: 32bit 64bit example clean
 	@echo 32 BIT
 	$(CC) $(CFLAGS) -m32 -c -o la_datetime.o la_datetime.c
 	$(CC) $(CFLAGS) -m32 -c -o la_file.o la_file.c
+	$(CC) $(CFLAGS) -m32 -c -o la_directory.o la_directory.c
 	$(CC) $(CFLAGS) -m32 -c -o la_memory.o la_memory.c
 	$(CC) $(CFLAGS) -m32 -c -o la_parameter.o la_parameter.c
 	$(CC) $(CFLAGS) -m32 -c -o la_string.o la_string.c
@@ -18,6 +20,7 @@ all: 32bit 64bit example clean
 	@echo 64 BIT
 	$(CC) $(CFLAGS) -m64 -c -o la_datetime.o la_datetime.c
 	$(CC) $(CFLAGS) -m64 -c -o la_file.o la_file.c
+	$(CC) $(CFLAGS) -m64 -c -o la_directory.o la_directory.c
 	$(CC) $(CFLAGS) -m64 -c -o la_memory.o la_memory.c
 	$(CC) $(CFLAGS) -m64 -c -o la_parameter.o la_parameter.c
 	$(CC) $(CFLAGS) -m64 -c -o la_string.o la_string.c

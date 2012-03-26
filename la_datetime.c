@@ -44,7 +44,7 @@ LA_DATETIME datetime_now() {
 char *datetime_getTimestampAsString() {
 
 	char *date;
-	date = malloc (15);
+	date = (char *) malloc (15);
 	if ( date==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);

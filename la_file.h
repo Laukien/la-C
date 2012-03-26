@@ -19,6 +19,9 @@
 #ifndef LA_FILE_H
 #define LA_FILE_H
 
-int file_exists(char *filename);
+#include "la_common.h"
+
+BOOL file_exists(char *filename);
+char *file_name(char *file);
 
 #endif
