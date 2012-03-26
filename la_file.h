@@ -21,7 +21,7 @@
 
 #include "la_common.h"
 
-BOOL file_exists(char *filename);
-char *file_name(char *file);
+BOOL file_exists(const char *filename);
+char *file_name(const char *file);
 
 #endif

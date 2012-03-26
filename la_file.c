@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-BOOL file_exists(char *filename) {
+BOOL file_exists(const char *filename) {
 	FILE *pFile = fopen(filename, "r");
 	if ( pFile == NULL) return FALSE;
 
@@ -31,7 +31,7 @@ BOOL file_exists(char *filename) {
 	return TRUE;
 }
 
-char *file_name(char *file) {
+char *file_name(const char *file) {
 	int i;
 	for (i = strlen(file)-1; i >= -1; i--) {
 		if (i == -1) break;                     /* not found */
