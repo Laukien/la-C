@@ -1,9 +1,9 @@
 /*
  * =====================================================================================
  *
- *       Filename:  la_file.h
+ *       Filename:  la_directory.h
  *
- *    Description:  header for la_file.c
+ *    Description:  header for la_directory.c
  *
  *        Version:  1.0
  *        Created:  11/11/2011 02:26:29 PM
@@ -16,13 +16,21 @@
  * =====================================================================================
  */
 
-#ifndef LA_FILE_H
-#define LA_FILE_H
+#ifndef LA_DIRECTORY_H
+#define LA_DIRECTORY_H
 
 #include "la_common.h"
+#include "la_system.h"
 
-BOOL file_exists(const char *filename);
-char *file_name(const char *file);
-char *file_temp();
+#ifdef SYSTEM_OS_VENDOR_MICROSOFT
+	#define DIRECTORY_SEPARATOR_CHAR '\\'
+	#define DIRECTORY_SEPARATOR_STRING "\\"
+#else	
+	#define DIRECTORY_SEPARATOR_CHAR '/'
+	#define DIRECTORY_SEPARATOR_STRING "/"
+#endif
+
+BOOL directory_exists(const char *directoryname);
+char *directory_temp();
 
 #endif
