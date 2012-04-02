@@ -40,7 +40,6 @@ LA_DATETIME datetime_now() {
         return now;
 }
 
-
 char *datetime_getTimestampAsString() {
 
 	char *date;
@@ -52,6 +51,51 @@ char *datetime_getTimestampAsString() {
 
 	LA_DATETIME now = datetime_now();
 	sprintf(date, "%4d%02d%02d%02d%02d%02d", now.year, now.month, now.monthday, now.hour, now.minute, now.second);
+
+	return date;
+}
+
+char *datetime_getDateAsString() {
+
+	char *date;
+	date = (char *) malloc (11);
+	if ( date==NULL ) {
+		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
+		exit (EXIT_FAILURE);
+	}
+
+	LA_DATETIME now = datetime_now();
+	sprintf(date, "%02d.%02d.%04d", now.monthday, now.month, now.year);
+
+	return date;
+}
+
+char *datetime_getTimeAsString() {
+
+	char *date;
+	date = (char *) malloc (9);
+	if ( date==NULL ) {
+		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
+		exit (EXIT_FAILURE);
+	}
+
+	LA_DATETIME now = datetime_now();
+	sprintf(date, "%02d:%02d:%02d", now.hour, now.minute, now.second);
+
+	return date;
+}
+
+char *datetime_getDateTimeAsString() {
+
+	char *date;
+	date = (char *) malloc (20);
+	if ( date==NULL ) {
+		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
+		exit (EXIT_FAILURE);
+	}
+
+	LA_DATETIME now = datetime_now();
+	sprintf(date, "%02d.%02d.%04d %02d:%02d:%02d", now.monthday, now.month, now.year, now.hour, now.minute, now.second);
 
 	return date;
 }

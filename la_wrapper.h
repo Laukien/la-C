@@ -2,6 +2,9 @@
 
 namespace datetime {
 	std::string getTimestampAsString();
+	std::string getDateAsString();
+	std::string getTimeAsString();
+	std::string getDateTimeAsString();
 }
 
 namespace file {

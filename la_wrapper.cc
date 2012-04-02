@@ -13,6 +13,29 @@ namespace datetime {
 
 		return tss;
 	}
+
+	std::string getDateAsString() {
+		char *ts = datetime_getDateAsString();
+		std::string tss = ts;
+		free(ts);
+
+		return tss;
+	}
+
+	std::string getTimeAsString() {
+		char *ts = datetime_getTimeAsString();
+		std::string tss = ts;
+		free(ts);
+
+		return tss;
+	}
+	std::string getDateTimeAsString() {
+		char *ts = datetime_getDateTimeAsString();
+		std::string tss = ts;
+		free(ts);
+
+		return tss;
+	}
 }
 
 namespace file {

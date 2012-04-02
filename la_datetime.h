@@ -31,5 +31,8 @@ typedef struct {
 
 LA_DATETIME datetime_now();
 char *datetime_getTimestampAsString();
+char *datetime_getDateAsString();
+char *datetime_getTimeAsString();
+char *datetime_getDateTimeAsString();
 
 #endif
