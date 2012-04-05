@@ -15,6 +15,7 @@ all: 32bit 64bit example clean
 	$(CC) $(CFLAGS) -m32 -c -o la_memory.o la_memory.c
 	$(CC) $(CFLAGS) -m32 -c -o la_number.o la_number.c
 	$(CC) $(CFLAGS) -m32 -c -o la_parameter.o la_parameter.c
+	$(CC) $(CFLAGS) -m32 -c -o la_error.o la_error.c
 	$(CC) $(CFLAGS) -m32 -c -o la_string.o la_string.c
 	$(CC) $(CFLAGS) -m32 -c -o la_system.o la_system.c
 	$(CXX) $(CXXFLAGS) -m32 -c -o la_wrapper.o la_wrapper.cc
@@ -28,6 +29,7 @@ all: 32bit 64bit example clean
 	$(CC) $(CFLAGS) -m64 -c -o la_memory.o la_memory.c
 	$(CC) $(CFLAGS) -m64 -c -o la_number.o la_number.c
 	$(CC) $(CFLAGS) -m64 -c -o la_parameter.o la_parameter.c
+	$(CC) $(CFLAGS) -m64 -c -o la_error.o la_error.c
 	$(CC) $(CFLAGS) -m64 -c -o la_string.o la_string.c
 	$(CC) $(CFLAGS) -m64 -c -o la_system.o la_system.c
 	$(CXX) $(CXXFLAGS) -m64 -c -o la_wrapper.o la_wrapper.cc
