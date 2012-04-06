@@ -19,6 +19,15 @@
 #ifndef LA_DIRECTORY_H
 #define LA_DIRECTORY_H
 
+#ifdef __cplusplus
+#include <string>
+namespace directory {
+	bool exists(const std::string name);
+	std::string temp();
+}
+extern "C" {
+#endif
+
 #include "la_common.h"
 #include "la_system.h"
 
@@ -32,5 +41,9 @@
 
 BOOL directory_exists(const char *directoryname);
 char *directory_temp();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

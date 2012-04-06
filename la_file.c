@@ -74,3 +74,27 @@ char *file_temp() {
 
 	return dir;
 }
+
+#ifdef __cplusplus
+namespace file {
+	bool exists(const std::string filename) {
+		return file_exists(filename.c_str());
+	}
+
+	std::string name(const std::string filename) {
+		char *name = file_name(filename.c_str());	
+		std::string names = name;
+		free(name);
+
+		return names;
+	}
+
+	std::string temp() {
+		char *file = file_temp();
+		std::string tmp = file;
+		free(file);
+
+		return tmp;
+	}
+}
+#endif

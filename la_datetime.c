@@ -99,3 +99,39 @@ char *datetime_getDateTimeAsString() {
 
 	return date;
 }
+
+#ifdef __cplusplus
+namespace datetime {
+	std::string getTimestampAsString() {
+		char *ts = datetime_getTimestampAsString();
+		std::string tss = ts;
+		free(ts);
+
+		return tss;
+	}
+
+	std::string getDateAsString() {
+		char *ts = datetime_getDateAsString();
+		std::string tss = ts;
+		free(ts);
+
+		return tss;
+	}
+
+	std::string getTimeAsString() {
+		char *ts = datetime_getTimeAsString();
+		std::string tss = ts;
+		free(ts);
+
+		return tss;
+	}
+	std::string getDateTimeAsString() {
+		char *ts = datetime_getDateTimeAsString();
+		std::string tss = ts;
+		free(ts);
+
+		return tss;
+	}
+}
+#endif
+

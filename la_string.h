@@ -18,6 +18,10 @@
 #ifndef LA_STRING_H
 #define LA_STRING_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
 	char *pointer;
 	unsigned int size;
@@ -35,5 +39,9 @@ char *string_toUpper(char *str);
 char *string_trim(char *str);
 char *string_replaceFirst(char *string, char *from, char *to);
 char *string_replace(char *string, char *from, char *to);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

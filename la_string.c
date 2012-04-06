@@ -109,7 +109,7 @@ char *string_pointer(LA_STRING *ptr) {
 char *string_toLower(char *str) {
 	int len = strlen(str);	
 
-	char *result = malloc ( len + 1);
+	char *result = (char *)malloc ( len + 1);
 	if ( result==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (str_tolower)\n" );
 		exit (EXIT_FAILURE);
@@ -126,7 +126,7 @@ char *string_toLower(char *str) {
 char *string_toUpper(char *str) {
 	int len = strlen(str);	
 
-	char *result = malloc ( len + 1 );
+	char *result = (char *)malloc ( len + 1 );
 	if ( result==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (str_toupper)\n" );
 		exit (EXIT_FAILURE);
@@ -149,7 +149,7 @@ char *string_trim(char *str) {
 	if ( idx_start == idx_stop) return NULL;
 
 
-	char *trim = malloc (idx_stop-idx_start+1 );
+	char *trim = (char *)malloc (idx_stop-idx_start+1 );
 	if ( trim==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);
@@ -170,7 +170,7 @@ char *string_replaceFirst(char *string, char *from, char *to) {
 
 	char *begin = strstr(string, from);         /* get the first position */
 	if (begin == NULL) {                        /* 'from' doesn't exists */
-		result = malloc(string_size + 1);
+		result = (char *)malloc(string_size + 1);
 		if (result == NULL) {
 			printf ( "ERROR: Unable to get memory.\n" );
 			exit(EXIT_FAILURE);
@@ -178,7 +178,7 @@ char *string_replaceFirst(char *string, char *from, char *to) {
 		strcpy(result, string);                 /* copy  */
 	} else {
 		int idx = begin - string;
-		result = malloc(result_size + 1);
+		result = (char *)malloc(result_size + 1);
 		if (result == NULL) {
 			printf ( "ERROR: Unable to get memory.\n" );
 			exit(EXIT_FAILURE);
@@ -198,7 +198,7 @@ char *string_replace(char *string, char *from, char *to) {
 	int to_size = strlen(to);
 	int result_size = string_size;
 	char *result;
-	result = malloc(string_size + 1);
+	result = (char *)malloc(string_size + 1);
 	if (result == NULL) {
 		printf ( "ERROR: Unable to get memory.\n" );
 		exit(EXIT_FAILURE);

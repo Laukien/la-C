@@ -19,6 +19,17 @@
 #ifndef LA_DATETIME_H
 #define LA_DATETIME_H
 
+#ifdef __cplusplus
+#include <string>
+namespace datetime {
+	std::string getTimestampAsString();
+	std::string getDateAsString();
+	std::string getTimeAsString();
+	std::string getDateTimeAsString();
+}
+extern "C" {
+#endif
+
 typedef struct {
         short year;
         short month;
@@ -34,5 +45,9 @@ char *datetime_getTimestampAsString();
 char *datetime_getDateAsString();
 char *datetime_getTimeAsString();
 char *datetime_getDateTimeAsString();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

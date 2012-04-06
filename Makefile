@@ -1,5 +1,7 @@
 CC = gcc
 CFLAGS += -O3 -Wall
+CXX = g++
+CXXFLAGS += -O3 -Wall
 AR = ar
 ARFLAGS = -rcs
 NAME = lac
@@ -30,6 +32,29 @@ compile:
 		la_error.c\
 		la_string.c\
 		la_system.c\
+
+	$(CXX) $(CXXFLAGS) -c -o la_datetime.o la_datetime.c
+	$(CXX) $(CXXFLAGS) -c -o la_file.o la_file.c
+	$(CXX) $(CXXFLAGS) -c -o la_directory.o la_directory.c
+	$(CXX) $(CXXFLAGS) -c -o la_memory.o la_memory.c
+	$(CXX) $(CXXFLAGS) -c -o la_number.o la_number.c
+	$(CXX) $(CXXFLAGS) -c -o la_parameter.o la_parameter.c
+	$(CXX) $(CXXFLAGS) -c -o la_error.o la_error.c
+	$(CXX) $(CXXFLAGS) -c -o la_string.o la_string.c
+	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
+	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
+	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
+		la_datetime.c\
+		la_file.c\
+		la_directory.c\
+		la_memory.c\
+		la_number.c\
+		la_parameter.c\
+		la_error.c\
+		la_string.c\
+		la_system.c\
+
+	rm -f *.o
 
 example:
 	@echo

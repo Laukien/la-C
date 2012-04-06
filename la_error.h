@@ -19,6 +19,10 @@
 #ifndef LA_ERROR_H
 #define LA_ERROR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "la_common.h"
 
 #define ERROR_MESSAGE_SIZE 1024
@@ -33,5 +37,9 @@ char *getErrorMessage();
 void showError();
 BOOL isError();
 void clearError();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

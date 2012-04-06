@@ -19,10 +19,24 @@
 #ifndef LA_FILE_H
 #define LA_FILE_H
 
+#ifdef __cplusplus
+#include <string>
+namespace file {
+	bool exists(const std::string filename);
+	std::string name(const std::string filename);
+	std::string temp();
+}
+extern "C" {
+#endif
+
 #include "la_common.h"
 
 BOOL file_exists(const char *filename);
 char *file_name(const char *file);
 char *file_temp();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

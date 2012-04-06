@@ -19,6 +19,10 @@
 #ifndef LA_COLOR_H
 #define LA_COLOR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* shell: common */
 #define SH_DEFAULT			"\033[0m"
 #define SH_UNDERLINE		"\033[4m"
@@ -61,5 +65,9 @@
 #define SH_BG_LIGHT_PURPLE	"\033[1;45m"
 #define SH_BG_LIGHT_YELLOW	"\033[1;43m"
 #define SH_BG_WHITE			"\033[1;47m"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -19,6 +19,10 @@
 #ifndef LA_PARAMETER_H
 #define LA_PARAMETER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct la_parameter {
 	char *key;
 	char *value;
@@ -35,6 +39,10 @@ char *parameter_get (LA_PARAMETER *param, char *key);
 unsigned int parameter_size (LA_PARAMETER *param);
 //void parameter_loadFromFile(LA_PARAMETER *param, char *filename);
 //void parameter_saveToFile(LA_PARAMETER *param, char *filename);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

@@ -19,6 +19,10 @@
 #ifndef LA_SYSTEM_H
 #define LA_SYSTEM_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "la_common.h"
 
 /* OS-Type & OS-Vendor*/
@@ -68,5 +72,9 @@ BOOL isOSVendorSGI();
 BOOL isOSVendorHP();
 BOOL isOSVendorIBM();
 BOOL isOSVendorApple();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

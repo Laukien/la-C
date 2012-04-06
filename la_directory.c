@@ -56,3 +56,19 @@ char *directory_temp() {
 
 	return dir;
 }
+
+#ifdef __cplusplus
+namespace directory {
+	bool exists(const std::string name) {
+		return directory_exists(name.c_str());
+	}
+
+	std::string temp() {
+		char *dir = directory_temp();
+		std::string tmp = dir;
+		free(dir);
+
+		return tmp;
+	}
+}
+#endif
