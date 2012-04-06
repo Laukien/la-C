@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_number.h
+ *
+ *    Description:  convert numbers
+ *
+ *        Version:  1.0
+ *        Created:  03/09/2012 07:29:24 AM
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Stephan Laukien (slaukien), software@laukien.com
+ *        Company:  
+ *
+ * =====================================================================================
+ */
+
 #include "la_number.h"
 #include <stdlib.h>
 #include <stdio.h>
