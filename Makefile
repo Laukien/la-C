@@ -75,7 +75,7 @@ install:
 	cp -f lib$(NAME).$(VERSION).a /usr/local/lib
 	ln -f -s /usr/local/lib/lib$(NAME).$(VERSION).a /usr/local/lib/lib$(NAME).a
 	cp -f lib$(NAME).$(VERSION).so /usr/local/lib
-	ln -f -s /usr/local/lib/$(NAME).lib$(VERSION).so /usr/local/lib/lib$(NAME).so
+	ln -f -s /usr/local/lib/lib$(NAME).$(VERSION).so /usr/local/lib/lib$(NAME).so
 	cp -f *.h /usr/local/include
 	ldconfig /usr/local/lib
 
