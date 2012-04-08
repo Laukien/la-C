@@ -181,7 +181,7 @@ int parameter_saveToFile(LA_PARAMETER *param, char *filename) {
 	LA_PARAMETER *node;
 	node = param;
 
-	unsigned int count;
+	unsigned int count = 0;
 	FILE *file;
 	file = fopen(filename, "w");
 	if (file == NULL) return -1;
@@ -195,4 +195,6 @@ int parameter_saveToFile(LA_PARAMETER *param, char *filename) {
 	 } while (node->next != NULL);
 
 	fclose(file);
+
+	return count;
 }
