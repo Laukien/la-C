@@ -18,6 +18,8 @@
 #ifndef LA_STRING_H
 #define LA_STRING_H
 
+#include "la_common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -41,6 +43,7 @@ char *string_toUpper(const char *str);
 char *string_trim(const char *str);
 char *string_replaceFirst(const char *string, const char *from, const char *to);
 char *string_replace(const char *string, const char *from, const char *to);
+BOOL string_isEmpty(const char *string);
 
 #ifdef __cplusplus
 }

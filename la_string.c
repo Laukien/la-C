@@ -247,3 +247,12 @@ char *string_replace(const char *string, const char *from, const char *to) {
 
 	return result;
 }
+
+BOOL string_isEmpty(const char *string) {
+	if (string == NULL) return TRUE;
+	char *t = string_trim(string);
+	size_t len = strlen(t);
+	free(t);
+
+	return len == 0 ? TRUE : FALSE;
+}
