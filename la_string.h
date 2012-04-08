@@ -30,17 +30,17 @@ typedef struct {
 LA_STRING *string_new();
 void string_free(LA_STRING *ptr);
 unsigned int string_size(LA_STRING *ptr);
-void string_append(LA_STRING *ptr, char *str);
-void string_insert(LA_STRING *ptr, char *str, unsigned int pos);
+void string_append(LA_STRING *ptr, const char *str);
+void string_insert(LA_STRING *ptr, const char *str, unsigned int pos);
 char *string_pointer(LA_STRING *ptr);
 LA_STRING *string_clone(LA_STRING *ptr);
 void string_reset(LA_STRING *ptr);
 
-char *string_toLower(char *str);
-char *string_toUpper(char *str);
-char *string_trim(char *str);
-char *string_replaceFirst(char *string, char *from, char *to);
-char *string_replace(char *string, char *from, char *to);
+char *string_toLower(const char *str);
+char *string_toUpper(const char *str);
+char *string_trim(const char *str);
+char *string_replaceFirst(const char *string, const char *from, const char *to);
+char *string_replace(const char *string, const char *from, const char *to);
 
 #ifdef __cplusplus
 }

@@ -57,7 +57,7 @@ unsigned int string_size(LA_STRING *ptr) {
 	return ptr->size;
 }
 
-void string_append(LA_STRING *ptr, char *str) {
+void string_append(LA_STRING *ptr, const char *str) {
 	if (ptr == NULL) {
 		printf ( "ERROR: Pointer is NULL.\n" );
 		exit(EXIT_FAILURE);
@@ -73,7 +73,7 @@ void string_append(LA_STRING *ptr, char *str) {
 	ptr->pointer[ptr->size] = '\0';             /* end string */
 }
 
-void string_insert(LA_STRING *ptr, char *str, unsigned int pos) {
+void string_insert(LA_STRING *ptr, const char *str, unsigned int pos) {
 	if (ptr == NULL) {
 		printf ( "ERROR: Pointer is NULL.\n" );
 		exit(EXIT_FAILURE);
@@ -116,14 +116,14 @@ LA_STRING *string_clone(LA_STRING *ptr) {
 void string_reset(LA_STRING *ptr) {
 	free(ptr->pointer);
 	ptr->pointer = (char *)malloc(1);
-	if ( result==NULL ) {
+	if ( ptr->pointer == NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_reset)\n" );
 		exit (EXIT_FAILURE);
 	}
 	ptr->size = 0;
 }
 
-char *string_toLower(char *str) {
+char *string_toLower(const char *str) {
 	int len = strlen(str);	
 
 	char *result = (char *)malloc ( len + 1);
@@ -140,7 +140,7 @@ char *string_toLower(char *str) {
 	return result;
 }
 
-char *string_toUpper(char *str) {
+char *string_toUpper(const char *str) {
 	int len = strlen(str);	
 
 	char *result = (char *)malloc ( len + 1 );
@@ -158,7 +158,7 @@ char *string_toUpper(char *str) {
 }
 
 
-char *string_trim(char *str) {
+char *string_trim(const char *str) {
 	int idx_start=0;
 	int idx_stop=strlen(str);
 	while (str[idx_start] != '\0' && !isalnum(str[idx_start])) idx_start++;
@@ -178,14 +178,14 @@ char *string_trim(char *str) {
 	return trim;
 }
 
-char *string_replaceFirst(char *string, char *from, char *to) {
+char *string_replaceFirst(const char *string, const char *from, const char *to) {
 	int string_size = strlen(string);
 	int from_size = strlen(from);
 	int to_size = strlen(to);
 	int result_size = string_size - from_size + to_size;
 	char *result;
 
-	char *begin = strstr(string, from);         /* get the first position */
+    const char *begin = strstr(string, from);   /* get the first position */
 	if (begin == NULL) {                        /* 'from' doesn't exists */
 		result = (char *)malloc(string_size + 1);
 		if (result == NULL) {
@@ -209,7 +209,7 @@ char *string_replaceFirst(char *string, char *from, char *to) {
 	return result;
 }
 
-char *string_replace(char *string, char *from, char *to) {
+char *string_replace(const char *string, const char *from, const char *to) {
 	int string_size = strlen(string);
 	int from_size = strlen(from);
 	int to_size = strlen(to);
@@ -221,7 +221,7 @@ char *string_replace(char *string, char *from, char *to) {
 		exit(EXIT_FAILURE);
 	}
 
-	char *begin = strstr(string, from);         /* get the first position */
+    const char *begin = strstr(string, from);   /* get the first position */
 	if (begin == NULL) {                        /* 'from' doesn't exists */
 		strcpy(result, string);                 /* copy  */
 	} else {
