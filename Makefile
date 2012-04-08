@@ -1,7 +1,9 @@
 CC = gcc
 CFLAGS += -O3 -Wall
+CFLAGS += -ggdb
 CXX = g++
 CXXFLAGS += -O3 -Wall
+#CXXFLAGS += -ggdb
 AR = ar
 ARFLAGS = -rcs
 NAME = lac
@@ -61,6 +63,7 @@ example:
 	@echo === EXAMPLE ===
 	$(CC) $(CFLAGS) -o example_string_1 example_string_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_1 example_parameter_1.c -L. lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -o example_parameter_2 example_parameter_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_file_1 example_file_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_number_1 example_number_1.c -L. lib$(NAME).$(VERSION).a
 
