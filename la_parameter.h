@@ -19,6 +19,9 @@
 #ifndef LA_PARAMETER_H
 #define LA_PARAMETER_H
 
+#define LA_PARAMETER_KEY_SIZE 32
+#define LA_PARAMETER_VALUE_SIZE 64
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,10 +38,11 @@ void parameter_add (LA_PARAMETER *param, char *key, char *value);
 void parameter_remove (LA_PARAMETER *param, char *key);
 void parameter_clear (LA_PARAMETER *param);
 void parameter_free (LA_PARAMETER *param);
+void parameter_reset (LA_PARAMETER *param);
 char *parameter_get (LA_PARAMETER *param, char *key);
 unsigned int parameter_size (LA_PARAMETER *param);
-//void parameter_loadFromFile(LA_PARAMETER *param, char *filename);
-//void parameter_saveToFile(LA_PARAMETER *param, char *filename);
+int parameter_loadFromFile(LA_PARAMETER *param, char *filename);
+int parameter_saveToFile(LA_PARAMETER *param, char *filename);
 
 #ifdef __cplusplus
 }
