@@ -52,7 +52,7 @@ BOOL isError() {
 	return (_id != ERROR_NONE || strlen(_msg) > 0);
 }
 
-void clearError() {
+void resetError() {
 	_id = ERROR_NONE;
 	_msg[0] = '\0';
 }

@@ -36,7 +36,7 @@ int getErrorId();
 char *getErrorMessage();
 void showError();
 BOOL isError();
-void clearError();
+void resetError();
 
 #ifdef __cplusplus
 }
