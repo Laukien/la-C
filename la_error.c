@@ -25,7 +25,7 @@ int _id;
 char _msg[ERROR_MESSAGE_SIZE+1];
 
 void initError() {
-	clearError();
+	resetError();
 }
 
 void setError(int id, char *msg) {
