@@ -80,14 +80,17 @@ char *parameter_get (LA_PARAMETER *param, char *key) {
 
 unsigned int parameter_size (LA_PARAMETER *param) {
 	if ( param->next == NULL) return 0;
+
 	LA_PARAMETER *node = param;
-	unsigned int i=0;
+	unsigned int count = 0;
+
 	do {
 		node = node->next;
-		i++;
+		printf ( "NODE: %s->%s\n", node->key, node->value );
+		++count;
 	} while (node->next != NULL);
 
-	return i;
+	return count;
 }
 
 
