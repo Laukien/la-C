@@ -113,12 +113,22 @@ LA_STRING *string_clone(LA_STRING *ptr) {
 	return new_ptr;
 }
 
+void string_reset(LA_STRING *ptr) {
+	free(ptr->pointer);
+	ptr->pointer = (char *)malloc(1);
+	if ( result==NULL ) {
+		fprintf ( stderr, "\ndynamic memory allocation failed (string_reset)\n" );
+		exit (EXIT_FAILURE);
+	}
+	ptr->size = 0;
+}
+
 char *string_toLower(char *str) {
 	int len = strlen(str);	
 
 	char *result = (char *)malloc ( len + 1);
 	if ( result==NULL ) {
-		fprintf ( stderr, "\ndynamic memory allocation failed (str_tolower)\n" );
+		fprintf ( stderr, "\ndynamic memory allocation failed (string_toLower)\n" );
 		exit (EXIT_FAILURE);
 	}
 
@@ -135,7 +145,7 @@ char *string_toUpper(char *str) {
 
 	char *result = (char *)malloc ( len + 1 );
 	if ( result==NULL ) {
-		fprintf ( stderr, "\ndynamic memory allocation failed (str_toupper)\n" );
+		fprintf ( stderr, "\ndynamic memory allocation failed (string_toUpper)\n" );
 		exit (EXIT_FAILURE);
 	}
 
@@ -158,7 +168,7 @@ char *string_trim(char *str) {
 
 	char *trim = (char *)malloc (idx_stop-idx_start+1 );
 	if ( trim==NULL ) {
-		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
+		fprintf ( stderr, "\ndynamic memory allocation failed (string_trim)\n" );
 		exit (EXIT_FAILURE);
 	}
 
@@ -179,7 +189,7 @@ char *string_replaceFirst(char *string, char *from, char *to) {
 	if (begin == NULL) {                        /* 'from' doesn't exists */
 		result = (char *)malloc(string_size + 1);
 		if (result == NULL) {
-			printf ( "ERROR: Unable to get memory.\n" );
+			fprintf ( stderr, "\ndynamic memory allocation failed (string_replaceFirst)\n" );
 			exit(EXIT_FAILURE);
 		}
 		strcpy(result, string);                 /* copy  */
@@ -187,7 +197,7 @@ char *string_replaceFirst(char *string, char *from, char *to) {
 		int idx = begin - string;
 		result = (char *)malloc(result_size + 1);
 		if (result == NULL) {
-			printf ( "ERROR: Unable to get memory.\n" );
+			fprintf ( stderr, "\ndynamic memory allocation failed (string_replaceFirst)\n" );
 			exit(EXIT_FAILURE);
 		}
 		memcpy(result, string, idx);
@@ -207,7 +217,7 @@ char *string_replace(char *string, char *from, char *to) {
 	char *result;
 	result = (char *)malloc(string_size + 1);
 	if (result == NULL) {
-		printf ( "ERROR: Unable to get memory.\n" );
+		fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
 		exit(EXIT_FAILURE);
 	}
 
@@ -222,7 +232,7 @@ char *string_replace(char *string, char *from, char *to) {
 			result_size = result_size - from_size + to_size;
 			result = (char *)realloc(result, result_size + 1);
 			if (result == NULL) {
-				printf ( "ERROR: Unable to get memory.\n" );
+				fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
 				exit(EXIT_FAILURE);
 			}
 //			memset(result, '\0', result_size);
