@@ -78,7 +78,7 @@ char *parameter_get (LA_PARAMETER *param, char *key) {
 	return NULL;
 }
 
-unsigned int size (LA_PARAMETER *param) {
+unsigned int parameter_size (LA_PARAMETER *param) {
 	if ( param->next == NULL) return 0;
 	LA_PARAMETER *node = param;
 	unsigned int i=0;
