@@ -106,6 +106,13 @@ char *string_pointer(LA_STRING *ptr) {
 	return ptr->pointer;
 }
 
+LA_STRING *string_clone(LA_STRING *ptr) {
+	LA_STRING *new_ptr = string_new();
+	string_append(new_ptr, ptr->pointer);
+
+	return new_ptr;
+}
+
 char *string_toLower(char *str) {
 	int len = strlen(str);	
 

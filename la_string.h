@@ -33,6 +33,7 @@ unsigned int string_size(LA_STRING *ptr);
 void string_append(LA_STRING *ptr, char *str);
 void string_insert(LA_STRING *ptr, char *str, unsigned int pos);
 char *string_pointer(LA_STRING *ptr);
+LA_STRING *string_clone(LA_STRING *ptr);
 
 char *string_toLower(char *str);
 char *string_toUpper(char *str);
