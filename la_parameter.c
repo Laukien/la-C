@@ -149,7 +149,9 @@ int parameter_loadFromFile(LA_PARAMETER *param, char *filename) {
 	char *key;
 	char *value;
 	char line[LA_PARAMETER_KEY_SIZE + 1 + LA_PARAMETER_VALUE_SIZE + 2 + 1];
-	while (fgets(line, sizeof(line)/sizeof(line[0]), file) != NULL) {
+	int len = sizeof(line)/sizeof(line[0]);
+//	memset(line, '\0', len);
+	while (fgets(line, len, file) != NULL) {
 		/* correct string */
 		char *c = string_replaceFirst(line, "#", "\0");
 		char *t = string_trim(c);
@@ -172,6 +174,7 @@ int parameter_loadFromFile(LA_PARAMETER *param, char *filename) {
 
 		free(value);
 		free(key);
+//		memset(line, '\0', len);
 	}
 	fclose(file);
 
