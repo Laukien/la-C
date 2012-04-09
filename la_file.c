@@ -26,6 +26,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 BOOL file_exists(const char *filename) {
 	FILE *pFile = fopen(filename, "r");
@@ -97,4 +98,13 @@ namespace file {
 		return tmp;
 	}
 }
+
+size_t file_size(const char *filename) {
+	struct stat st;
+	stat(filename, &st);
+	size_t size = st.st_size;
+
+	return size;
+}
+
 #endif

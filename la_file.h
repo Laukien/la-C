@@ -19,6 +19,8 @@
 #ifndef LA_FILE_H
 #define LA_FILE_H
 
+#include "string.h"
+
 #ifdef __cplusplus
 #include <string>
 namespace file {
@@ -34,6 +36,7 @@ extern "C" {
 BOOL file_exists(const char *filename);
 char *file_name(const char *file);
 char *file_temp();
+size_t file_size(const char *filename);
 
 #ifdef __cplusplus
 }
