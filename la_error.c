@@ -22,7 +22,7 @@
 #include <string.h>
 
 int _id;
-char _msg[ERROR_MESSAGE_SIZE+1];
+char _msg[ERROR_MESSAGE_SIZE + 1];
 
 void initError() {
 	resetError();
@@ -30,7 +30,7 @@ void initError() {
 
 void setError(int id, char *msg) {
 	if (strlen(msg) > ERROR_MESSAGE_SIZE) {
-		printf ( "ERROR: Message is longer than '%d'.\n", ERROR_MESSAGE_SIZE );
+		fprintf ( stderr, "ERROR: Message is longer than '%d'.\n", ERROR_MESSAGE_SIZE );
 		exit(EXIT_FAILURE);
 	}
 
@@ -57,3 +57,6 @@ void resetError() {
 	_msg[0] = '\0';
 }
 
+void showError() {
+	fprintf (stderr, "ERROR: %s (%d)\n", _msg, _id);
+}
