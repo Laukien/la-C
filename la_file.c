@@ -76,6 +76,14 @@ char *file_temp() {
 	return dir;
 }
 
+size_t file_size(const char *filename) {
+	struct stat st;
+	stat(filename, &st);
+	size_t size = st.st_size;
+
+	return size;
+}
+
 #ifdef __cplusplus
 namespace file {
 	bool exists(const std::string filename) {
@@ -97,14 +105,6 @@ namespace file {
 
 		return tmp;
 	}
-}
-
-size_t file_size(const char *filename) {
-	struct stat st;
-	stat(filename, &st);
-	size_t size = st.st_size;
-
-	return size;
 }
 
 #endif

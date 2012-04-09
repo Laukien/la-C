@@ -65,6 +65,7 @@ example:
 	$(CC) $(CFLAGS) -o example_parameter_1 example_parameter_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_2 example_parameter_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_file_1 example_file_1.c -L. lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -o example_file_2 example_file_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_number_1 example_number_1.c -L. lib$(NAME).$(VERSION).a
 
 clean:
