@@ -37,7 +37,7 @@ LA_PARAMETER *parameter_new () {
 	return param;
 }
 
-void parameter_add (LA_PARAMETER *param, char *key, char *value) {
+void parameter_add (LA_PARAMETER *param, const char *key, const char *value) {
 	LA_PARAMETER *node = (LA_PARAMETER*) malloc (sizeof(LA_PARAMETER) );
 	if ( node==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
@@ -65,7 +65,7 @@ void parameter_add (LA_PARAMETER *param, char *key, char *value) {
 	param->next = node;
 }
 
-char *parameter_get (LA_PARAMETER *param, char *key) {
+char *parameter_get (LA_PARAMETER *param, const char *key) {
 	LA_PARAMETER *node = param;
 	if (param->next == NULL) return NULL;       /* check if parameter-set is empty */
 
@@ -138,7 +138,7 @@ void parameter_reset (LA_PARAMETER *param) {
 	param->next = NULL;
 }
 
-int parameter_loadFromFile(LA_PARAMETER *param, char *filename) {
+int parameter_loadFromFile(LA_PARAMETER *param, const char *filename) {
 	parameter_reset(param);
 
 	FILE *file;
@@ -181,7 +181,7 @@ int parameter_loadFromFile(LA_PARAMETER *param, char *filename) {
 	return count;
 }
 
-int parameter_saveToFile(LA_PARAMETER *param, char *filename) {
+int parameter_saveToFile(LA_PARAMETER *param, const char *filename) {
 	if (param->next == NULL) return 0;          /* no parameters to save */
 
 	LA_PARAMETER *node;

@@ -34,15 +34,15 @@ struct la_parameter {
 typedef struct la_parameter LA_PARAMETER;
 
 LA_PARAMETER *parameter_new();
-void parameter_add (LA_PARAMETER *param, char *key, char *value);
-void parameter_remove (LA_PARAMETER *param, char *key);
+void parameter_add (LA_PARAMETER *param, const char *key, const char *value);
+void parameter_remove (LA_PARAMETER *param, const char *key);
 void parameter_clear (LA_PARAMETER *param);
 void parameter_free (LA_PARAMETER *param);
 void parameter_reset (LA_PARAMETER *param);
-char *parameter_get (LA_PARAMETER *param, char *key);
+char *parameter_get (LA_PARAMETER *param, const char *key);
 unsigned int parameter_size (LA_PARAMETER *param);
-int parameter_loadFromFile(LA_PARAMETER *param, char *filename);
-int parameter_saveToFile(LA_PARAMETER *param, char *filename);
+int parameter_loadFromFile(LA_PARAMETER *param, const char *filename);
+int parameter_saveToFile(LA_PARAMETER *param, const char *filename);
 
 #ifdef __cplusplus
 }
