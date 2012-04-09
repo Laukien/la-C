@@ -19,7 +19,7 @@
 #ifndef LA_FILE_H
 #define LA_FILE_H
 
-#include "string.h"
+#include <string.h>
 
 #ifdef __cplusplus
 #include <string>
