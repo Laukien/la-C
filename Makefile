@@ -22,6 +22,7 @@ compile:
 	$(CC) $(CFLAGS) -c -o la_parameter.o la_parameter.c
 	$(CC) $(CFLAGS) -c -o la_error.o la_error.c
 	$(CC) $(CFLAGS) -c -o la_string.o la_string.c
+	$(CC) $(CFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
 	$(CC) $(CFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME).$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
@@ -43,6 +44,7 @@ compile:
 	$(CXX) $(CXXFLAGS) -c -o la_parameter.o la_parameter.c
 	$(CXX) $(CXXFLAGS) -c -o la_error.o la_error.c
 	$(CXX) $(CXXFLAGS) -c -o la_string.o la_string.c
+	$(CXX) $(CXXFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
 	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
@@ -61,7 +63,7 @@ compile:
 example:
 	@echo
 	@echo === EXAMPLE ===
-	$(CC) $(CFLAGS) -o example_string_1 example_string_1.c lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -o example_stringbuffer_1 example_stringbuffer_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_1 example_parameter_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_2 example_parameter_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_file_1 example_file_1.c -L. lib$(NAME).$(VERSION).a
