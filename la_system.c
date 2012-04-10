@@ -19,7 +19,7 @@
 #include "la_system.h"
 #include <stdio.h>
 
-BOOL isOSTypeWindows() {
+BOOL system_isOSTypeWindows() {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	return TRUE;
 #else
@@ -27,7 +27,7 @@ BOOL isOSTypeWindows() {
 #endif
 }
 
-BOOL isOSTypeDOS() {
+BOOL system_isOSTypeDOS() {
 #ifdef SYSTEM_OS_TYPE_DOS
 	return TRUE;
 #else
@@ -35,7 +35,7 @@ BOOL isOSTypeDOS() {
 #endif
 }
 
-BOOL isOSTypeUNIX() {
+BOOL system_isOSTypeUNIX() {
 #ifdef SYSTEM_OS_TYPE_UNIX
 	return TRUE;
 #else
@@ -43,7 +43,7 @@ BOOL isOSTypeUNIX() {
 #endif
 }
 
-BOOL isOSTypeLinux() {
+BOOL system_isOSTypeLinux() {
 #ifdef SYSTEM_OS_TYPE_LINUX
 	return TRUE;
 #else
@@ -51,7 +51,7 @@ BOOL isOSTypeLinux() {
 #endif
 }
 
-BOOL isOSTypeIRIX() {
+BOOL system_isOSTypeIRIX() {
 #ifdef SYSTEM_OS_TYPE_IRIX
 	return TRUE;
 #else
@@ -59,7 +59,7 @@ BOOL isOSTypeIRIX() {
 #endif
 }
 
-BOOL isOSTypeHPUX() {
+BOOL system_isOSTypeHPUX() {
 #ifdef SYSTEM_OS_TYPE_HPUX
 	return TRUE;
 #else
@@ -67,7 +67,7 @@ BOOL isOSTypeHPUX() {
 #endif
 }
 
-BOOL isOSTypeOSX() {
+BOOL system_isOSTypeOSX() {
 #ifdef SYSTEM_OS_TYPE_OSX
 	return TRUE;
 #else
@@ -75,7 +75,7 @@ BOOL isOSTypeOSX() {
 #endif
 }
 
-BOOL isOSTypeOS2() {
+BOOL system_isOSTypeOS2() {
 #ifdef SYSTEM_OS_TYPE_OS2
 	return TRUE;
 #else
@@ -83,7 +83,7 @@ BOOL isOSTypeOS2() {
 #endif
 }
 
-BOOL isOSVendorMicrosoft() {
+BOOL system_isOSVendorMicrosoft() {
 #ifdef SYSTEM_OS_VENDOR_MICROSOFT
 	return TRUE;
 #else
@@ -91,7 +91,7 @@ BOOL isOSVendorMicrosoft() {
 #endif
 }
 
-BOOL isOSVendorSGI() {
+BOOL system_isOSVendorSGI() {
 #ifdef SYSTEM_OS_VENDOR_SGI
 	return TRUE;
 #else
@@ -99,7 +99,7 @@ BOOL isOSVendorSGI() {
 #endif
 }
 
-BOOL isOSVendorHP() {
+BOOL system_isOSVendorHP() {
 #ifdef SYSTEM_OS_VENDOR_HP
 	return TRUE;
 #else
@@ -107,7 +107,7 @@ BOOL isOSVendorHP() {
 #endif
 }
 
-BOOL isOSVendorIBM() {
+BOOL system_isOSVendorIBM() {
 #ifdef SYSTEM_OS_VENDOR_IBM
 	return TRUE;
 #else
@@ -115,7 +115,7 @@ BOOL isOSVendorIBM() {
 #endif
 }
 
-BOOL isOSVendorApple() {
+BOOL system_isOSVendorApple() {
 #ifdef SYSTEM_OS_VENDOR_APPLE
 	return TRUE;
 #else
@@ -123,7 +123,7 @@ BOOL isOSVendorApple() {
 #endif
 }
 
-BOOL isArch32() {
+BOOL system_isArch32() {
 #ifdef SYSTEM_ARCH_32
 	return TRUE;
 #else
@@ -131,7 +131,7 @@ BOOL isArch32() {
 #endif
 }
 
-BOOL isArch64() {
+BOOL system_isArch64() {
 #ifdef SYSTEM_ARCH_64
 	return TRUE;
 #else

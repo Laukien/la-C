@@ -63,25 +63,25 @@ extern "C" {
 #endif
 
 /* OS-Type */
-BOOL isOSTypeWindows();
-BOOL isOSTypeDOS();
-BOOL isOSTypeOS2();
-BOOL isOSTypeUNIX();
-BOOL isOSTypeLinux();
-BOOL isOSTypeIRIX();
-BOOL isOSTypeHPUX();
-BOOL isOSTypeOSX();
+BOOL system_isOSTypeWindows();
+BOOL system_isOSTypeDOS();
+BOOL system_isOSTypeOS2();
+BOOL system_isOSTypeUNIX();
+BOOL system_isOSTypeLinux();
+BOOL system_isOSTypeIRIX();
+BOOL system_isOSTypeHPUX();
+BOOL system_isOSTypeOSX();
 
 /* OS-Vendor */
-BOOL isOSVendorMicrosoft();
-BOOL isOSVendorSGI();
-BOOL isOSVendorHP();
-BOOL isOSVendorIBM();
-BOOL isOSVendorApple();
+BOOL system_isOSVendorMicrosoft();
+BOOL system_isOSVendorSGI();
+BOOL system_isOSVendorHP();
+BOOL system_isOSVendorIBM();
+BOOL system_isOSVendorApple();
 
 /* ARCH */
-BOOL isArch32();
-BOOL isArch64();
+BOOL system_isArch32();
+BOOL system_isArch64();
 
 #ifdef __cplusplus
 }
