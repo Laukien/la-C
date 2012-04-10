@@ -18,7 +18,6 @@
 
 #ifndef LA_FILE_H
 #define LA_FILE_H
-
 #include <string.h>
 
 #ifdef __cplusplus

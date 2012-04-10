@@ -122,3 +122,20 @@ BOOL isOSVendorApple() {
 	return FALSE;
 #endif
 }
+
+BOOL isArch32() {
+#ifdef SYSTEM_ARCH_32
+	return TRUE;
+#else
+	return FALSE;
+#endif
+}
+
+BOOL isArch64() {
+#ifdef SYSTEM_ARCH_64
+	return TRUE;
+#else
+	return FALSE;
+#endif
+}
+

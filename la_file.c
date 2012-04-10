@@ -20,7 +20,17 @@
 #include "la_directory.h"
 #include "la_number.h"
 #include "la_system.h"
-
+#ifdef SYSTEM_ARCH_64
+	#ifndef __USE_LARGEFILE64
+		#define __USE_LARGEFILE64
+	#endif
+	#ifndef _LARGEFILE_SOURCE
+		#define _LARGEFILE_SOURCE
+	#endif
+	#ifndef _LARGEFILE64_SOURCE
+		#define _LARGEFILE64_SOURCE
+	#endif
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -77,8 +87,13 @@ char *file_temp() {
 }
 
 size_t file_size(const char *filename) {
+#ifdef SYSTEM_ARCH_64
+	struct stat64 st;
+	if (stat64(filename, &st) != 0) return -1;
+#else
 	struct stat st;
-	stat(filename, &st);
+	if (stat(filename, &st) != 0) return -1;
+#endif
 	size_t size = st.st_size;
 
 	return size;

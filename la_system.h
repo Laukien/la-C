@@ -56,6 +56,12 @@ extern "C" {
 	#define SYSTEM_OS_TYPE_UNKNOWN
 #endif
 
+#if defined __LP64__ || defined __x86_64__
+	#define SYSTEM_ARCH_64
+#elif defined __i386__
+	#define SYSTEM_ARCH_32
+#endif
+
 /* OS-Type */
 BOOL isOSTypeWindows();
 BOOL isOSTypeDOS();
@@ -72,6 +78,10 @@ BOOL isOSVendorSGI();
 BOOL isOSVendorHP();
 BOOL isOSVendorIBM();
 BOOL isOSVendorApple();
+
+/* ARCH */
+BOOL isArch32();
+BOOL isArch64();
 
 #ifdef __cplusplus
 }
