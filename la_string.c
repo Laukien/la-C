@@ -59,15 +59,15 @@ char *string_toUpper(const char *str) {
 
 
 char *string_trim(const char *str) {
-	int idx_start=0;
+	int idx_start = 0;
 	int idx_stop=strlen(str);
 	while (str[idx_start] != '\0' && iscntrl(str[idx_start])) idx_start++;
-	while (idx_stop>idx_start && iscntrl(str[idx_stop-1])) idx_stop--;
-	if ( idx_start == idx_stop) return NULL;
+	while (idx_stop>idx_start && iscntrl(str[idx_stop - 1])) idx_stop--;
+	if (idx_start == idx_stop) return NULL;
 
 
-	char *trim = (char *)malloc (idx_stop-idx_start+1 );
-	if ( trim==NULL ) {
+	char *trim = (char *)malloc (idx_stop-idx_start + 1 );
+	if (trim == NULL) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_trim)\n" );
 		exit (EXIT_FAILURE);
 	}
