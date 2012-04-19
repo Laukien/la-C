@@ -155,9 +155,15 @@ int parameter_loadFromFile(LA_PARAMETER *param, const char *filename) {
 		/* correct string */
 		char *c = string_replaceFirst(line, "#", "\0");
 		char *t = string_trim(c);
+		free(c);
+
+		if ( t == NULL || strlen(t) == 0) {
+			free(t);
+			continue;
+		}
+
 		strcpy(line, t);
 		free(t);
-		free(c);
 
 		/* split key-value */
 		char *sep = strchr(line, '=');

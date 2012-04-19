@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS += -O3 -Wall
-CFLAGS += -ggdb
+#CFLAGS += -ggdb
 CXX = g++
 CXXFLAGS += -O3 -Wall
 #CXXFLAGS += -ggdb
@@ -9,9 +9,9 @@ ARFLAGS = -rcs
 NAME = lac
 VERSION = 1.1
 
-all: compile example
+all: cc cxx example
 
-compile:
+cc:
 	@echo
 	@echo === COMPILE ===
 	$(CC) $(CFLAGS) -c -o la_datetime.o la_datetime.c
@@ -36,6 +36,7 @@ compile:
 		la_string.c\
 		la_system.c\
 
+cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_datetime.o la_datetime.c
 	$(CXX) $(CXXFLAGS) -c -o la_file.o la_file.c
 	$(CXX) $(CXXFLAGS) -c -o la_directory.o la_directory.c
@@ -57,8 +58,6 @@ compile:
 		la_error.c\
 		la_string.c\
 		la_system.c\
-
-	rm -f *.o
 
 example:
 	@echo
@@ -82,6 +81,10 @@ install:
 	ln -f -s /usr/local/lib/lib$(NAME).$(VERSION).a /usr/local/lib/lib$(NAME).a
 	cp -f lib$(NAME).$(VERSION).so /usr/local/lib
 	ln -f -s /usr/local/lib/lib$(NAME).$(VERSION).so /usr/local/lib/lib$(NAME).so
+	cp -f lib$(NAME)++.$(VERSION).a /usr/local/lib
+	ln -f -s /usr/local/lib/lib$(NAME)++.$(VERSION).a /usr/local/lib/lib$(NAME)++.a
+	cp -f lib$(NAME)++.$(VERSION).so /usr/local/lib
+	ln -f -s /usr/local/lib/lib$(NAME)++.$(VERSION).so /usr/local/lib/lib$(NAME)++.so
 	cp -f *.h /usr/local/include
 	ldconfig /usr/local/lib
 
