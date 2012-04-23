@@ -72,7 +72,13 @@ char *parameter_get (LA_PARAMETER *param, const char *key) {
 	do {
 		node = node->next;
 
-		if ( strcmp(node->key, key) == 0 ) return node->value;
+		if ( strcmp(node->key, key) == 0 ) {
+			/* copy value */
+			char *value;
+			value = (char *) malloc (strlen(node->value)+1);
+			strcpy(value, node->value);
+			return value;
+		}
 	} while (node->next != NULL);
 
 	return NULL;
