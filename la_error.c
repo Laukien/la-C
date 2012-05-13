@@ -24,11 +24,11 @@
 int _id;
 char _msg[ERROR_MESSAGE_SIZE + 1];
 
-void initError() {
-	resetError();
+void error_init() {
+	error_reset();
 }
 
-void setError(int id, const char *msg) {
+void error_set(int id, const char *msg) {
 	if (strlen(msg) > ERROR_MESSAGE_SIZE) {
 		fprintf ( stderr, "ERROR: Message is longer than '%d'.\n", ERROR_MESSAGE_SIZE );
 		exit(EXIT_FAILURE);
@@ -38,25 +38,25 @@ void setError(int id, const char *msg) {
 	strcpy(_msg, msg);
 }
 
-int getErrorId() {
+int error_getId() {
 	return _id;
 }
 
-char *getErrorMessage() {
-	if (!isError()) return NULL;
+char *error_getMessage() {
+	if (!error_exists()) return NULL;
 
 	return _msg;
 }
 
-BOOL isError() {
+BOOL error_exists() {
 	return (_id != ERROR_NONE || strlen(_msg) > 0);
 }
 
-void resetError() {
+void error_reset() {
 	_id = ERROR_NONE;
 	_msg[0] = '\0';
 }
 
-void showError() {
+void error_show() {
 	fprintf (stderr, "ERROR: %s (%d)\n", _msg, _id);
 }

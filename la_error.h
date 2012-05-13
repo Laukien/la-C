@@ -30,13 +30,13 @@ extern "C" {
 #define ERROR_NONE 0
 #define ERROR_UNKNOWN -1
 
-void initError();
-void setError(int id, const char *msg);
-int getErrorId();
-char *getErrorMessage();
-void showError();
-BOOL isError();
-void resetError();
+void error_init();
+void error_set(int id, const char *msg);
+int error_getId();
+char *error_getMessage();
+void error_show();
+BOOL error_exists();
+void error_reset();
 
 #ifdef __cplusplus
 }
