@@ -31,7 +31,7 @@ extern "C" {
 #define ERROR_UNKNOWN -1
 
 void initError();
-void setError(int id, char *msg);
+void setError(int id, const char *msg);
 int getErrorId();
 char *getErrorMessage();
 void showError();
