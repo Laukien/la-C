@@ -28,7 +28,7 @@ void initError() {
 	resetError();
 }
 
-void setError(int id, char *msg) {
+void setError(int id, const char *msg) {
 	if (strlen(msg) > ERROR_MESSAGE_SIZE) {
 		fprintf ( stderr, "ERROR: Message is longer than '%d'.\n", ERROR_MESSAGE_SIZE );
 		exit(EXIT_FAILURE);
