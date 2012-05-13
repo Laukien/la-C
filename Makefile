@@ -1,19 +1,24 @@
-CC = gcc
+CC := gcc
 CFLAGS += -O3 -Wall
 #CFLAGS += -ggdb
-CXX = g++
+CXX := g++
 CXXFLAGS += -O3 -Wall
 #CXXFLAGS += -ggdb
-AR = ar
-ARFLAGS = -rcs
-NAME = lac
-VERSION = 1.1
+AR := ar
+ARFLAGS := -rcs
+NAME := lac
+VERSION := 1.2
+POSTGRESQL := -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir) -L$(shell pg_config --libdir) -lpq
+MYSQL := $(shell mysql_config --include) $(shell mysql_config --libs)
+
 
 all: cc cxx example
 
 cc:
 	@echo
 	@echo === COMPILE ===
+	$(CC) $(CFLAGS) -c -o la_database.o la_database.c
+	$(CC) $(CFLAGS) -c -o la_database-postgresql.o la_database-postgresql.c
 	$(CC) $(CFLAGS) -c -o la_datetime.o la_datetime.c
 	$(CC) $(CFLAGS) -c -o la_file.o la_file.c
 	$(CC) $(CFLAGS) -c -o la_directory.o la_directory.c
@@ -26,6 +31,8 @@ cc:
 	$(CC) $(CFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME).$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
+		la_database.c\
+		la_database-postgresql.c\
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
@@ -37,6 +44,8 @@ cc:
 		la_system.c\
 
 cxx:
+	$(CXX) $(CXXFLAGS) -c -o la_database.o la_database.c
+	$(CXX) $(CXXFLAGS) -c -o la_database-postgresql.o la_database-postgresql.c
 	$(CXX) $(CXXFLAGS) -c -o la_datetime.o la_datetime.c
 	$(CXX) $(CXXFLAGS) -c -o la_file.o la_file.c
 	$(CXX) $(CXXFLAGS) -c -o la_directory.o la_directory.c
@@ -49,6 +58,8 @@ cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
+		la_database.c\
+		la_database-postgresql.c\
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
@@ -68,6 +79,7 @@ example:
 	$(CC) $(CFLAGS) -o example_file_1 example_file_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_file_2 example_file_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_number_1 example_number_1.c -L. lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -o example_database-postgresql_1 example_database-postgresql_1.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
 
 clean:
 	@echo
