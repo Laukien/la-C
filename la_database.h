@@ -19,6 +19,10 @@
 #define LA_DATABASE_ERROR_RESULT 6
 #define LA_DATABASE_ERROR_FORMAT 7
 
+#define LA_DATABASE_CONNECTION_SIZE 512
+#define LA_DATABASE_QUERY_SIZE 4096
+#define LA_DATABASE_NUMBER_SIZE 64
+
 #ifdef __cplusplus
 extern "C" {
 #endif

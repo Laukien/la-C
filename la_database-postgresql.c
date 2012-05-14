@@ -1,6 +1,8 @@
 #include "la_database-postgresql.h"
+#include "la_stringbuffer.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #ifdef PG_MODULE_MAGIC
 PG_MODULE_MAGIC;
@@ -33,6 +35,16 @@ BOOL checkParameter(LA_DATABASE *self) {
 	}
 
 	return TRUE;
+}
+
+int countParameter(const char *query) {
+	int count = 0;
+	int i;
+	for (i = 0; query[i] != '\0'; ++i) {
+		if (query[i] == '%') ++count;
+	}
+
+	return count;
 }
 
 LA_DATABASE *database_new() {
@@ -83,8 +95,8 @@ void database_open(LA_DATABASE *self) {
 		return;
 	}
 
-	char conn[512 + 1];
-	snprintf(conn, 512, "host=%s dbname=%s user=%s password=%s", self->host, self->name, self->user, self->password);
+	char conn[LA_DATABASE_CONNECTION_SIZE + 1];
+	snprintf(conn, LA_DATABASE_CONNECTION_SIZE, "host=%s dbname=%s user=%s password=%s", self->host, self->name, self->user, self->password);
 	self->connection = PQconnectdb(conn);
 }
 
@@ -127,42 +139,6 @@ BOOL database_isResult(LA_DATABASE *self) {
 	return self->result != NULL;
 }
 
-BOOL database_nextResult(LA_DATABASE *self) {
-	if (database_isResult(self) && self->resultCur < self->resultRow) {
-		++(self->resultCur);
-
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-BOOL database_previousResult(LA_DATABASE *self) {
-	if (database_isResult(self) && self->resultCur > 0) {
-		--(self->resultCur);
-
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-BOOL database_firstResult(LA_DATABASE *self) {
-	if (database_isResult(self)) {
-		self->resultCur = 0;
-
-		return TRUE;
-	} else return FALSE;
-}
-
-BOOL database_lastResult(LA_DATABASE *self) {
-	if (database_isResult(self)) {
-		self->resultCur = self->resultRow - 1;
-
-		return TRUE;
-	} else return FALSE;
-}
-
 char *database_getString(LA_DATABASE *self, int col) {
 	if (!database_isResult(self)) return NULL;
 	if (self->resultCur < 0 || self->resultCur >= self->resultRow) {
@@ -196,7 +172,53 @@ void database_execute(LA_DATABASE *self, const char *query, ...) {
 	/* reset */
 	if (database_isResult(self)) database_closeResult(self);
 
-	self->result = PQexec(self->connection, query);
+	/* query */
+	char *text = (char*) malloc(strlen(query) + 1);
+	strcpy(text, query);
+
+	va_list args;
+	va_start(args, query);
+
+	LA_STRINGBUFFER *sb;
+	sb = stringbuffer_new();
+
+	int i;
+	int idx = 0;
+	BOOL isString = FALSE;
+	char fmt;
+	for (i = 0; text[i] != '\0'; ++i) {
+		if (text[i] == '\'') {
+			isString = !isString;
+			continue;
+		}
+		if (text[i] != '?') continue;
+
+		text[i] = '\0';
+		stringbuffer_append(sb, text + idx);
+
+		++i;
+		fmt = text[i];
+		if (isString) {
+			char *val = va_arg(args, char *);
+			char *esc = escapeParameter(val);
+			stringbuffer_append(sb, esc);
+			free(esc);
+		} else {
+			int val = va_arg(args, int);
+			char esc[LA_DATABASE_NUMBER_SIZE + 1];
+			sprintf(esc, "%d", val);
+			stringbuffer_append(sb, esc);
+		}
+
+        idx = i;                                /* set idx-start to next index */
+	}
+	stringbuffer_append(sb, text + idx);
+
+	va_end(args);
+
+	self->result = PQexec(self->connection, stringbuffer_text(sb));
+	stringbuffer_free(sb);
+	free(text);
 	if (self->result == NULL) {
 		error_set(LA_DATABASE_ERROR_EXECUTE, "unable to execute");
 		return;

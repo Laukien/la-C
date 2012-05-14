@@ -40,6 +40,42 @@ void database_setPassword(LA_DATABASE *self, const char *password) {
 	strcpy(self->password, password);
 }
 
+BOOL database_nextResult(LA_DATABASE *self) {
+	if (database_isResult(self) && self->resultCur < (self->resultRow) - 1) {
+		++(self->resultCur);
+
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+BOOL database_previousResult(LA_DATABASE *self) {
+	if (database_isResult(self) && self->resultCur > 0) {
+		--(self->resultCur);
+
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+BOOL database_firstResult(LA_DATABASE *self) {
+	if (database_isResult(self)) {
+		self->resultCur = 0;
+
+		return TRUE;
+	} else return FALSE;
+}
+
+BOOL database_lastResult(LA_DATABASE *self) {
+	if (database_isResult(self)) {
+		self->resultCur = self->resultRow - 1;
+
+		return TRUE;
+	} else return FALSE;
+}
+
 int database_getResultRowCount(LA_DATABASE *self) {
 	if (!database_checkSelf(self)) return 0;
 
