@@ -16,6 +16,38 @@
  * =====================================================================================
  */
 
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
+
 void console_clean() {
 	printf ( CONSOLE_CLEAN );
+}
+
+int console_getRow() {
+	struct winsize w;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+	return w.ws_row;
+}
+
+int console_getColumn() {
+	struct winsize w;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+	return w.ws_col;
+}
+
+int console_getWidth() {
+	struct winsize w;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+	return w.ws_xpixel;
+}
+
+int console_getHeight() {
+	struct winsize w;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+	return w.ws_ypixel;
 }

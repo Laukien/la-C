@@ -67,6 +67,13 @@ extern "C" {
 #define CONSOLE_BG_LIGHT_YELLOW	"\033[1;43m"
 #define CONSOLE_BG_WHITE			"\033[1;47m"
 
+
+void console_clean();
+int console_getRow();
+int console_getColumn();
+int console_getWidth();
+int console_getHeight();
+
 #ifdef __cplusplus
 }
 #endif
