@@ -19,6 +19,7 @@
 #define LA_STRING_H
 
 #include "la_common.h"
+#include <regex.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,6 +31,7 @@ char *string_trim(const char *str);
 char *string_replaceFirst(const char *string, const char *from, const char *to);
 char *string_replace(const char *string, const char *from, const char *to);
 BOOL string_isEmpty(const char *string);
+char *regexp (char *string, char *patrn, int *begin, int *end);
 
 #ifdef __cplusplus
 }

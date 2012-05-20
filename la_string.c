@@ -156,3 +156,26 @@ BOOL string_isEmpty(const char *string) {
 
 	return len == 0 ? TRUE : FALSE;
 }
+
+char *regexp (char *string, char *patrn, int *begin, int *end) {     
+	int i, len;                  
+	int w = 0;
+	char *word = NULL;
+	regex_t rgT;
+	regmatch_t match;
+	regcomp(&rgT, patrn, REG_EXTENDED);
+	if ((regexec(&rgT, string, 1, &match, 0)) == 0) {
+		*begin = (int)match.rm_so;
+		*end = (int)match.rm_eo;
+		len = *end-*begin;
+		word = (char*)malloc(len + 1);
+		for (i = *begin; i < *end; ++i) {
+			word[w] = string[i];
+			++w;
+		}
+		word[w] = '\0';
+	}
+	regfree(&rgT);
+	return word;
+}
+
