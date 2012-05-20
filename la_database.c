@@ -2,45 +2,45 @@
 #include <stdlib.h>
 #include <string.h>
 
-BOOL database_checkSelf(LA_DATABASE *self) {
+BOOL database_checkSelf(DATABASE *self) {
 	error_reset();
 	if (self == NULL) {
-		error_set(LA_DATABASE_ERROR_INIT, "database not initiated");
+		error_set(DATABASE_ERROR_INIT, "database not initiated");
 		return FALSE;
 	}
 
 	return TRUE;
 }
 
-void database_setHost(LA_DATABASE *self, const char *host) {
+void database_setHost(DATABASE *self, const char *host) {
 	if (!database_checkSelf(self)) return;
 
 	self->host = (char *)malloc(strlen(host) + 1);
 	strcpy(self->host, host);
 }
 
-void database_setName(LA_DATABASE *self, const char *name) {
+void database_setName(DATABASE *self, const char *name) {
 	if (!database_checkSelf(self)) return;
 
 	self->name = (char *)malloc(strlen(name) + 1);
 	strcpy(self->name, name);
 }
 
-void database_setUser(LA_DATABASE *self, const char *user) {
+void database_setUser(DATABASE *self, const char *user) {
 	if (!database_checkSelf(self)) return;
 
 	self->user = (char *)malloc(strlen(user) + 1);
 	strcpy(self->user, user);
 }
 
-void database_setPassword(LA_DATABASE *self, const char *password) {
+void database_setPassword(DATABASE *self, const char *password) {
 	if (!database_checkSelf(self)) return;
 
 	self->password = (char *)malloc(strlen(password) + 1);
 	strcpy(self->password, password);
 }
 
-BOOL database_nextResult(LA_DATABASE *self) {
+BOOL database_nextResult(DATABASE *self) {
 	if (database_isResult(self) && self->resultCur < (self->resultRow) - 1) {
 		++(self->resultCur);
 
@@ -50,7 +50,7 @@ BOOL database_nextResult(LA_DATABASE *self) {
 	}
 }
 
-BOOL database_previousResult(LA_DATABASE *self) {
+BOOL database_previousResult(DATABASE *self) {
 	if (database_isResult(self) && self->resultCur > 0) {
 		--(self->resultCur);
 
@@ -60,7 +60,7 @@ BOOL database_previousResult(LA_DATABASE *self) {
 	}
 }
 
-BOOL database_firstResult(LA_DATABASE *self) {
+BOOL database_firstResult(DATABASE *self) {
 	if (database_isResult(self)) {
 		self->resultCur = 0;
 
@@ -68,7 +68,7 @@ BOOL database_firstResult(LA_DATABASE *self) {
 	} else return FALSE;
 }
 
-BOOL database_lastResult(LA_DATABASE *self) {
+BOOL database_lastResult(DATABASE *self) {
 	if (database_isResult(self)) {
 		self->resultCur = self->resultRow - 1;
 
@@ -76,19 +76,19 @@ BOOL database_lastResult(LA_DATABASE *self) {
 	} else return FALSE;
 }
 
-int database_getResultRowCount(LA_DATABASE *self) {
+int database_getResultRowCount(DATABASE *self) {
 	if (!database_checkSelf(self)) return 0;
 
 	return self->resultRow;
 }
 
-int database_getResultColumnCount(LA_DATABASE *self) {
+int database_getResultColumnCount(DATABASE *self) {
 	if (!database_checkSelf(self)) return 0;
 
 	return self->resultCol;
 }
 
-int database_getResultCursor(LA_DATABASE *self) {
+int database_getResultCursor(DATABASE *self) {
 	if (!database_checkSelf(self)) return 0;
 
 	return self->resultCur;

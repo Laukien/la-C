@@ -19,8 +19,8 @@
 #ifndef LA_PARAMETER_H
 #define LA_PARAMETER_H
 
-#define LA_PARAMETER_KEY_SIZE 32
-#define LA_PARAMETER_VALUE_SIZE 64
+#define PARAMETER_KEY_SIZE 32
+#define PARAMETER_VALUE_SIZE 64
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,18 +31,18 @@ struct la_parameter {
 	char *value;
 	struct la_parameter *next;
 };
-typedef struct la_parameter LA_PARAMETER;
+typedef struct la_parameter PARAMETER;
 
-LA_PARAMETER *parameter_new();
-void parameter_add (LA_PARAMETER *param, const char *key, const char *value);
-void parameter_remove (LA_PARAMETER *param, const char *key);
-void parameter_clear (LA_PARAMETER *param);
-void parameter_free (LA_PARAMETER *param);
-void parameter_reset (LA_PARAMETER *param);
-char *parameter_get (LA_PARAMETER *param, const char *key);
-unsigned int parameter_size (LA_PARAMETER *param);
-int parameter_loadFromFile(LA_PARAMETER *param, const char *filename);
-int parameter_saveToFile(LA_PARAMETER *param, const char *filename);
+PARAMETER *parameter_new();
+void parameter_add (PARAMETER *param, const char *key, const char *value);
+void parameter_remove (PARAMETER *param, const char *key);
+void parameter_clear (PARAMETER *param);
+void parameter_free (PARAMETER *param);
+void parameter_reset (PARAMETER *param);
+char *parameter_get (PARAMETER *param, const char *key);
+unsigned int parameter_size (PARAMETER *param);
+int parameter_loadFromFile(PARAMETER *param, const char *filename);
+int parameter_saveToFile(PARAMETER *param, const char *filename);
 
 #ifdef __cplusplus
 }

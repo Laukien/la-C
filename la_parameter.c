@@ -23,8 +23,8 @@
 #include "la_parameter.h"
 #include "la_string.h"
 
-LA_PARAMETER *parameter_new () {
-	LA_PARAMETER *param = (LA_PARAMETER*) malloc ( sizeof(LA_PARAMETER) );
+PARAMETER *parameter_new () {
+	PARAMETER *param = (PARAMETER*) malloc ( sizeof(PARAMETER) );
 	if ( param==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);
@@ -37,8 +37,8 @@ LA_PARAMETER *parameter_new () {
 	return param;
 }
 
-void parameter_add (LA_PARAMETER *param, const char *key, const char *value) {
-	LA_PARAMETER *node = (LA_PARAMETER*) malloc (sizeof(LA_PARAMETER) );
+void parameter_add (PARAMETER *param, const char *key, const char *value) {
+	PARAMETER *node = (PARAMETER*) malloc (sizeof(PARAMETER) );
 	if ( node==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
 		exit (EXIT_FAILURE);
@@ -65,8 +65,8 @@ void parameter_add (LA_PARAMETER *param, const char *key, const char *value) {
 	param->next = node;
 }
 
-char *parameter_get (LA_PARAMETER *param, const char *key) {
-	LA_PARAMETER *node = param;
+char *parameter_get (PARAMETER *param, const char *key) {
+	PARAMETER *node = param;
 	if (param->next == NULL) return NULL;       /* check if parameter-set is empty */
 
 	do {
@@ -84,10 +84,10 @@ char *parameter_get (LA_PARAMETER *param, const char *key) {
 	return NULL;
 }
 
-unsigned int parameter_size (LA_PARAMETER *param) {
+unsigned int parameter_size (PARAMETER *param) {
 	if ( param->next == NULL) return 0;
 
-	LA_PARAMETER *node = param;
+	PARAMETER *node = param;
 	unsigned int count = 0;
 
 	do {
@@ -100,9 +100,9 @@ unsigned int parameter_size (LA_PARAMETER *param) {
 }
 
 
-void parameter_free (LA_PARAMETER *param) {
-	LA_PARAMETER *node;
-	LA_PARAMETER *next;
+void parameter_free (PARAMETER *param) {
+	PARAMETER *node;
+	PARAMETER *next;
 
 	node = param;                               /* get the first parameter */
 	while (node->next != NULL) {
@@ -120,9 +120,9 @@ void parameter_free (LA_PARAMETER *param) {
 	node = NULL;
 }
 
-void parameter_reset (LA_PARAMETER *param) {
-	LA_PARAMETER *node;
-	LA_PARAMETER *next;
+void parameter_reset (PARAMETER *param) {
+	PARAMETER *node;
+	PARAMETER *next;
 
 	node = param->next;                         /* get the next parameter */
 	if (node == NULL) return;
@@ -144,7 +144,7 @@ void parameter_reset (LA_PARAMETER *param) {
 	param->next = NULL;
 }
 
-int parameter_loadFromFile(LA_PARAMETER *param, const char *filename) {
+int parameter_loadFromFile(PARAMETER *param, const char *filename) {
 	parameter_reset(param);
 
 	FILE *file;
@@ -154,7 +154,7 @@ int parameter_loadFromFile(LA_PARAMETER *param, const char *filename) {
 	unsigned int count = 0;
 	char *key;
 	char *value;
-	char line[LA_PARAMETER_KEY_SIZE + 1 + LA_PARAMETER_VALUE_SIZE + 2 + 1];
+	char line[PARAMETER_KEY_SIZE + 1 + PARAMETER_VALUE_SIZE + 2 + 1];
 	int len = sizeof(line)/sizeof(line[0]);
 //	memset(line, '\0', len);
 	while (fgets(line, len, file) != NULL) {
@@ -174,8 +174,8 @@ int parameter_loadFromFile(LA_PARAMETER *param, const char *filename) {
 		/* split key-value */
 		char *sep = strchr(line, '=');
         if (sep == NULL) continue;              /* no separator */
-		if ((sep - line) > LA_PARAMETER_KEY_SIZE) continue;
-		if ((strlen(line) - (sep - line) - 1) > LA_PARAMETER_VALUE_SIZE) continue;
+		if ((sep - line) > PARAMETER_KEY_SIZE) continue;
+		if ((strlen(line) - (sep - line) - 1) > PARAMETER_VALUE_SIZE) continue;
 		sep[0] = '\0';                          /* make the separator th the key-end */
 		key = string_trim(line);
         ++sep;                                  /* move one byte right */
@@ -193,10 +193,10 @@ int parameter_loadFromFile(LA_PARAMETER *param, const char *filename) {
 	return count;
 }
 
-int parameter_saveToFile(LA_PARAMETER *param, const char *filename) {
+int parameter_saveToFile(PARAMETER *param, const char *filename) {
 	if (param->next == NULL) return 0;          /* no parameters to save */
 
-	LA_PARAMETER *node;
+	PARAMETER *node;
 	node = param;
 
 	unsigned int count = 0;

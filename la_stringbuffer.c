@@ -22,32 +22,32 @@
 #include <stdio.h>
 #include <string.h>
 
-LA_STRINGBUFFER *stringbuffer_new() {
-	LA_STRINGBUFFER *ptr = (LA_STRINGBUFFER *)malloc(sizeof(LA_STRINGBUFFER));
+STRINGBUFFER *stringbuffer_new() {
+	STRINGBUFFER *ptr = (STRINGBUFFER *)malloc(sizeof(STRINGBUFFER));
 	if (ptr == NULL) {
 		printf ( "ERROR: Unable to get memory.\n" );
 		exit(EXIT_FAILURE);
 	}
 
-	ptr->pointer = (char *)malloc(1);
-	ptr->pointer[0] = '\0';
+	ptr->text = (char *)malloc(1);
+	ptr->text[0] = '\0';
 	ptr->size = 0;
 
 	return ptr;
 }
 
-void stringbuffer_free(LA_STRINGBUFFER *ptr) {
+void stringbuffer_free(STRINGBUFFER *ptr) {
 	if (ptr == NULL) {
 		printf ( "ERROR: Pointer is NULL.\n" );
 		exit(EXIT_FAILURE);
 	}
 
-	free(ptr->pointer);
+	free(ptr->text);
 	ptr->size = 0;
 	free(ptr);
 }
 
-unsigned int stringbuffer_size(LA_STRINGBUFFER *ptr) {
+unsigned int stringbuffer_size(STRINGBUFFER *ptr) {
 	if (ptr == NULL) {
 		printf ( "ERROR: Pointer is NULL.\n" );
 		exit(EXIT_FAILURE);
@@ -56,23 +56,23 @@ unsigned int stringbuffer_size(LA_STRINGBUFFER *ptr) {
 	return ptr->size;
 }
 
-void stringbuffer_append(LA_STRINGBUFFER *ptr, const char *str) {
+void stringbuffer_append(STRINGBUFFER *ptr, const char *str) {
 	if (ptr == NULL) {
 		printf ( "ERROR: Pointer is NULL.\n" );
 		exit(EXIT_FAILURE);
 	}
 
     ptr->size = ptr->size + strlen(str);        /* set new length */
-	ptr->pointer = (char *) realloc(ptr->pointer, ptr->size + 1);
-	if (ptr->pointer == NULL) {
+	ptr->text = (char *) realloc(ptr->text, ptr->size + 1);
+	if (ptr->text == NULL) {
 		printf ( "ERROR: Unable to get more memory.\n" );
 		exit(EXIT_FAILURE);
 	}
-	memcpy(ptr->pointer+strlen(ptr->pointer), str, strlen(str)); 
-	ptr->pointer[ptr->size] = '\0';             /* end string */
+	memcpy(ptr->text+strlen(ptr->text), str, strlen(str)); 
+	ptr->text[ptr->size] = '\0';             /* end string */
 }
 
-void stringbuffer_insert(LA_STRINGBUFFER *ptr, const char *str, unsigned int pos) {
+void stringbuffer_insert(STRINGBUFFER *ptr, const char *str, unsigned int pos) {
 	if (ptr == NULL) {
 		printf ( "ERROR: Pointer is NULL.\n" );
 		exit(EXIT_FAILURE);
@@ -85,37 +85,37 @@ void stringbuffer_insert(LA_STRINGBUFFER *ptr, const char *str, unsigned int pos
 		exit(EXIT_FAILURE);
 	}
 	if (pos != 0) {
-		memcpy(tmp, ptr->pointer, pos); 
+		memcpy(tmp, ptr->text, pos); 
 	}
 	memcpy(tmp + pos, str, strlen(str));
-	if(pos != strlen(ptr->pointer)) {
-		memcpy(tmp + pos + strlen(str), ptr->pointer + pos, strlen(ptr->pointer) - pos);
+	if(pos != strlen(ptr->text)) {
+		memcpy(tmp + pos + strlen(str), ptr->text + pos, strlen(ptr->text) - pos);
 	}
 
-	free(ptr->pointer);
-	ptr->pointer = tmp;
+	free(ptr->text);
+	ptr->text = tmp;
 }
 
-char *stringbuffer_pointer(LA_STRINGBUFFER *ptr) {
+char *stringbuffer_text(STRINGBUFFER *ptr) {
 	if (ptr == NULL) {
 		printf ( "ERROR: Pointer is NULL.\n" );
 		exit(EXIT_FAILURE);
 	}
 
-	return ptr->pointer;
+	return ptr->text;
 }
 
-LA_STRINGBUFFER *stringbuffer_clone(LA_STRINGBUFFER *ptr) {
-	LA_STRINGBUFFER *new_ptr = stringbuffer_new();
-	stringbuffer_append(new_ptr, ptr->pointer);
+STRINGBUFFER *stringbuffer_clone(STRINGBUFFER *ptr) {
+	STRINGBUFFER *new_ptr = stringbuffer_new();
+	stringbuffer_append(new_ptr, ptr->text);
 
 	return new_ptr;
 }
 
-void stringbuffer_reset(LA_STRINGBUFFER *ptr) {
-	free(ptr->pointer);
-	ptr->pointer = (char *)malloc(1);
-	if ( ptr->pointer == NULL ) {
+void stringbuffer_reset(STRINGBUFFER *ptr) {
+	free(ptr->text);
+	ptr->text = (char *)malloc(1);
+	if ( ptr->text == NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (stringbuffer_reset)\n" );
 		exit (EXIT_FAILURE);
 	}

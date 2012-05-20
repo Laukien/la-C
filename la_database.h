@@ -1,9 +1,9 @@
 #ifndef LA_DATABASE_H
 #define LA_DATABASE_H
 
-#if defined LA_DATABASE_POSTGRESQL_H
+#if defined DATABASE_POSTGRESQL_H
 		#include <libpq-fe.h>
-#elif defined LA_DATABASE_MYSQL_H
+#elif defined DATABASE_MYSQL_H
 //	#include <my_global.h>
 	#include <mysql.h>
 #endif
@@ -11,17 +11,17 @@
 #include "la_common.h"
 #include "la_error.h"
 
-#define LA_DATABASE_ERROR_INIT 1
-#define LA_DATABASE_ERROR_MEMORY 2
-#define LA_DATABASE_ERROR_PARAMETER 3
-#define LA_DATABASE_ERROR_CONNECTION 4
-#define LA_DATABASE_ERROR_EXECUTE 5
-#define LA_DATABASE_ERROR_RESULT 6
-#define LA_DATABASE_ERROR_FORMAT 7
+#define DATABASE_ERROR_INIT 1
+#define DATABASE_ERROR_MEMORY 2
+#define DATABASE_ERROR_PARAMETER 3
+#define DATABASE_ERROR_CONNECTION 4
+#define DATABASE_ERROR_EXECUTE 5
+#define DATABASE_ERROR_RESULT 6
+#define DATABASE_ERROR_FORMAT 7
 
-#define LA_DATABASE_CONNECTION_SIZE 512
-#define LA_DATABASE_QUERY_SIZE 4096
-#define LA_DATABASE_NUMBER_SIZE 64
+#define DATABASE_CONNECTION_SIZE 512
+#define DATABASE_QUERY_SIZE 4096
+#define DATABASE_NUMBER_SIZE 64
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,42 +35,42 @@ typedef struct {
 	int resultCol;
 	int resultRow;
 	int resultCur;
-#if defined LA_DATABASE_POSTGRESQL_H
+#if defined DATABASE_POSTGRESQL_H
 	char *schema;
 	PGconn *connection;
 	PGresult *result;
-#elif defined LA_DATABASE_MYSQL_H
+#elif defined DATABASE_MYSQL_H
 	MYSQL *connection;
 	MYSQL_RES *result;
 	MYSQL_ROW row;
-#elif defined LA_DATABASE_ORACLE_H
+#elif defined DATABASE_ORACLE_H
 	char *schema;
 	char *sid;
 #endif
-} LA_DATABASE;
+} DATABASE;
 
-LA_DATABASE *database_new();
-void database_free(LA_DATABASE *self);
-void database_open(LA_DATABASE *self);
-void database_close(LA_DATABASE *self);
-BOOL database_isOpen(LA_DATABASE *self);
-void database_closeResult(LA_DATABASE *self);
-BOOL database_isResult(LA_DATABASE *self);
-int database_getResultRowCount(LA_DATABASE *self);
-int database_getResultColumnCount(LA_DATABASE *self);
-int database_getResultCursor(LA_DATABASE *self);
-BOOL database_nextResult(LA_DATABASE *self);
-BOOL database_previousResult(LA_DATABASE *self);
-BOOL database_firstResult(LA_DATABASE *self);
-BOOL database_lastResult(LA_DATABASE *self);
-void database_setHost(LA_DATABASE *self, const char *host);
-void database_setName(LA_DATABASE *self, const char *name);
-void database_setUser(LA_DATABASE *self, const char *user);
-void database_setPassword(LA_DATABASE *self, const char *password);
-char *database_getString(LA_DATABASE *self, int col);
-void database_execute(LA_DATABASE *self, const char *query, ...);
-char *database_getVersion(LA_DATABASE *self);
-BOOL database_checkSelf(LA_DATABASE *self);
+DATABASE *database_new();
+void database_free(DATABASE *self);
+void database_open(DATABASE *self);
+void database_close(DATABASE *self);
+BOOL database_isOpen(DATABASE *self);
+void database_closeResult(DATABASE *self);
+BOOL database_isResult(DATABASE *self);
+int database_getResultRowCount(DATABASE *self);
+int database_getResultColumnCount(DATABASE *self);
+int database_getResultCursor(DATABASE *self);
+BOOL database_nextResult(DATABASE *self);
+BOOL database_previousResult(DATABASE *self);
+BOOL database_firstResult(DATABASE *self);
+BOOL database_lastResult(DATABASE *self);
+void database_setHost(DATABASE *self, const char *host);
+void database_setName(DATABASE *self, const char *name);
+void database_setUser(DATABASE *self, const char *user);
+void database_setPassword(DATABASE *self, const char *password);
+char *database_getString(DATABASE *self, int col);
+void database_execute(DATABASE *self, const char *query, ...);
+char *database_getVersion(DATABASE *self);
+BOOL database_checkSelf(DATABASE *self);
 
 #ifdef __cplusplus
 }

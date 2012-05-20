@@ -3,7 +3,7 @@
 
 int main(void) {
 
-	LA_PARAMETER *param = parameter_new();
+	PARAMETER *param = parameter_new();
 
 	parameter_add(param, "key1", "valueA");
 	parameter_add(param, "key2", "valueB");

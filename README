@@ -3,9 +3,9 @@ Just another C-library...
 
 Libraries
 ---------
-* color
 * common
-* database
+* console
+* database_postgresql
 * datetime
 * directory
 * error

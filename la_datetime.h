@@ -38,9 +38,9 @@ typedef struct {
         short hour;
         short minute;
         short second;
-} LA_DATETIME;
+} DATETIME;
 
-LA_DATETIME datetime_now();
+DATETIME datetime_now();
 char *datetime_getTimestampAsString();
 char *datetime_getDateAsString();
 char *datetime_getTimeAsString();

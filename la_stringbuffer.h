@@ -25,18 +25,18 @@ extern "C" {
 #endif
 
 typedef struct {
-	char *pointer;
+	char *text;
 	unsigned int size;
-} LA_STRINGBUFFER;
+} STRINGBUFFER;
 
-LA_STRINGBUFFER *stringbuffer_new();
-void stringbuffer_free(LA_STRINGBUFFER *ptr);
-unsigned int stringbuffer_size(LA_STRINGBUFFER *ptr);
-void stringbuffer_append(LA_STRINGBUFFER *ptr, const char *str);
-void stringbuffer_insert(LA_STRINGBUFFER *ptr, const char *str, unsigned int pos);
-char *stringbuffer_pointer(LA_STRINGBUFFER *ptr);
-LA_STRINGBUFFER *stringbuffer_clone(LA_STRINGBUFFER *ptr);
-void stringbuffer_reset(LA_STRINGBUFFER *ptr);
+STRINGBUFFER *stringbuffer_new();
+void stringbuffer_free(STRINGBUFFER *ptr);
+unsigned int stringbuffer_size(STRINGBUFFER *ptr);
+void stringbuffer_append(STRINGBUFFER *ptr, const char *str);
+void stringbuffer_insert(STRINGBUFFER *ptr, const char *str, unsigned int pos);
+char *stringbuffer_text(STRINGBUFFER *ptr);
+STRINGBUFFER *stringbuffer_clone(STRINGBUFFER *ptr);
+void stringbuffer_reset(STRINGBUFFER *ptr);
 
 #ifdef __cplusplus
 }
