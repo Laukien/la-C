@@ -17,6 +17,7 @@ all: cc cxx example
 cc:
 	@echo
 	@echo === COMPILE ===
+	$(CC) $(CFLAGS) -c -o la_console.o la_console.c
 	$(CC) $(CFLAGS) -c -o la_database_postgresql.o la_database_postgresql.c
 	$(CC) $(CFLAGS) -c -o la_database_oracle.o la_database_oracle.c
 	$(CC) $(CFLAGS) -c -o la_datetime.o la_datetime.c
@@ -31,6 +32,7 @@ cc:
 	$(CC) $(CFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME).$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
+		la_console.c\
 		la_database_postgresql.c\
 		la_database_oracle.c\
 		la_datetime.c\
@@ -45,6 +47,7 @@ cc:
 		la_system.c\
 
 cxx:
+	$(CXX) $(CXXFLAGS) -c -o la_console.o la_console.c
 	$(CXX) $(CXXFLAGS) -c -o la_database_postgresql.o la_database_postgresql.c
 	$(CXX) $(CXXFLAGS) -c -o la_database_oracle.o la_database_oracle.c
 	$(CXX) $(CXXFLAGS) -c -o la_datetime.o la_datetime.c
@@ -59,6 +62,7 @@ cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
+		la_console.c\
 		la_database_postgresql.c\
 		la_database_oracle.c\
 		la_datetime.c\

@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 
+#include "la_console.h"
 #include <sys/ioctl.h>
 #include <stdio.h>
 #include <unistd.h>
