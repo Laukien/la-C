@@ -157,7 +157,7 @@ BOOL string_isEmpty(const char *string) {
 	return len == 0 ? TRUE : FALSE;
 }
 
-char *regexp (char *string, char *patrn, int *begin, int *end) {     
+char *string_regexp (char *string, char *patrn, int *begin, int *end) {     
 	int i, len;                  
 	int w = 0;
 	char *word = NULL;
