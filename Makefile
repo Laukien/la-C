@@ -7,7 +7,7 @@ CXXFLAGS += -O3 -Wall
 AR := ar
 ARFLAGS := -rcs
 NAME := lac
-VERSION := 1.2
+VERSION := 1.3
 POSTGRESQL := -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir) -L$(shell pg_config --libdir) -lpq
 MYSQL := $(shell mysql_config --include) $(shell mysql_config --libs)
 
@@ -17,8 +17,8 @@ all: cc cxx example
 cc:
 	@echo
 	@echo === COMPILE ===
-	$(CC) $(CFLAGS) -c -o la_database.o la_database.c
-	$(CC) $(CFLAGS) -c -o la_database-postgresql.o la_database-postgresql.c
+	$(CC) $(CFLAGS) -c -o la_database_postgresql.o la_database_postgresql.c
+	$(CC) $(CFLAGS) -c -o la_database_oracle.o la_database_oracle.c
 	$(CC) $(CFLAGS) -c -o la_datetime.o la_datetime.c
 	$(CC) $(CFLAGS) -c -o la_file.o la_file.c
 	$(CC) $(CFLAGS) -c -o la_directory.o la_directory.c
@@ -31,8 +31,8 @@ cc:
 	$(CC) $(CFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME).$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
-		la_database.c\
-		la_database-postgresql.c\
+		la_database_postgresql.c\
+		la_database_oracle.c\
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
@@ -41,11 +41,12 @@ cc:
 		la_parameter.c\
 		la_error.c\
 		la_string.c\
+		la_stringbuffer.c\
 		la_system.c\
 
 cxx:
-	$(CXX) $(CXXFLAGS) -c -o la_database.o la_database.c
-	$(CXX) $(CXXFLAGS) -c -o la_database-postgresql.o la_database-postgresql.c
+	$(CXX) $(CXXFLAGS) -c -o la_database_postgresql.o la_database_postgresql.c
+	$(CXX) $(CXXFLAGS) -c -o la_database_oracle.o la_database_oracle.c
 	$(CXX) $(CXXFLAGS) -c -o la_datetime.o la_datetime.c
 	$(CXX) $(CXXFLAGS) -c -o la_file.o la_file.c
 	$(CXX) $(CXXFLAGS) -c -o la_directory.o la_directory.c
@@ -58,8 +59,8 @@ cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
-		la_database.c\
-		la_database-postgresql.c\
+		la_database_postgresql.c\
+		la_database_oracle.c\
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
@@ -68,6 +69,7 @@ cxx:
 		la_parameter.c\
 		la_error.c\
 		la_string.c\
+		la_stringbuffer.c\
 		la_system.c\
 
 example:
@@ -79,7 +81,9 @@ example:
 	$(CC) $(CFLAGS) -o example_file_1 example_file_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_file_2 example_file_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_number_1 example_number_1.c -L. lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example_database-postgresql_1 example_database-postgresql_1.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
+	$(CC) $(CFLAGS) -o example_database_postgresql_1 example_database_postgresql_1.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
+	$(CC) $(CFLAGS) -o example_database_postgresql_2 example_database_postgresql_2.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
+	$(CC) $(CFLAGS) -o example_database_oracle_1 example_database_oracle_1.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
 
 clean:
 	@echo
