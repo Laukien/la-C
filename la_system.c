@@ -18,6 +18,8 @@
 
 #include "la_system.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 BOOL system_isOSTypeWindows() {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
@@ -139,3 +141,34 @@ BOOL system_isArch64() {
 #endif
 }
 
+SYSTEM_UPTIME system_getUptime() {
+#ifdef SYSTEM_OS_TYPE_LINUX
+	SYSTEM_UPTIME ut;
+    memset(&ut, 0, sizeof(ut));                 /* set all fields to '0' */
+
+	char line[64];
+
+	FILE *file;
+	file = fopen ("/proc/uptime", "r");
+	if (file == NULL) return ut;
+	fgets(line, (sizeof(char) * sizeof(line)) - 1, file);
+	fclose(file);
+
+	char *idx = strchr(line, ' ');
+	if (idx == NULL) return ut;
+	idx[0] = '\0';                              /* cut string */
+
+	double value = atof(line);
+	printf ( "UPTIME: %f\n", value );
+
+	ut.day = value / 86400;
+	ut.hour = ((int)value % 86400) / 3600;
+	ut.minute = ((int)value % 3600) / 60;
+	ut.second = ((int)value % 60);
+	ut.millisecond = (value * 1000) - ((int)value * 1000);
+
+	return ut;
+#else
+#error not implemented yet
+#endif
+}

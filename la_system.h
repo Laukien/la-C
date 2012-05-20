@@ -83,6 +83,17 @@ BOOL system_isOSVendorApple();
 BOOL system_isArch32();
 BOOL system_isArch64();
 
+/* OS */
+typedef struct {
+	int day;
+	int hour;
+	int minute;
+	int second;
+	int millisecond;
+} SYSTEM_UPTIME;
+
+SYSTEM_UPTIME system_getUptime();
+
 #ifdef __cplusplus
 }
 #endif
