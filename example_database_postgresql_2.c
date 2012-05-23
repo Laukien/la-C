@@ -22,11 +22,28 @@ int main(void) {
 		exit (1);
 	}
 
+	char *datname;
+	char *datdba;
+	char *encoding;
+	char *datistemplate;
+	char *datallowconn;
 	database_postgresql_execute(db, "SELECT * FROM pg_database WHERE datname NOT LIKE '%?%' AND datdba < ?;", "template", 100);
-	printf ( "| %15s | %15s | %15s | %15s | %15s |\n", "datnasme", "datdba", "encoding", "datistemplate", "datallowconn" );
+	printf ( "| %15s | %15s | %15s | %15s | %15s |\n", "datname", "datdba", "encoding", "datistemplate", "datallowconn" );
 	printf ( "|-----------------+-----------------+-----------------+-----------------+-----------------|\n" );
 	while (database_postgresql_nextResult(db)) {
-		printf ( "| %15s | %15s | %15s | %15s | %15s |\n", database_postgresql_getString(db, 0), database_postgresql_getString(db, 1), database_postgresql_getString(db, 2), database_postgresql_getString(db, 3), database_postgresql_getString(db, 4) );
+		datname = database_postgresql_getString(db, 0);
+		datdba = database_postgresql_getString(db, 1);
+		encoding = database_postgresql_getString(db, 2);
+		datistemplate = database_postgresql_getString(db, 3);
+		datallowconn = database_postgresql_getString(db, 4);
+
+		printf ( "| %15s | %15s | %15s | %15s | %15s |\n", datname, datdba, encoding, datistemplate, datallowconn );
+
+		free(datname);
+		free(datdba);
+		free(encoding);
+		free(datistemplate);
+		free(datallowconn);
 	}
 	if (error_exists()) {
 		error_show();
