@@ -169,7 +169,7 @@ SYSTEM_UPTIME system_getUptime() {
 
 	return ut;
 #else
-#warn not implemented yet - use 'net statistics workstation'
+#warning not implemented yet - use 'net statistics workstation'
 	exit(1);
 #endif
 }
