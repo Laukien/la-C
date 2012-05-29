@@ -94,6 +94,9 @@ typedef struct {
 
 SYSTEM_UPTIME system_getUptime();
 
+/* OTHER */
+BOOL system_isCopyright();
+
 #ifdef __cplusplus
 }
 #endif

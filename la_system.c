@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 BOOL system_isOSTypeWindows() {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
@@ -173,4 +174,14 @@ SYSTEM_UPTIME system_getUptime() {
 	/* net statistics workstation */
 	exit(1);
 #endif
+}
+
+BOOL system_isCopyright() {
+	char *env = getenv("COPYRIGHT");
+	if (env == NULL || strlen(env) < 1) return TRUE;
+
+	char chr = env[0];
+	chr = tolower(chr);
+
+	return !(chr == 'n' || chr == 'f' || chr == '0');
 }
