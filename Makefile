@@ -1,9 +1,9 @@
 CC := gcc
 CFLAGS += -O3 -Wall
-CFLAGS += -ggdb
+CFLAGS += -ggdb3
 CXX := g++
 CXXFLAGS += -O3 -Wall
-#CXXFLAGS += -ggdb
+CXXFLAGS += -ggdb3
 AR := ar
 ARFLAGS := -rcs
 NAME := lac
@@ -33,8 +33,6 @@ cc:
 	$(AR) $(ARFLAGS) lib$(NAME).$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
 		la_console.c\
-		la_database_postgresql.c\
-		la_database_oracle.c\
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
@@ -44,7 +42,8 @@ cc:
 		la_error.c\
 		la_string.c\
 		la_stringbuffer.c\
-		la_system.c\
+		la_system.c
+	gcc -shared -fPIC -Wl,-soname,lib$(NAME)-postgresql.$(VERSION).so -o lib$(NAME)-postgresql.$(VERSION).so la_database_postgresql.c
 
 cxx:
 	$(CXX) $(CXXFLAGS) -O0 -c -o la_console.o la_console.c
@@ -63,8 +62,6 @@ cxx:
 	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
 		la_console.c\
-		la_database_postgresql.c\
-		la_database_oracle.c\
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
@@ -74,7 +71,8 @@ cxx:
 		la_error.c\
 		la_string.c\
 		la_stringbuffer.c\
-		la_system.c\
+		la_system.c
+	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++-postgresql.$(VERSION).so -o lib$(NAME)++-postgresql.$(VERSION).so la_database_postgresql.c
 
 example:
 	@echo
