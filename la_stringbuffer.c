@@ -102,6 +102,14 @@ char *stringbuffer_text(STRINGBUFFER *ptr) {
 		exit(EXIT_FAILURE);
 	}
 
+	/* clone text */
+	char *text = (char *)malloc(strlen(ptr->text + 1));
+	if (text == NULL) {
+		printf ( "ERROR: Unable to get more memory.\n" );
+		exit(EXIT_FAILURE);
+	}
+	strcpy(text, ptr->text);
+
 	return ptr->text;
 }
 
