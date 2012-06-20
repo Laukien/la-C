@@ -110,7 +110,7 @@ char *stringbuffer_text(STRINGBUFFER *ptr) {
 	}
 	strcpy(text, ptr->text);
 
-	return ptr->text;
+	return text;
 }
 
 STRINGBUFFER *stringbuffer_clone(STRINGBUFFER *ptr) {
