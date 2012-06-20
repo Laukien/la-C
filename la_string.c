@@ -26,7 +26,7 @@
 char *string_toLower(const char *str) {
 	int len = strlen(str);	
 
-	char *result = (char *)malloc ( len + 1);
+	char *result = (char *)malloc (len + 1);
 	if ( result==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_toLower)\n" );
 		exit (EXIT_FAILURE);
@@ -36,6 +36,7 @@ char *string_toLower(const char *str) {
 	for ( i = 0; i < len; ++i ) {
 		result[i] = tolower(str[i]);
 	}
+	result[len] = '\0';
 
 	return result;
 }
@@ -43,7 +44,7 @@ char *string_toLower(const char *str) {
 char *string_toUpper(const char *str) {
 	int len = strlen(str);	
 
-	char *result = (char *)malloc ( len + 1 );
+	char *result = (char *)malloc (len + 1);
 	if ( result==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_toUpper)\n" );
 		exit (EXIT_FAILURE);
@@ -53,6 +54,7 @@ char *string_toUpper(const char *str) {
 	for ( i = 0; i <= len; ++i ) {
 		result[i] = toupper(str[i]);
 	}
+	result[len] = '\0';
 
 	return result;
 }
