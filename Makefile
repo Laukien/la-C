@@ -1,8 +1,8 @@
 CC := gcc
-CFLAGS += -O3 -Wall
+CFLAGS += -O0 -Wall
 CFLAGS += -ggdb3
 CXX := g++
-CXXFLAGS += -O3 -Wall
+CXXFLAGS += -O0 -Wall
 CXXFLAGS += -ggdb3
 AR := ar
 ARFLAGS := -rcs
