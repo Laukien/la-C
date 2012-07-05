@@ -28,6 +28,7 @@ cc:
 	$(CC) $(CFLAGS) -c -o la_number.o la_number.c
 	$(CC) $(CFLAGS) -c -o la_parameter.o la_parameter.c
 	$(CC) $(CFLAGS) -c -o la_error.o la_error.c
+	$(CC) $(CFLAGS) -c -o la_exception.o la_exception.c
 	$(CC) $(CFLAGS) -c -o la_string.o la_string.c
 	$(CC) $(CFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
 	$(CC) $(CFLAGS) -c -o la_system.o la_system.c
@@ -41,6 +42,7 @@ cc:
 		la_number.c\
 		la_parameter.c\
 		la_error.c\
+		la_exception.c\
 		la_string.c\
 		la_stringbuffer.c\
 		la_system.c
@@ -57,6 +59,7 @@ cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_number.o la_number.c
 	$(CXX) $(CXXFLAGS) -c -o la_parameter.o la_parameter.c
 	$(CXX) $(CXXFLAGS) -c -o la_error.o la_error.c
+	$(CXX) $(CXXFLAGS) -c -o la_exception.o la_exception.c
 	$(CXX) $(CXXFLAGS) -c -o la_string.o la_string.c
 	$(CXX) $(CXXFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
 	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
@@ -70,6 +73,7 @@ cxx:
 		la_number.c\
 		la_parameter.c\
 		la_error.c\
+		la_exception.c\
 		la_string.c\
 		la_stringbuffer.c\
 		la_system.c
@@ -87,7 +91,7 @@ example:
 	$(CC) $(CFLAGS) -o example_copyright example_copyright.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_database_postgresql_1 example_database_postgresql_1.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
 	$(CC) $(CFLAGS) -o example_database_postgresql_2 example_database_postgresql_2.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
-	$(CC) $(CFLAGS) -o example_database_oracle_1 example_database_oracle_1.c -L. lib$(NAME).$(VERSION).a $(ORACLE)
+	$(CC) $(CFLAGS) -o example_exception_1 example_exception_1.c -L. lib$(NAME).$(VERSION).a
 
 clean:
 	@echo
