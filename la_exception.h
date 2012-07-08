@@ -27,7 +27,7 @@ extern "C" {
 
 #define EXCEPTION_CALLBACK_SIZE 16
 
-typedef void (*EXCEPTION_CALLBACK)(int id, char *message, void *pointer);
+typedef void (*EXCEPTION_CALLBACK)(int id, const char *message, void *pointer);
 typedef struct {
 	int level;
 	EXCEPTION_CALLBACK callback[EXCEPTION_CALLBACK_SIZE];
@@ -37,7 +37,7 @@ typedef struct {
 EXCEPTION *exception_new();
 void exception_addCallback(EXCEPTION *e, EXCEPTION_CALLBACK callback, void *pointer);
 void exception_delCallback(EXCEPTION *e);
-void exception_throw(EXCEPTION *e, int id, char *message);
+void exception_throw(EXCEPTION *e, int id, const char *message);
 int exception_level(EXCEPTION *e);
 BOOL exception_exists(EXCEPTION *e);
 void exception_free(EXCEPTION *e);

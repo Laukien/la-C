@@ -47,7 +47,7 @@ void exception_delCallback(EXCEPTION *e) {
 	--(e->level);
 }
 
-void exception_throw(EXCEPTION *e, int id, char *message) {
+void exception_throw(EXCEPTION *e, int id, const char *message) {
 	int i;
 	for (i = e->level - 1; i >= 0; --i) {
 		e->callback[i](id, message, e->pointer[i]);
