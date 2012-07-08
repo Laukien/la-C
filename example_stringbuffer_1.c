@@ -1,5 +1,6 @@
 #include "la_stringbuffer.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void) {
     STRINGBUFFER *str = stringbuffer_new();        /* init string */
