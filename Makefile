@@ -91,6 +91,7 @@ example:
 	$(CC) $(CFLAGS) -o example_copyright example_copyright.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_database_postgresql_1 example_database_postgresql_1.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
 	$(CC) $(CFLAGS) -o example_database_postgresql_2 example_database_postgresql_2.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
+	$(CC) $(CFLAGS) -o example_database_postgresql_3 example_database_postgresql_3.c -L. lib$(NAME).$(VERSION).a $(POSTGRESQL)
 	$(CC) $(CFLAGS) -o example_exception_1 example_exception_1.c -L. lib$(NAME).$(VERSION).a
 
 clean:
