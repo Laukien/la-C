@@ -4,6 +4,7 @@
 #include <libpq-fe.h>
 #include "la_common.h"
 #include "la_error.h"
+#include "la_exception.h"
 
 #define DATABASE_POSTGRESQL_ERROR_INIT 1
 #define DATABASE_POSTGRESQL_ERROR_MEMORY 2
@@ -22,6 +23,7 @@ extern "C" {
 #endif
 
 typedef struct {
+	EXCEPTION *exception;
 	char *host;
 	int port;
 	char *name;
@@ -33,9 +35,11 @@ typedef struct {
 	int resultCur;
 	PGconn *connection;
 	PGresult *result;
+	char error[ERROR_MESSAGE_SIZE + 1];
 } DATABASE_POSTGRESQL;
 
 DATABASE_POSTGRESQL *database_postgresql_new();
+void database_setException(DATABASE_POSTGRESQL *self, EXCEPTION *e);
 void database_postgresql_free(DATABASE_POSTGRESQL *self);
 void database_postgresql_open(DATABASE_POSTGRESQL *self);
 void database_postgresql_close(DATABASE_POSTGRESQL *self);
@@ -59,6 +63,8 @@ void database_postgresql_execute(DATABASE_POSTGRESQL *self, const char *query, .
 char *database_postgresql_getVersion(DATABASE_POSTGRESQL *self);
 BOOL database_postgresql_checkSelf(DATABASE_POSTGRESQL *self);
 void database_postgresql_setSchema(DATABASE_POSTGRESQL *self, const char *schema);
+BOOL isError(DATABASE_POSTGRESQL *self);
+char *getError(DATABASE_POSTGRESQL *self);
 
 #ifdef __cplusplus
 }
