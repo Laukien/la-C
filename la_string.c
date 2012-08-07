@@ -28,7 +28,11 @@ char *string_toLower(const char *str) {
 
 	char *result = (char *)malloc (len + 1);
 	if ( result==NULL ) {
+#ifdef SYSTEM_OS_TYPE_UNIX
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_toLower)\n" );
+#else
+		fprintf ( stdout, "\ndynamic memory allocation failed (string_toLower)\n" );
+#endif
 		exit (EXIT_FAILURE);
 	}
 
@@ -46,7 +50,11 @@ char *string_toUpper(const char *str) {
 
 	char *result = (char *)malloc (len + 1);
 	if ( result==NULL ) {
+#ifdef SYSTEM_OS_TYPE_UNIX
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_toUpper)\n" );
+#else
+		fprintf ( stdout, "\ndynamic memory allocation failed (string_toUpper)\n" );
+#endif
 		exit (EXIT_FAILURE);
 	}
 
@@ -158,7 +166,7 @@ BOOL string_isEmpty(const char *string) {
 
 	return len == 0 ? TRUE : FALSE;
 }
-
+#ifdef SYSTEM_OS_TYPE_LINUX
 char *string_regexp (char *string, char *patrn, int *begin, int *end) {     
 	int i, len;                  
 	int w = 0;
@@ -180,4 +188,4 @@ char *string_regexp (char *string, char *patrn, int *begin, int *end) {
 	regfree(&rgT);
 	return word;
 }
-
+#endif
