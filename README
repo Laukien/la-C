@@ -4,6 +4,7 @@ Just another C-library...
 Libraries
 ---------
 * common
+* character
 * console
 * database_postgresql
 * datetime
@@ -19,9 +20,12 @@ Libraries
 
 Examples
 --------
+* copyright
 * database
+* exception
 * file
 * number
 * parameter
+* string
 * stringbuffer
 

@@ -7,7 +7,7 @@ CXXFLAGS += -ggdb3
 AR := ar
 ARFLAGS := -rcs
 NAME := lac
-VERSION := 1.3
+VERSION := 1.3.1
 POSTGRESQL := -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir) -L$(shell pg_config --libdir) -lpq
 MYSQL := $(shell mysql_config --include) $(shell mysql_config --libs)
 ORACLE := -I$(ORACLE_HOME)/rdbms/public $(ORACLE_HOME)/lib/libclient11.a -Wl,-R$(ORACLE_HOME)/lib -L$(ORACLE_HOME)/lib -lclntsh
@@ -18,6 +18,7 @@ all: cc cxx example
 cc:
 	@echo
 	@echo === COMPILE ===
+	$(CC) $(CFLAGS) -c -o la_character.o la_character.c
 	$(CC) $(CFLAGS) -O0 -c -o la_console.o la_console.c
 	$(CC) $(CFLAGS) -c -o la_database_postgresql.o la_database_postgresql.c
 	$(CC) $(CFLAGS) -c -o la_database_oracle.o la_database_oracle.c
@@ -34,6 +35,7 @@ cc:
 	$(CC) $(CFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME).$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
+		la_character.c\
 		la_console.c\
 		la_datetime.c\
 		la_file.c\
@@ -49,6 +51,7 @@ cc:
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)-postgresql.$(VERSION).so -o lib$(NAME)-postgresql.$(VERSION).so la_database_postgresql.c
 
 cxx:
+	$(CXX) $(CXXFLAGS) -c -o la_character.o la_character.c
 	$(CXX) $(CXXFLAGS) -O0 -c -o la_console.o la_console.c
 	$(CXX) $(CXXFLAGS) -c -o la_database_postgresql.o la_database_postgresql.c
 	$(CXX) $(CXXFLAGS) -c -o la_database_oracle.o la_database_oracle.c
@@ -65,6 +68,7 @@ cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
+		la_character.c\
 		la_console.c\
 		la_datetime.c\
 		la_file.c\
@@ -82,6 +86,7 @@ cxx:
 example:
 	@echo
 	@echo === EXAMPLE ===
+	$(CC) $(CFLAGS) -o example_string_1 example_string_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_stringbuffer_1 example_stringbuffer_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_1 example_parameter_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_2 example_parameter_2.c -L. lib$(NAME).$(VERSION).a
