@@ -36,6 +36,8 @@ BOOL string_isEmpty(const char *string);
 #ifdef SYSTEM_OS_TYPE_LINUX
 char *string_regexp (char *string, char *patrn, int *begin, int *end);
 #endif
+char *string_fromHex(const char *str);
+char *string_toHex(const char *str);
 
 #ifdef __cplusplus
 }

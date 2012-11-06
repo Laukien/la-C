@@ -16,12 +16,14 @@
  * =====================================================================================
  */
 
+#include "la_character.h"
 #include "la_string.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
 
 char *string_toLower(const char *str) {
 	int len = strlen(str);	
@@ -189,3 +191,51 @@ char *string_regexp (char *string, char *patrn, int *begin, int *end) {
 	return word;
 }
 #endif
+
+char *string_fromHex(const char *str) {
+	unsigned int len = strlen(str) / 2;	
+	assert (len * 2 == strlen(str));
+
+	char *result = (char *)malloc (len + 1);
+	if ( result==NULL ) {
+#ifdef SYSTEM_OS_TYPE_UNIX
+		fprintf ( stderr, "\ndynamic memory allocation failed (string_fromHex)\n" );
+#else
+		fprintf ( stdout, "\ndynamic memory allocation failed (string_fromHex)\n" );
+#endif
+		exit (EXIT_FAILURE);
+	}
+
+	int i;
+	for (i = 0; i < len; ++i) {
+		result[i] = character_fromHex(str[i * 2]) << 4 | character_fromHex(str[i * 2 + 1]);
+	}
+
+	result[len] = '\0';
+
+	return result;
+}
+
+char *string_toHex(const char *str) {
+	unsigned int len = strlen(str);	
+
+	char *result = (char *)malloc ((len * 2) + 1);
+	if ( result==NULL ) {
+#ifdef SYSTEM_OS_TYPE_UNIX
+		fprintf ( stderr, "\ndynamic memory allocation failed (string_toHex)\n" );
+#else
+		fprintf ( stdout, "\ndynamic memory allocation failed (string_toHex)\n" );
+#endif
+		exit (EXIT_FAILURE);
+	}
+
+	unsigned int i;
+	for (i = 0; i < len; ++i) {
+		result[i * 2] = character_toHex(str[i] >> 4);
+		result[i * 2 + 1] = character_toHex(str[i] & 15);
+	}
+	result [len * 2] = '\0';
+
+	return result;
+}
+
