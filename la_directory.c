@@ -23,11 +23,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#ifdef SYSTEM_OS_TYPE_WINDOWS
-#include <dirent.h>
-#else
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+#include <dirent.h>
 #endif
 
 BOOL directory_create(const char *directoryname) {
