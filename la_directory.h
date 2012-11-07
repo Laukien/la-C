@@ -22,6 +22,7 @@
 #ifdef __cplusplus
 #include <string>
 namespace directory {
+	bool create(const std::string name);
 	bool exists(const std::string name);
 	std::string temp();
 }
@@ -39,6 +40,7 @@ extern "C" {
 	#define DIRECTORY_SEPARATOR_STRING "/"
 #endif
 
+BOOL directory_create(const char *directoryname);
 BOOL directory_exists(const char *directoryname);
 char *directory_temp();
 

@@ -23,8 +23,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+#include <dirent.h>
+#else
 #include <sys/types.h>
 #include <sys/stat.h>
+#endif
+
+BOOL directory_create(const char *directoryname) {
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	mkdir(directoryname);
+#else
+	mkdir(directoryname, 755);
+#endif
+}
 
 BOOL directory_exists(const char *name) {
 	struct stat st;
@@ -59,6 +71,10 @@ char *directory_temp() {
 
 #ifdef __cplusplus
 namespace directory {
+	bool create(const std::string name) {
+		return directory_create(name.c_str());
+	}
+
 	bool exists(const std::string name) {
 		return directory_exists(name.c_str());
 	}
