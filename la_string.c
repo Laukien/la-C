@@ -206,7 +206,7 @@ char *string_fromHex(const char *str) {
 		exit (EXIT_FAILURE);
 	}
 
-	int i;
+	unsigned int i;
 	for (i = 0; i < len; ++i) {
 		result[i] = character_fromHex(str[i * 2]) << 4 | character_fromHex(str[i * 2 + 1]);
 	}

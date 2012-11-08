@@ -31,9 +31,9 @@
 
 BOOL directory_create(const char *directoryname) {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
-	mkdir(directoryname);
+	return (mkdir(directoryname)) == 0 ? TRUE : FALSE;
 #else
-	mkdir(directoryname, 755);
+	return (mkdir(directoryname, 0755)) == 0 ? TRUE : FALSE;
 #endif
 }
 
