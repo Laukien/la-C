@@ -25,6 +25,7 @@ cc:
 	$(CC) $(CFLAGS) -c -o la_datetime.o la_datetime.c
 	$(CC) $(CFLAGS) -c -o la_file.o la_file.c
 	$(CC) $(CFLAGS) -c -o la_directory.o la_directory.c
+	$(CC) $(CFLAGS) -c -o la_list.o la_list.c
 	$(CC) $(CFLAGS) -c -o la_memory.o la_memory.c
 	$(CC) $(CFLAGS) -c -o la_number.o la_number.c
 	$(CC) $(CFLAGS) -c -o la_parameter.o la_parameter.c
@@ -40,6 +41,7 @@ cc:
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
+		la_list.c\
 		la_memory.c\
 		la_number.c\
 		la_parameter.c\
@@ -58,6 +60,7 @@ cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_datetime.o la_datetime.c
 	$(CXX) $(CXXFLAGS) -c -o la_file.o la_file.c
 	$(CXX) $(CXXFLAGS) -c -o la_directory.o la_directory.c
+	$(CXX) $(CXXFLAGS) -c -o la_list.o la_list.c
 	$(CXX) $(CXXFLAGS) -c -o la_memory.o la_memory.c
 	$(CXX) $(CXXFLAGS) -c -o la_number.o la_number.c
 	$(CXX) $(CXXFLAGS) -c -o la_parameter.o la_parameter.c
@@ -73,6 +76,7 @@ cxx:
 		la_datetime.c\
 		la_file.c\
 		la_directory.c\
+		la_list.c\
 		la_memory.c\
 		la_number.c\
 		la_parameter.c\
@@ -88,6 +92,7 @@ example:
 	@echo === EXAMPLE ===
 	$(CC) $(CFLAGS) -o example_string_1 example_string_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_stringbuffer_1 example_stringbuffer_1.c lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -o example_list_1 example_list_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_1 example_parameter_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_2 example_parameter_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_file_1 example_file_1.c -L. lib$(NAME).$(VERSION).a
