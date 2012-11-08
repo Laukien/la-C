@@ -92,7 +92,7 @@ unsigned int parameter_size (PARAMETER *param) {
 
 	do {
 		node = node->next;
-		printf ( "NODE: %s->%s\n", node->key, node->value );
+//		printf ( "NODE: %s->%s\n", node->key, node->value );
 		++count;
 	} while (node->next != NULL);
 
