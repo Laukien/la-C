@@ -132,6 +132,13 @@ void list_reset (LIST *self) {
 	self->next = NULL;
 }
 
+void list_show(LIST *self) {
+	int i;
+	for (i = 0; i < list_size(self); ++i) {
+		puts(list_get(self, i));
+	}
+}
+
 int list_loadFromFile(LIST *self, const char *filename) {
 	list_reset(self);
 

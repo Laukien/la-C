@@ -36,7 +36,9 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <dirent.h>
 
 BOOL file_exists(const char *filename) {
 	FILE *pFile = fopen(filename, "r");
@@ -97,6 +99,39 @@ size_t file_size(const char *filename) {
 	size_t size = st.st_size;
 
 	return size;
+}
+
+void _file_list(const char *directoryname, LIST *list) {
+	DIR *dp;	
+	struct dirent *ep;
+	struct stat st;
+	char *filename;
+	dp = opendir(directoryname);
+	if (dp != NULL) {
+		while ((ep = readdir(dp)) != NULL) {
+			/* check DOT-path */
+			if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0) continue;
+
+			/* build filename */
+			filename = (char *) malloc(strlen(directoryname) + 1 + strlen(ep->d_name) + 1);
+			strcpy(filename, directoryname);
+			strcat(filename, DIRECTORY_SEPARATOR_STRING);
+			strcat(filename, ep->d_name);
+			stat(filename, &st);
+
+			if (st.st_mode & S_IFDIR) _file_list(filename, list);
+			list_add(list, filename);
+		}
+		closedir(dp);
+	}
+}
+
+LIST *file_list(const char *filename) {
+	LIST *list = list_new();
+
+	_file_list(filename, list);
+
+	return list;
 }
 
 #ifdef __cplusplus

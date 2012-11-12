@@ -39,6 +39,7 @@ void list_free (LIST *self);
 void list_reset (LIST *self);
 char *list_get (LIST *self, unsigned int index);
 unsigned int list_size (LIST *self);
+void list_show(LIST *self);
 int list_loadFromFile(LIST *self, const char *filename);
 int list_saveToFile(LIST *self, const char *filename);
 

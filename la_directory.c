@@ -25,9 +25,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef SYSTEM_OS_TYPE_WINDOWS
 #include <dirent.h>
-#endif
 
 BOOL directory_create(const char *directoryname) {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
@@ -66,6 +64,35 @@ char *directory_temp() {
 #endif
 
 	return dir;
+}
+
+LIST *directory_list(const char *directoryname) {
+	DIR *dp;	
+	struct dirent *ep;
+	struct stat st;
+	char *filename;
+	LIST *list = list_new();
+
+	dp = opendir(directoryname);
+	if (dp != NULL) {
+		while ((ep = readdir(dp)) != NULL) {
+			/* check DOT-path */
+			if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0) continue;
+
+			/* build filename */
+			filename = (char *) malloc(strlen(directoryname) + 1 + strlen(ep->d_name) + 1);
+			strcpy(filename, directoryname);
+			strcat(filename, DIRECTORY_SEPARATOR_STRING);
+			strcat(filename, ep->d_name);
+			stat(filename, &st);
+
+			if (st.st_mode & S_IFDIR) continue;
+			list_add(list, ep->d_name);
+		}
+		closedir(dp);
+	}
+
+	return list;
 }
 
 #ifdef __cplusplus

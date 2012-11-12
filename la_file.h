@@ -31,11 +31,13 @@ extern "C" {
 #endif
 
 #include "la_common.h"
+#include "la_list.h"
 
 BOOL file_exists(const char *filename);
 char *file_name(const char *file);
 char *file_temp();
 size_t file_size(const char *filename);
+LIST *file_list(const char *directoryname);
 
 #ifdef __cplusplus
 }

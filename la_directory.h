@@ -30,6 +30,7 @@ extern "C" {
 #endif
 
 #include "la_common.h"
+#include "la_list.h"
 #include "la_system.h"
 
 #ifdef SYSTEM_OS_VENDOR_MICROSOFT
@@ -43,6 +44,7 @@ extern "C" {
 BOOL directory_create(const char *directoryname);
 BOOL directory_exists(const char *directoryname);
 char *directory_temp();
+LIST *directory_list(const char *directoryname);
 
 #ifdef __cplusplus
 }
