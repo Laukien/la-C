@@ -7,7 +7,7 @@ CXXFLAGS += -ggdb3
 AR := ar
 ARFLAGS := -rcs
 NAME := lac
-VERSION := 1.3.5
+VERSION := 1.3.6
 POSTGRESQL := -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir) -L$(shell pg_config --libdir) -lpq
 MYSQL := $(shell mysql_config --include) $(shell mysql_config --libs)
 ORACLE := -I$(ORACLE_HOME)/rdbms/public $(ORACLE_HOME)/lib/libclient11.a -Wl,-R$(ORACLE_HOME)/lib -L$(ORACLE_HOME)/lib -lclntsh
@@ -94,6 +94,7 @@ example:
 	$(CC) $(CFLAGS) -o example_string_1 example_string_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_stringbuffer_1 example_stringbuffer_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_list_1 example_list_1.c -L. lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -o example_list_2 example_list_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_1 example_parameter_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_parameter_2 example_parameter_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_file_1 example_file_1.c -L. lib$(NAME).$(VERSION).a
