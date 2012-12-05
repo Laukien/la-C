@@ -34,6 +34,7 @@ extern "C" {
 #include "la_list.h"
 
 BOOL file_exists(const char *filename);
+BOOL file_remove(const char *filename);
 char *file_name(const char *file);
 char *file_temp();
 size_t file_size(const char *filename);
