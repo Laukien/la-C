@@ -48,6 +48,11 @@ BOOL file_exists(const char *filename) {
 	return TRUE;
 }
 
+BOOL file_remove(const char *filename) {
+	int ret = unlink(filename);
+	return ret ? FALSE : TRUE;
+}
+
 char *file_name(const char *file) {
 	int i;
 	for (i = strlen(file)-1; i >= -1; i--) {
