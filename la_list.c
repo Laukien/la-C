@@ -187,9 +187,12 @@ void list_reset (LIST *self) {
 }
 
 void list_show(LIST *self) {
-	int i;
+	unsigned int i;
+	char *str;
 	for (i = 0; i < list_size(self); ++i) {
-		puts(list_get(self, i));
+		str = list_get(self, i);
+		puts(str);
+		free(str);
 	}
 }
 
