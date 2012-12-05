@@ -126,6 +126,7 @@ void _file_list(const char *directoryname, LIST *list) {
 
 			if (st.st_mode & S_IFDIR) _file_list(filename, list);
 			list_add(list, filename);
+			free(filename);
 		}
 		closedir(dp);
 	}
