@@ -1,3 +1,4 @@
+#include "la_file.h"
 #include "la_parameter.h"
 #include "stdio.h"
 
@@ -16,6 +17,7 @@ int main(void) {
 	printf ( "KEY 2: %s\n", parameter_get(param, "key2") );
 
 	parameter_free(param);
-
+	file_remove("test.param");
+	
 	return(0);
 }
