@@ -23,6 +23,22 @@
 #include "la_list.h"
 #include "la_string.h"
 
+LIST *list_getNode (LIST *self, unsigned int index) {
+	LIST *node = self;
+	if (self->next == NULL) return NULL;       /* check if list-set is empty */
+
+	unsigned int count = 0;
+	do {
+		node = node->next;
+
+		if (index == count) {
+			return node;
+		} else ++count;
+	} while (node->next != NULL);
+
+	return NULL;
+}
+
 LIST *list_new () {
 	LIST *self = (LIST*) malloc ( sizeof(LIST) );
 	if ( self==NULL ) {
@@ -43,6 +59,9 @@ void list_add (LIST *self, const char *value) {
 		exit (EXIT_FAILURE);
 	}
 
+	/* init next */
+	node->next = NULL;
+
 	/* create value */
 	node->value = (char *) malloc (strlen(value)+1);
 	if ( node->value==NULL ) {
@@ -52,8 +71,43 @@ void list_add (LIST *self, const char *value) {
 	strcpy(node->value, value);
 
 	/* set pointer */
-	node->next = self->next;
-	self->next = node;
+	unsigned int size = list_size(self);
+	if ( size == 0) {
+		node->next = self->next;
+		self->next = node;
+	} else {
+		LIST *last = list_getNode(self, size - 1);
+		last->next = node;
+	}
+}
+
+void list_remove (LIST *self, unsigned int index) {
+	LIST *nodeSelf, *nodePrev, *nodeNext;
+
+	nodeSelf = list_getNode(self, index);
+	if (nodeSelf == NULL) return;
+	
+	unsigned int size = list_size(self);
+	if (size <= 1) {
+		list_reset(self);
+		return;
+	}
+
+	if (index == 0) {                           /* first element */
+		nodeNext = nodeSelf->next;
+		self->next = nodeNext;
+	} else if (index == (size - 1)) {           /* last element */
+		nodePrev = list_getNode(self, index - 1);
+		nodePrev->next = NULL;
+	} else {
+		nodePrev = list_getNode(self, index - 1);
+		nodeNext = nodeSelf->next;
+		nodePrev->next = nodeNext;
+	}
+	free(nodeSelf->value);
+	nodeSelf->value = NULL;
+	free(nodeSelf);
+	nodeSelf = NULL;
 }
 
 char *list_get (LIST *self, unsigned int index) {
