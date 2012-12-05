@@ -1,5 +1,6 @@
 #include "la_list.h"
 #include "stdio.h"
+#include "stdlib.h"
 
 int main(void) {
 
@@ -7,7 +8,9 @@ int main(void) {
 
 	list_add(param, "valueA");
 
-	printf ( "Index 1: %s\n", list_get(param, 0) );
+	char *str = list_get(param, 0);
+	printf ( "Index 1: %s\n", str );
+	free(str);
 
 	list_free(param);
 
