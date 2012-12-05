@@ -39,8 +39,20 @@ void parameter_remove (PARAMETER *param, const char *key);
 void parameter_clear (PARAMETER *param);
 void parameter_free (PARAMETER *param);
 void parameter_reset (PARAMETER *param);
+PARAMETER *parameter_getByIndex (PARAMETER *param, unsigned int index);
+char *parameter_getKeyByIndex (PARAMETER *param, unsigned int index);
+char *parameter_getValueByIndex (PARAMETER *param, unsigned int index);
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  parameter_getIndexByKey
+ *  Description:  return index of the element; otherwise '0' if the exlement doesn't exists
+ * =====================================================================================
+ */
+unsigned int parameter_getIndexByKey (PARAMETER *self, const char *key);
 char *parameter_get (PARAMETER *param, const char *key);
 unsigned int parameter_size (PARAMETER *param);
+void parameter_show(PARAMETER *self);
 int parameter_loadFromFile(PARAMETER *param, const char *filename);
 int parameter_saveToFile(PARAMETER *param, const char *filename);
 

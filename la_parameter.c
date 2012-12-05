@@ -23,6 +23,22 @@
 #include "la_parameter.h"
 #include "la_string.h"
 
+PARAMETER *parameter_getNode (PARAMETER *self, unsigned int index) {
+	PARAMETER *node = self;
+	if (self->next == NULL) return NULL;       /* check if parameter-set is empty */
+
+	unsigned int count = 0;
+	do {
+		node = node->next;
+
+		if (index == count) {
+			return node;
+		} else ++count;
+	} while (node->next != NULL);
+
+	return NULL;
+}
+
 PARAMETER *parameter_new () {
 	PARAMETER *param = (PARAMETER*) malloc ( sizeof(PARAMETER) );
 	if ( param==NULL ) {
@@ -44,6 +60,9 @@ void parameter_add (PARAMETER *param, const char *key, const char *value) {
 		exit (EXIT_FAILURE);
 	}
 
+	/* init next */
+	node->next = NULL;
+
 	/* create key */
 	node->key = (char *) malloc (strlen(key)+1);
 	if ( node->key==NULL ) {
@@ -61,8 +80,134 @@ void parameter_add (PARAMETER *param, const char *key, const char *value) {
 	strcpy(node->value, value);
 
 	/* set pointer */
-	node->next = param->next;
-	param->next = node;
+	unsigned int size = parameter_size(param);
+	if ( size == 0) {
+		node->next = param->next;
+		param->next = node;
+	} else {
+		PARAMETER *last = parameter_getNode(param, size - 1);
+		last->next = node;
+	}
+}
+
+void parameter_remove (PARAMETER *self, const char *key) {
+	PARAMETER *nodeSelf, *nodePrev, *nodeNext;
+	unsigned int index = parameter_getIndexByKey(self, key);
+
+	nodeSelf = parameter_getNode(self, index);
+	if (nodeSelf == NULL) return;
+	
+	unsigned int size = parameter_size(self);
+	if (size <= 1) {
+		parameter_reset(self);
+		return;
+	}
+
+	if (index == 0) {                           /* first element */
+		nodeNext = nodeSelf->next;
+		self->next = nodeNext;
+	} else if (index == (size - 1)) {           /* last element */
+		nodePrev = parameter_getNode(self, index - 1);
+		nodePrev->next = NULL;
+	} else {
+		nodePrev = parameter_getNode(self, index - 1);
+		nodeNext = nodeSelf->next;
+		nodePrev->next = nodeNext;
+	}
+	/* free key */
+	free(nodeSelf->key);
+	nodeSelf->key = NULL;
+	/* free value */
+	free(nodeSelf->value);
+	nodeSelf->value = NULL;
+	/* free node */
+	free(nodeSelf);
+	nodeSelf = NULL;
+}
+
+PARAMETER *parameter_getByIndex (PARAMETER *self, unsigned int index) {
+	PARAMETER *node = self;
+	if (self->next == NULL) return NULL;       /* check if list-set is empty */
+
+	unsigned int count = 0;
+	do {
+		node = node->next;
+
+		if (index == count) {
+			/* init parameter */
+			PARAMETER *param;
+			param = (PARAMETER *) malloc(sizeof(PARAMETER));
+			param->next = NULL;
+
+			/* copy key */
+			param->key = (char *) malloc (strlen(node->key)+1);
+			strcpy(param->key, node->key);
+
+			/* copy value */
+			param->value = (char *) malloc (strlen(node->value)+1);
+			strcpy(param->value, node->value);
+
+			return param;
+		} else ++count;
+	} while (node->next != NULL);
+
+	return NULL;
+}
+
+char *parameter_getKeyByIndex (PARAMETER *self, unsigned int index) {
+	PARAMETER *node = self;
+	if (self->next == NULL) return NULL;       /* check if list-set is empty */
+
+	unsigned int count = 0;
+	do {
+		node = node->next;
+
+		if (index == count) {
+			/* copy key */
+			char *key;
+			key = (char *) malloc (strlen(node->key)+1);
+			strcpy(key, node->key);
+			return key;
+		} else ++count;
+	} while (node->next != NULL);
+
+	return NULL;
+}
+
+char *parameter_getValueByIndex (PARAMETER *self, unsigned int index) {
+	PARAMETER *node = self;
+	if (self->next == NULL) return NULL;       /* check if list-set is empty */
+
+	unsigned int count = 0;
+	do {
+		node = node->next;
+
+		if (index == count) {
+			/* copy value */
+			char *value;
+			value = (char *) malloc (strlen(node->value)+1);
+			strcpy(value, node->value);
+			return value;
+		} else ++count;
+	} while (node->next != NULL);
+
+	return NULL;
+}
+
+unsigned int parameter_getIndexByKey (PARAMETER *self, const char *key) {
+	PARAMETER *node = self;
+    if (self->next == NULL) return 0;           /* check if list-set is empty */
+
+	unsigned int count = 0;
+	do {
+		node = node->next;
+
+		if (strcmp(node->key, key) == 0) return count;
+
+		++count;
+	} while (node->next != NULL);
+
+	return 0;
 }
 
 char *parameter_get (PARAMETER *param, const char *key) {
@@ -142,6 +287,16 @@ void parameter_reset (PARAMETER *param) {
 	node = NULL;
 
 	param->next = NULL;
+}
+
+void parameter_show(PARAMETER *self) {
+	unsigned int i;
+	PARAMETER *param;
+	for (i = 0; i < parameter_size(self); ++i) {
+		param = parameter_getByIndex(self, i);
+		printf ( "%s = %s\n", param->key, param->value );
+		free(param);
+	}
 }
 
 int parameter_loadFromFile(PARAMETER *param, const char *filename) {
