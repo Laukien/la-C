@@ -133,7 +133,7 @@ void list_swap(LIST *self, unsigned int index1, unsigned int index2) {
 }
 
 char *list_get(LIST *self, unsigned int index) {
-	LIST *node;
+	LIST *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
 	unsigned int count = 0;
