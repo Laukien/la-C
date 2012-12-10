@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,7 +24,7 @@
 #include "la_list.h"
 #include "la_string.h"
 
-LIST *list_getNode (LIST *self, unsigned int index) {
+LIST *list_getNode(LIST *self, unsigned int index) {
 	LIST *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
@@ -52,7 +53,7 @@ LIST *list_new () {
 	return self;
 }
 
-void list_add (LIST *self, const char *value) {
+void list_add(LIST *self, const char *value) {
 	LIST *node = (LIST*) malloc (sizeof(LIST) );
 	if ( node==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
@@ -81,7 +82,7 @@ void list_add (LIST *self, const char *value) {
 	}
 }
 
-void list_remove (LIST *self, unsigned int index) {
+void list_remove(LIST *self, unsigned int index) {
 	LIST *nodeSelf, *nodePrev, *nodeNext;
 
 	nodeSelf = list_getNode(self, index);
@@ -110,8 +111,29 @@ void list_remove (LIST *self, unsigned int index) {
 	nodeSelf = NULL;
 }
 
-char *list_get (LIST *self, unsigned int index) {
-	LIST *node = self;
+void list_swap(LIST *self, unsigned int index1, unsigned int index2) {
+	unsigned int len = list_size(self);
+	assert(index1 >= 0 && index1 < len && index2 >= 0 && index2 < len);
+
+	if (index1 == index2) return;
+
+	LIST *tmp11 = index1 == 0 ? self : list_getNode(self, index1-1);
+	LIST *tmp12 = index2 == 0 ? self : list_getNode(self, index2-1);
+	LIST *tmp10 = tmp11->next;
+
+	LIST *tmp21 = list_getNode(self, index1);
+	LIST *tmp22 = list_getNode(self, index2);
+	LIST *tmp20 = tmp22->next;
+
+	tmp11->next = tmp12->next;
+	tmp12->next = tmp10;
+
+	tmp22->next = tmp21->next;
+	tmp21->next = tmp20;
+}
+
+char *list_get(LIST *self, unsigned int index) {
+	LIST *node;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
 	unsigned int count = 0;
@@ -130,7 +152,7 @@ char *list_get (LIST *self, unsigned int index) {
 	return NULL;
 }
 
-unsigned int list_size (LIST *self) {
+unsigned int list_size(LIST *self) {
 	if ( self->next == NULL) return 0;
 
 	LIST *node = self;
@@ -146,7 +168,7 @@ unsigned int list_size (LIST *self) {
 }
 
 
-void list_free (LIST *self) {
+void list_free(LIST *self) {
 	LIST *node;
 	LIST *next;
 
@@ -164,7 +186,7 @@ void list_free (LIST *self) {
 	node = NULL;
 }
 
-void list_reset (LIST *self) {
+void list_reset(LIST *self) {
 	LIST *node;
 	LIST *next;
 
