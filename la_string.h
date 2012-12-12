@@ -19,6 +19,7 @@
 #define LA_STRING_H
 
 #include "la_common.h"
+#include "la_list.h"
 #include "la_system.h"
 #ifdef SYSTEM_OS_TYPE_LINUX
 #include <regex.h>
@@ -32,6 +33,7 @@ char *string_toUpper(const char *str);
 char *string_trim(const char *str);
 char *string_replaceFirst(const char *string, const char *from, const char *to);
 char *string_replace(const char *string, const char *from, const char *to);
+LIST *string_split(const char *string, const char *delimiters);
 BOOL string_isEmpty(const char *string);
 #ifdef SYSTEM_OS_TYPE_LINUX
 char *string_regexp (char *string, char *patrn, int *begin, int *end);

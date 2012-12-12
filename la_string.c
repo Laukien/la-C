@@ -121,6 +121,33 @@ char *string_replaceFirst(const char *string, const char *from, const char *to) 
 	return result;
 }
 
+LIST *string_split(const char *string, const char *delimiters) {
+	LIST *list = list_new();
+	const char* s = string;
+	const char* e = s;
+	size_t len;
+	char *token;
+
+	while (*e != 0) {
+		e = s;
+		while (*e != 0 && strchr(delimiters, *e) == 0) ++e;
+		if (e - s > 0) {
+			len = e - s;
+			token = (char *) malloc(len + 1);
+
+			memcpy(token, s, len);
+			token[len] = '\0';                  /* finish string */
+
+			list_add(list, token);              /* add token to list */
+
+			free(token);
+		}
+		s = e + 1;
+	}
+
+	return list;
+}
+
 char *string_replace(const char *string, const char *from, const char *to) {
 	int string_size = strlen(string);
 	int from_size = strlen(from);
