@@ -25,6 +25,7 @@ extern "C" {
 
 char character_fromHex(const char chr);
 char character_toHex(const char chr);
+char *character_replace(const char *str, const char from, const char to);
 
 #ifdef __cplusplus
 }

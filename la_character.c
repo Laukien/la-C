@@ -32,3 +32,19 @@ char character_toHex(const char chr) {
 	return hex[chr & 15];
 }
 
+char *character_replace(const char *str, const char from, const char to) {
+	assert(str != NULL);
+
+	size_t len = strlen(str);
+	char *res = (char *) malloc(len + 1);
+
+	size_t i;
+	for (i = 0; i < len; ++i) {
+		if (str[i] == from)
+			res[i] = to;
+		else
+			res[i] = str[i];
+	}
+
+	return res;
+}
