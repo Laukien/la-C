@@ -24,7 +24,7 @@
 #include "la_string.h"
 
 PARAMETER *parameter_getNode (PARAMETER *self, unsigned int index) {
-	PARAMETER *node;
+	PARAMETER *node = self;
 	if (self->next == NULL) return NULL;       /* check if parameter-set is empty */
 
 	unsigned int count = 0;
