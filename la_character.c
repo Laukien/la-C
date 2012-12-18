@@ -38,7 +38,10 @@ char *character_replace(const char *str, const char from, const char to) {
 	assert(str != NULL);
 
 	size_t len = strlen(str);
+//	char *res = strdup(str);
 	char *res = (char *) malloc(len + 1);
+	if (res == NULL) return NULL;
+	memset(res, '\0', len + 1);
 
 	size_t i;
 	for (i = 0; i < len; ++i) {
