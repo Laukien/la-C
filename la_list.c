@@ -117,19 +117,29 @@ void list_swap(LIST *self, unsigned int index1, unsigned int index2) {
 
 	if (index1 == index2) return;
 
-	LIST *tmp11 = index1 == 0 ? self : list_getNode(self, index1-1);
-	LIST *tmp12 = index2 == 0 ? self : list_getNode(self, index2-1);
-	LIST *tmp10 = tmp11->next;
+//	LIST *tmp11 = index1 == 0 ? self : list_getNode(self, index1-1);
+//	LIST *tmp12 = index2 == 0 ? self : list_getNode(self, index2-1);
+//	LIST *tmp10 = tmp11->next;
+//
+//	LIST *tmp21 = list_getNode(self, index1);
+//	LIST *tmp22 = list_getNode(self, index2);
+//	LIST *tmp20 = tmp22->next;
+//
+//	tmp11->next = tmp12->next;
+//	tmp12->next = tmp10;
+//
+//	tmp22->next = tmp21->next;
+//	tmp21->next = tmp20;
 
-	LIST *tmp21 = list_getNode(self, index1);
-	LIST *tmp22 = list_getNode(self, index2);
-	LIST *tmp20 = tmp22->next;
+	LIST *node1, *node2;
+	char *tmp;
 
-	tmp11->next = tmp12->next;
-	tmp12->next = tmp10;
+	node1 = list_getNode(self, index1);
+	node2 = list_getNode(self, index2);
 
-	tmp22->next = tmp21->next;
-	tmp21->next = tmp20;
+	tmp = node1->value;
+	node1->value = node2->value;
+	node2->value = tmp;
 }
 
 char *list_get(LIST *self, unsigned int index) {

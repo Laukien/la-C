@@ -49,4 +49,3 @@ int list_saveToFile(LIST *self, const char *filename);
 #endif
 
 #endif
-
