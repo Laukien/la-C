@@ -82,6 +82,26 @@ void list_add(LIST *self, const char *value) {
 	}
 }
 
+void list_addUnique(LIST *self, const char *value) {
+	if (!list_exists(self, value))
+		list_add(self, value);
+}
+
+BOOL list_exists(LIST *self, const char *value) {
+	LIST *node = self;
+	if (self->next == NULL)
+		return FALSE;
+
+	do {
+		node = node->next;
+
+		if (strcmp(value, node->value) == 0)
+			return TRUE;
+	} while (node->next != NULL);
+
+	return FALSE;
+}
+
 void list_remove(LIST *self, unsigned int index) {
 	LIST *nodeSelf, *nodePrev, *nodeNext;
 

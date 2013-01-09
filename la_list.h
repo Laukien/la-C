@@ -21,6 +21,8 @@
 
 #define LIST_VALUE_SIZE 128
 
+#include "la_common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,6 +35,8 @@ typedef struct la_list LIST;
 
 LIST *list_new();
 void list_add(LIST *self, const char *value);
+void list_addUnique(LIST *self, const char *value);
+BOOL list_exists(LIST *self, const char *value);
 void list_remove(LIST *self, unsigned int index);
 void list_clear(LIST *self);
 void list_swap(LIST *self, unsigned int index1, unsigned int index2);
