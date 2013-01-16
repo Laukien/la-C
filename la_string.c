@@ -203,6 +203,7 @@ char *string_loadFromFile(const char *filename) {
 
 	char line[512 + 1];
 	char *str = (char *) malloc(1024 * 10);     /* get 10KB */
+	str[0] = '\0';                              /* empty string */
 	while (fgets(line, 512, file) != NULL) {
 		str = (char *) realloc(str, strlen(str) + strlen(line) + 1);
 		strcat(str, line);
