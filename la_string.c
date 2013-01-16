@@ -195,6 +195,34 @@ BOOL string_isEmpty(const char *string) {
 
 	return len == 0 ? TRUE : FALSE;
 }
+
+char *string_loadFromFile(const char *filename) {
+	FILE *file;
+	file = fopen(filename, "r");
+	if (file == NULL) return NULL;
+
+	char line[512 + 1];
+	char *str = (char *) malloc(1024 * 10);     /* get 10KB */
+	while (fgets(line, 512, file) != NULL) {
+		str = (char *) realloc(str, strlen(str) + strlen(line) + 1);
+		strcat(str, line);
+	}
+
+	return str;
+}
+
+BOOL string_saveToFile(const char *filename, const char *str) {
+	FILE *file;
+	file = fopen(filename, "w");
+	if (file == NULL) return FALSE;
+
+	fputs(str, file);
+
+	fclose(file);
+
+	return TRUE;
+}
+
 #ifdef SYSTEM_OS_TYPE_LINUX
 char *string_regexp (char *string, char *patrn, int *begin, int *end) {     
 	int i, len;                  

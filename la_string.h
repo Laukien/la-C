@@ -35,6 +35,8 @@ char *string_replaceFirst(const char *string, const char *from, const char *to);
 char *string_replace(const char *string, const char *from, const char *to);
 LIST *string_split(const char *string, const char *delimiters);
 BOOL string_isEmpty(const char *string);
+char *string_loadFromFile(const char *filename);
+BOOL string_saveToFile(const char *filename, const char *str);
 #ifdef SYSTEM_OS_TYPE_LINUX
 char *string_regexp (char *string, char *patrn, int *begin, int *end);
 #endif
