@@ -22,6 +22,11 @@
 #include <string.h>
 #include <ctype.h>
 
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+#undef BOOL
+#include <windows.h>
+#endif
+
 BOOL system_isOSTypeWindows() {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	return TRUE;
@@ -160,7 +165,7 @@ SYSTEM_UPTIME system_getUptime() {
 	idx[0] = '\0';                              /* cut string */
 
 	double value = atof(line);
-	printf ( "UPTIME: %f\n", value );
+//	printf ( "UPTIME: %f\n", value );
 
 	ut.day = value / 86400;
 	ut.hour = ((int)value % 86400) / 3600;
@@ -171,7 +176,6 @@ SYSTEM_UPTIME system_getUptime() {
 	return ut;
 #else
 #warning Uptime is not implemented yet!
-	/* net statistics workstation */
 	exit(1);
 #endif
 }

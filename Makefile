@@ -94,6 +94,7 @@ example:
 	$(CC) $(CFLAGS) -o example_string_1 example_string_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_string_2 example_string_2.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_stringbuffer_1 example_stringbuffer_1.c lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -o example_system_1 example_system_1.c lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_list_1 example_list_1.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_list_2 example_list_2.c -L. lib$(NAME).$(VERSION).a
 	$(CC) $(CFLAGS) -o example_list_3 example_list_3.c -L. lib$(NAME).$(VERSION).a
