@@ -28,11 +28,39 @@
 #include <dirent.h>
 
 BOOL directory_create(const char *directoryname) {
+	if (directory_exists(directoryname)) return TRUE;
+
+	char *dir = strdup(directoryname);
+	size_t i;
+
+	/* make directory tokens */
+	for (i = 1; i < strlen(directoryname); ++i) {
+		if (dir[i] == DIRECTORY_SEPARATOR_CHAR) dir[i] = '\0';
+	}
+
+	/* rebuild directory from the root */
+	for (i = 1; i < strlen(directoryname); ++i) {
+		if (dir[i] != '\0') continue;
+		if (!directory_exists(directoryname)) {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
-	return (mkdir(directoryname)) == 0 ? TRUE : FALSE;
+			mkdir(dir);
 #else
-	return (mkdir(directoryname, 0755)) == 0 ? TRUE : FALSE;
+			mkdir(dir, 0755);
 #endif
+
+		}
+		dir[i] = DIRECTORY_SEPARATOR_CHAR;
+	}
+
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+			mkdir(directoryname);
+#else
+			mkdir(directoryname, 0755);
+#endif
+
+	free(dir);
+
+	return (directory_exists(directoryname));
 }
 
 BOOL directory_exists(const char *name) {
