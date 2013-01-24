@@ -318,7 +318,8 @@ int parameter_loadFromFile(PARAMETER *param, const char *filename) {
 		char *t = string_trim(c);
 		free(c);
 
-		if ( t == NULL || strlen(t) == 0) {
+		if ( t == NULL ) continue;
+		if ( strlen(t) == 0) {
 			free(t);
 			continue;
 		}

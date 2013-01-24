@@ -19,8 +19,8 @@
 #ifndef LA_PARAMETER_H
 #define LA_PARAMETER_H
 
-#define PARAMETER_KEY_SIZE 32
-#define PARAMETER_VALUE_SIZE 64
+#define PARAMETER_KEY_SIZE 128
+#define PARAMETER_VALUE_SIZE 2048
 
 #ifdef __cplusplus
 extern "C" {

@@ -19,7 +19,7 @@
 #ifndef LA_LIST_H
 #define LA_LIST_H
 
-#define LIST_VALUE_SIZE 128
+#define LIST_VALUE_SIZE 2048
 
 #include "la_common.h"
 
