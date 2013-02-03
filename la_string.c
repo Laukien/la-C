@@ -153,6 +153,7 @@ char *string_replace(const char *string, const char *from, const char *to) {
 	int from_size = strlen(from);
 	int to_size = strlen(to);
 	int result_size = string_size;
+	int diff_size;
 	char *result;
 	result = (char *)malloc(string_size + 1);
 	if (result == NULL) {
@@ -168,18 +169,30 @@ char *string_replace(const char *string, const char *from, const char *to) {
 		int idx = begin - string;
 		memcpy(result, string, idx);
 		while (begin != NULL) {
-			result_size = result_size - from_size + to_size;
+			/* calculate absulte diffence between 'to' and 'from' */
+			if (from_size == to_size)
+				diff_size = 0;
+			else if (from_size > to_size)
+				diff_size = to_size - from_size;
+			else if (from_size < to_size)
+				diff_size = from_size - to_size;
+
+			/* get memory an its size */
+			result_size = result_size - diff_size;
 			result = (char *)realloc(result, result_size + 1);
 			if (result == NULL) {
 				fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
 				exit(EXIT_FAILURE);
 			}
-//			memset(result, '\0', result_size);
+
+			/* copy 'to' to result */
 			memcpy(result + idx, to, to_size);
-			memcpy(result + idx + to_size, begin + from_size, string_size - idx+(count * (to_size - from_size)));
+			memcpy(result + idx + to_size, begin + from_size, string_size - idx + (count * diff_size));
+
+			/* get next 'from' */
 			begin = strstr(begin + from_size, from);
 			++count;
-			idx = begin - string + (count * (to_size - from_size));
+			idx = begin - string + (count * diff_size);
 		}
 		result[result_size] = '\0';
 	}
