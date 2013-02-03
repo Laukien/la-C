@@ -4,10 +4,14 @@ CFLAGS += -ggdb3
 CXX := g++
 CXXFLAGS += -O0 -Wall
 CXXFLAGS += -ggdb3
+GW := i686-pc-mingw32-gcc
+GWFLAGS += -m32 -O0
+GWXX := i686-pc-mingw32-g++
+GWXXFLAGS += -m32 -O0 -static-libgcc
 AR := ar
 ARFLAGS := -rcs
 NAME := lac
-VERSION := 1.3.9
+VERSION := 1.3.10
 POSTGRESQL := -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir) -L$(shell pg_config --libdir) -lpq
 MYSQL := $(shell mysql_config --include) $(shell mysql_config --libs)
 ORACLE := -I$(ORACLE_HOME)/rdbms/public $(ORACLE_HOME)/lib/libclient11.a -Wl,-R$(ORACLE_HOME)/lib -L$(ORACLE_HOME)/lib -lclntsh
@@ -86,6 +90,40 @@ cxx:
 		la_stringbuffer.c\
 		la_system.c
 	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++-postgresql.$(VERSION).so -o lib$(NAME)++-postgresql.$(VERSION).so la_database_postgresql.c
+
+mingw-cc:
+	@echo
+	@echo === COMPILE ===
+	$(GW) $(GWFLAGS) -c -o la_character.o la_character.c
+#$(GW) $(GWFLAGS) -O0 -c -o la_console.o la_console.c
+	$(GW) $(GWFLAGS) -c -o la_datetime.o la_datetime.c
+	$(GW) $(GWFLAGS) -c -o la_file.o la_file.c
+	$(GW) $(GWFLAGS) -c -o la_directory.o la_directory.c
+	$(GW) $(GWFLAGS) -c -o la_list.o la_list.c
+	$(GW) $(GWFLAGS) -c -o la_memory.o la_memory.c
+	$(GW) $(GWFLAGS) -c -o la_number.o la_number.c
+	$(GW) $(GWFLAGS) -c -o la_parameter.o la_parameter.c
+	$(GW) $(GWFLAGS) -c -o la_error.o la_error.c
+	$(GW) $(GWFLAGS) -c -o la_exception.o la_exception.c
+	$(GW) $(GWFLAGS) -c -o la_string.o la_string.c
+	$(GW) $(GWFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
+	$(GW) $(GWFLAGS) -c -o la_system.o la_system.c
+
+mingw-cxx:
+	$(GWXX) $(GWXXFLAGS) -c -o la_character.o la_character.c
+#$(GWXX) $(GWXXFLAGS) -O0 -c -o la_console.o la_console.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_datetime.o la_datetime.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_file.o la_file.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_directory.o la_directory.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_list.o la_list.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_memory.o la_memory.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_number.o la_number.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_parameter.o la_parameter.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_error.o la_error.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_exception.o la_exception.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_string.o la_string.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
+	$(GWXX) $(GWXXFLAGS) -c -o la_system.o la_system.c
 
 example:
 	@echo
