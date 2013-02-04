@@ -39,7 +39,7 @@ cc:
 	$(CC) $(CFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
 	$(CC) $(CFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME).$(VERSION).a *.o
-	gcc -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
+	$(CC) -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o lib$(NAME).$(VERSION).so\
 		la_character.c\
 		la_console.c\
 		la_datetime.c\
@@ -54,7 +54,7 @@ cc:
 		la_string.c\
 		la_stringbuffer.c\
 		la_system.c
-	gcc -shared -fPIC -Wl,-soname,lib$(NAME)-postgresql.$(VERSION).so -o lib$(NAME)-postgresql.$(VERSION).so la_database_postgresql.c
+	$(CC) -shared -fPIC -Wl,-soname,lib$(NAME)-postgresql.$(VERSION).so -o lib$(NAME)-postgresql.$(VERSION).so la_database_postgresql.c
 
 cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_character.o la_character.c
@@ -74,7 +74,7 @@ cxx:
 	$(CXX) $(CXXFLAGS) -c -o la_stringbuffer.o la_stringbuffer.c
 	$(CXX) $(CXXFLAGS) -c -o la_system.o la_system.c
 	$(AR) $(ARFLAGS) lib$(NAME)++.$(VERSION).a *.o
-	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
+	$(CXX) -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o lib$(NAME)++.$(VERSION).so\
 		la_character.c\
 		la_console.c\
 		la_datetime.c\
@@ -89,7 +89,7 @@ cxx:
 		la_string.c\
 		la_stringbuffer.c\
 		la_system.c
-	gcc -shared -fPIC -Wl,-soname,lib$(NAME)++-postgresql.$(VERSION).so -o lib$(NAME)++-postgresql.$(VERSION).so la_database_postgresql.c
+	$(CXX) -shared -fPIC -Wl,-soname,lib$(NAME)++-postgresql.$(VERSION).so -o lib$(NAME)++-postgresql.$(VERSION).so la_database_postgresql.c
 
 mingw-cc:
 	@echo
