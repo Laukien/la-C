@@ -48,7 +48,7 @@ int main(void) {
 		fprintf(stderr, "Unable to init database\n");
 		return(EXIT_FAILURE);
 	}
-	database_setException(data.db, data.e);
+	database_postgresql_setException(data.db, data.e);
 
 	printf ( "PARAM\n" );
 	database_postgresql_setHost(data.db, "localhosxt");

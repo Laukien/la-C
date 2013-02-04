@@ -39,7 +39,7 @@ typedef struct {
 } DATABASE_POSTGRESQL;
 
 DATABASE_POSTGRESQL *database_postgresql_new();
-void database_setException(DATABASE_POSTGRESQL *self, EXCEPTION *e);
+void database_postgresql_setException(DATABASE_POSTGRESQL *self, EXCEPTION *e);
 void database_postgresql_free(DATABASE_POSTGRESQL *self);
 void database_postgresql_open(DATABASE_POSTGRESQL *self);
 void database_postgresql_close(DATABASE_POSTGRESQL *self);

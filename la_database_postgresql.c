@@ -62,7 +62,7 @@ DATABASE_POSTGRESQL *database_postgresql_new() {
 	return self;
 }
 
-void database_setException(DATABASE_POSTGRESQL *self, EXCEPTION *e) {
+void database_postgresql_setException(DATABASE_POSTGRESQL *self, EXCEPTION *e) {
 	assert(self != NULL);
 	assert(e != NULL);
 
