@@ -209,20 +209,22 @@ char *string_replace(const char *string, const char *from, const char *to) {
 	int len_front;
 	int count;
 
+	/* check parameter */
 	if (!string)
 		return NULL;
 	if (!from || !(len_from = strlen(from)))
 		return NULL;
 	if (!(ins = strstr((char*)string, from)))   /* "(char *) - "g++ bug */
+		return strdup(string);
+	if (!to || !(len_to = strlen(to)))
 		return NULL;
-	if (!to)
-		to = "";
-	len_to = strlen(to);
 
+	/* count hits */
 	for (count = 0; (tmp = strstr(ins, from)) != NULL; ++count) {
 		ins = tmp + len_from;
 	}
 
+	/* get memory */
 	tmp = result = (char *) malloc(strlen(string) + (len_to - len_from) * count + 1);
 	if (result == NULL) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
