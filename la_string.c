@@ -90,6 +90,33 @@ char *string_trim(const char *str) {
 	return trim;
 }
 
+LIST *string_split(const char *string, const char *delimiters) {
+	LIST *list = list_new();
+	const char* s = string;
+	const char* e = s;
+	size_t len;
+	char *token;
+
+	while (*e != 0) {
+		e = s;
+		while (*e != 0 && strchr(delimiters, *e) == 0) ++e;
+		if (e - s > 0) {
+			len = e - s;
+			token = (char *) malloc(len + 1);
+
+			memcpy(token, s, len);
+			token[len] = '\0';                  /* finish string */
+
+			list_add(list, token);              /* add token to list */
+
+			free(token);
+		}
+		s = e + 1;
+	}
+
+	return list;
+}
+
 char *string_replaceFirst(const char *string, const char *from, const char *to) {
 	int string_size = strlen(string);
 	int from_size = strlen(from);
@@ -121,84 +148,100 @@ char *string_replaceFirst(const char *string, const char *from, const char *to) 
 	return result;
 }
 
-LIST *string_split(const char *string, const char *delimiters) {
-	LIST *list = list_new();
-	const char* s = string;
-	const char* e = s;
-	size_t len;
-	char *token;
-
-	while (*e != 0) {
-		e = s;
-		while (*e != 0 && strchr(delimiters, *e) == 0) ++e;
-		if (e - s > 0) {
-			len = e - s;
-			token = (char *) malloc(len + 1);
-
-			memcpy(token, s, len);
-			token[len] = '\0';                  /* finish string */
-
-			list_add(list, token);              /* add token to list */
-
-			free(token);
-		}
-		s = e + 1;
-	}
-
-	return list;
-}
+//char *string_replace(const char *string, const char *from, const char *to) {
+//	int string_size = strlen(string);
+//	int from_size = strlen(from);
+//	int to_size = strlen(to);
+//	int result_size = string_size;
+//	int diff_size;
+//	char *result;
+//	result = (char *)malloc(string_size + 1);
+//	if (result == NULL) {
+//		fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
+//		exit(EXIT_FAILURE);
+//	}
+//
+//    const char *begin = strstr(string, from);   /* get the first position */
+//	if (begin == NULL) {                        /* 'from' doesn't exists */
+//		strcpy(result, string);                 /* copy  */
+//	} else {
+//		int count = 0;
+//		int idx = begin - string;
+//		memcpy(result, string, idx);
+//		while (begin != NULL) {
+//			/* calculate absulte diffence between 'to' and 'from' */
+//			if (from_size == to_size)
+//				diff_size = 0;
+//			else if (from_size > to_size)
+//				diff_size = to_size - from_size;
+//			else if (from_size < to_size)
+//				diff_size = from_size - to_size;
+//
+//			/* get memory an its size */
+//			result_size = result_size - diff_size;
+//			result = (char *)realloc(result, result_size + 1);
+//			if (result == NULL) {
+//				fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
+//				exit(EXIT_FAILURE);
+//			}
+//
+//			/* copy 'to' to result */
+//			memcpy(result + idx, to, to_size);
+//			memcpy(result + idx + to_size, begin + from_size, string_size - idx);
+//
+//			/* get next 'from' */
+//			begin = strstr(begin + from_size, from);
+//			++count;
+//			idx = begin - string + (count * diff_size);
+//		}
+//		result[result_size] = '\0';
+//	}
+//
+//	return result;
+//}
 
 char *string_replace(const char *string, const char *from, const char *to) {
-	int string_size = strlen(string);
-	int from_size = strlen(from);
-	int to_size = strlen(to);
-	int result_size = string_size;
-	int diff_size;
 	char *result;
-	result = (char *)malloc(string_size + 1);
+	char *ins;
+	char *tmp;
+	int len_from;
+	int len_to;
+	int len_front;
+	int count;
+
+	if (!string)
+		return NULL;
+	if (!from || !(len_from = strlen(from)))
+		return NULL;
+	if (!(ins = strstr((char*)string, from)))   /* "(char *) - "g++ bug */
+		return NULL;
+	if (!to)
+		to = "";
+	len_to = strlen(to);
+
+	for (count = 0; (tmp = strstr(ins, from)) != NULL; ++count) {
+		ins = tmp + len_from;
+	}
+
+	tmp = result = (char *) malloc(strlen(string) + (len_to - len_from) * count + 1);
 	if (result == NULL) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
 		exit(EXIT_FAILURE);
 	}
 
-    const char *begin = strstr(string, from);   /* get the first position */
-	if (begin == NULL) {                        /* 'from' doesn't exists */
-		strcpy(result, string);                 /* copy  */
-	} else {
-		int count = 0;
-		int idx = begin - string;
-		memcpy(result, string, idx);
-		while (begin != NULL) {
-			/* calculate absulte diffence between 'to' and 'from' */
-			if (from_size == to_size)
-				diff_size = 0;
-			else if (from_size > to_size)
-				diff_size = to_size - from_size;
-			else if (from_size < to_size)
-				diff_size = from_size - to_size;
-
-			/* get memory an its size */
-			result_size = result_size - diff_size;
-			result = (char *)realloc(result, result_size + 1);
-			if (result == NULL) {
-				fprintf ( stderr, "\ndynamic memory allocation failed (string_replace)\n" );
-				exit(EXIT_FAILURE);
-			}
-
-			/* copy 'to' to result */
-			memcpy(result + idx, to, to_size);
-			memcpy(result + idx + to_size, begin + from_size, string_size - idx + (count * diff_size));
-
-			/* get next 'from' */
-			begin = strstr(begin + from_size, from);
-			++count;
-			idx = begin - string + (count * diff_size);
-		}
-		result[result_size] = '\0';
+	while (count--) {
+		ins = strstr((char *)string, from);
+		len_front = ins - string;
+		tmp = strncpy(tmp, string, len_front) + len_front;
+		tmp = strcpy(tmp, to) + len_to;
+		string += len_front + len_from;
 	}
+	strcpy(tmp, string);
 
 	return result;
 }
+
+
 
 BOOL string_isEmpty(const char *string) {
 	if (string == NULL) return TRUE;
@@ -221,6 +264,8 @@ char *string_loadFromFile(const char *filename) {
 		str = (char *) realloc(str, strlen(str) + strlen(line) + 1);
 		strcat(str, line);
 	}
+
+	fclose(file);
 
 	return str;
 }
