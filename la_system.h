@@ -79,11 +79,18 @@ BOOL system_isOSVendorHP();
 BOOL system_isOSVendorIBM();
 BOOL system_isOSVendorApple();
 
-/* ARCH */
+/* Arch */
 BOOL system_isArch32();
 BOOL system_isArch64();
+#ifdef SYSTEM_OS_TYPE_LINUX
+int system_getOSArch();
+int system_getCPUArch();
+int system_getBinaryArch();
+int system_getCompilerArch();
+#endif
 
 /* OS */
+#ifdef SYSTEM_OS_TYPE_LINUX
 typedef struct {
 	int day;
 	int hour;
@@ -93,11 +100,39 @@ typedef struct {
 } SYSTEM_UPTIME;
 
 SYSTEM_UPTIME system_getUptime();
+#endif
 
 /* OTHER */
 BOOL system_isCopyright();
 
 #ifdef __cplusplus
+	namespace la {
+		namespace system {
+			bool isOSTypeWindows();
+			bool isOSTypeDOS();
+			bool isOSTypeOS2();
+			bool isOSTypeUNIX();
+			bool isOSTypeLinux();
+			bool isOSTypeIRIX();
+			bool isOSTypeHPUX();
+			bool isOSTypeOSX();
+
+			bool isOSVendorMicrosoft();
+			bool isOSVendorSGI();
+			bool isOSVendorHP();
+			bool isOSVendorIBM();
+			bool isOSVendorApple();
+
+#ifdef SYSTEM_OS_TYPE_LINUX
+			int getOSArch();
+			int getCPUArch();
+			int getBinaryArch();
+			int getCompilerArch();
+#endif
+
+			bool isCopyright();
+		}
+	}
 }
 #endif
 

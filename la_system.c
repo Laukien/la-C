@@ -147,8 +147,8 @@ BOOL system_isArch64() {
 #endif
 }
 
-SYSTEM_UPTIME system_getUptime() {
 #ifdef SYSTEM_OS_TYPE_LINUX
+SYSTEM_UPTIME system_getUptime() {
 	SYSTEM_UPTIME ut;
     memset(&ut, 0, sizeof(ut));                 /* set all fields to '0' */
 
@@ -174,11 +174,8 @@ SYSTEM_UPTIME system_getUptime() {
 	ut.millisecond = (value * 1000) - ((int)value * 1000);
 
 	return ut;
-#else
-#warning Uptime is not implemented yet!
-	exit(1);
-#endif
 }
+#endif
 
 BOOL system_isCopyright() {
 	char *env = getenv("COPYRIGHT");
@@ -189,3 +186,140 @@ BOOL system_isCopyright() {
 
 	return !(chr == 'n' || chr == 'f' || chr == '0');
 }
+
+int system_getOSArch() {
+    FILE *fp = NULL;
+    char cb64[3];
+
+    fp = popen ("getconf LONG_BIT", "r");
+    if (!fp)
+       return -1;
+
+    char *p = fgets(cb64, 3, fp);
+
+	pclose(fp);
+    if (!p)
+        return -2;
+
+    if (!strncmp (cb64, "16", 3))
+        return 16;
+    else if (!strncmp (cb64, "32", 3))
+        return 32;
+    else if (!strncmp (cb64, "64", 3))
+        return 64;
+	else return -3;
+}
+
+int system_getCPUArch() {
+	FILE *fp = NULL;
+	char line[2048];
+	char *flags = NULL;
+
+	fp = fopen("/proc/cpuinfo", "r");
+	if (!fp)
+		return -1;
+
+
+	while (fgets(line, 2048, fp)) {
+		flags = strstr(line, "flags");
+		if (flags != NULL)
+			break;
+	}
+
+	fclose(fp);
+
+	if (strstr(flags, " lm ")) {
+		return(64);
+	}
+	if (strstr(flags, " tm ")) {
+		return(32);
+	}
+	if (strstr(flags, " rm ")) {
+		return(16);
+	}
+
+	return -1;
+}
+
+int system_getBinaryArch() {
+#ifdef SYSTEM_OS_TYPE_LINUX
+	return __WORDSIZE;
+#else
+	return -1;
+#endif
+}
+
+int system_getCompilerArch() {
+#if defined __LP64__ || defined __x86_64__
+	return 64;
+#elif defined __i386__
+	return 32;
+#endif
+	return -1;
+}
+
+#ifdef __cplusplus
+	namespace la {
+		namespace system {
+			bool isOSTypeWindows() {
+				return system_isOSTypeWindows();
+			}
+			bool isOSTypeDOS() {
+				return system_isOSTypeDOS();
+			}
+			bool isOSTypeOS2() {
+				return system_isOSTypeOS2();
+			}
+			bool isOSTypeUNIX() {
+				return system_isOSTypeUNIX();
+			}
+			bool isOSTypeLinux() {
+				return system_isOSTypeLinux();
+			}
+			bool isOSTypeIRIX() {
+				return system_isOSTypeIRIX();
+			}
+			bool isOSTypeHPUX() {
+				return system_isOSTypeHPUX();
+			}
+			bool isOSTypeOSX();
+
+			bool isOSVendorMicrosoft() {
+				return system_isOSVendorMicrosoft();
+			}
+			bool isOSVendorSGI() {
+				return system_isOSVendorSGI();
+			}
+			bool isOSVendorHP() {
+				return system_isOSVendorHP();
+			}
+			bool isOSVendorIBM() {
+				return system_isOSVendorIBM();
+			}
+			bool isOSVendorApple() {
+				return system_isOSVendorApple();
+			}
+
+			int getOSArch() {
+				return system_getOSArch();
+			}
+
+			int getCPUArch() {
+				return system_getCPUArch();
+			}
+
+			int getBinaryArch() {
+				return system_getBinaryArch();
+			}
+			int getCompilerArch() {
+				return system_getCPUArch();
+			}
+
+			bool isCopyright() {
+				return system_isCopyright();
+			}
+
+		}
+	}
+
+#endif
