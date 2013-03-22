@@ -29,9 +29,11 @@ extern "C" {
 #define LA_AUTHOR "Stephan Laukien"
 
 /* boolean type */
+#ifndef BOOL
 #define BOOL int
 #define TRUE 1
 #define FALSE 0 
+#endif
 
 #ifdef __cplusplus
 }
