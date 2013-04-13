@@ -17,8 +17,15 @@
  */
 
 #include "la_console.h"
-#include <sys/ioctl.h>
+#include "la_system.h"
 #include <stdio.h>
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+#include <stdlib.h>
+void console_clean() {
+	system ("cls");
+}
+#else
+#include <sys/ioctl.h>
 #include <unistd.h>
 #include <termios.h>
 
@@ -84,3 +91,4 @@ int console_getKey(int byte, int second) {
 
 	return c;
 }
+#endif

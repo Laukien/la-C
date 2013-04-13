@@ -133,7 +133,7 @@ void list_remove(LIST *self, unsigned int index) {
 
 void list_swap(LIST *self, unsigned int index1, unsigned int index2) {
 	unsigned int len = list_size(self);
-	assert(index1 >= 0 && index1 < len && index2 >= 0 && index2 < len);
+	assert(index1 > 0 && index1 < len && index2 > 0 && index2 < len);
 
 	if (index1 == index2) return;
 
