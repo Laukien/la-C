@@ -70,3 +70,33 @@ char *number_uintToString(unsigned int num) {
 
 	return str;
 }
+
+#ifdef __cplusplus
+namespace la {
+	namespace number {
+		size_t intToSize(int num) {
+			return number_intToSize(num);
+		}
+
+		size_t uintToSize(unsigned int num) {
+			return number_uintToSize(num);
+		}
+
+		std::string intToString(int num) {
+			char *tmp = number_intToString(num);
+			std::string res = std::string(tmp);
+			free(tmp);
+
+			return res;
+		}
+
+		std::string uintToString(unsigned int num) {
+			char *tmp = number_uintToString(num);
+			std::string res = std::string(tmp);
+			free(tmp);
+
+			return res;
+		}
+	}
+}
+#endif

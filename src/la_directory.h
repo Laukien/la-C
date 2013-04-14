@@ -19,19 +19,13 @@
 #ifndef LA_DIRECTORY_H
 #define LA_DIRECTORY_H
 
-#ifdef __cplusplus
-#include <string>
-namespace directory {
-	bool create(const std::string name);
-	bool exists(const std::string name);
-	std::string temp();
-}
-extern "C" {
-#endif
-
 #include "la_common.h"
 #include "la_list.h"
 #include "la_system.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifdef SYSTEM_OS_VENDOR_MICROSOFT
 	#define DIRECTORY_SEPARATOR_CHAR '\\'
@@ -47,6 +41,15 @@ char *directory_temp();
 LIST *directory_list(const char *directoryname);
 
 #ifdef __cplusplus
+}
+#include <string>
+namespace la {
+	namespace directory {
+		bool create(const std::string &name);
+		bool exists(const std::string &name);
+		std::string temp();
+		la::list list(const std::string &directoryname);
+	}
 }
 #endif
 

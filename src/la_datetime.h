@@ -20,13 +20,6 @@
 #define LA_DATETIME_H
 
 #ifdef __cplusplus
-#include <string>
-namespace datetime {
-	std::string getTimestampAsString();
-	std::string getDateAsString();
-	std::string getTimeAsString();
-	std::string getDateTimeAsString();
-}
 extern "C" {
 #endif
 
@@ -47,6 +40,16 @@ char *datetime_getTimeAsString();
 char *datetime_getDateTimeAsString();
 
 #ifdef __cplusplus
+}
+#include <string>
+
+namespace la {
+	namespace datetime {
+		std::string getTimestampAsString();
+		std::string getDateAsString();
+		std::string getTimeAsString();
+		std::string getDateTimeAsString();
+	}
 }
 #endif
 

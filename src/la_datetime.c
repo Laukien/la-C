@@ -101,36 +101,38 @@ char *datetime_getDateTimeAsString() {
 }
 
 #ifdef __cplusplus
-namespace datetime {
-	std::string getTimestampAsString() {
-		char *ts = datetime_getTimestampAsString();
-		std::string tss = ts;
-		free(ts);
+namespace la {
+	namespace datetime {
+		std::string getTimestampAsString() {
+			char *ts = datetime_getTimestampAsString();
+			std::string tss = ts;
+			free(ts);
 
-		return tss;
-	}
+			return tss;
+		}
 
-	std::string getDateAsString() {
-		char *ts = datetime_getDateAsString();
-		std::string tss = ts;
-		free(ts);
+		std::string getDateAsString() {
+			char *ts = datetime_getDateAsString();
+			std::string tss = ts;
+			free(ts);
 
-		return tss;
-	}
+			return tss;
+		}
 
-	std::string getTimeAsString() {
-		char *ts = datetime_getTimeAsString();
-		std::string tss = ts;
-		free(ts);
+		std::string getTimeAsString() {
+			char *ts = datetime_getTimeAsString();
+			std::string tss = ts;
+			free(ts);
 
-		return tss;
-	}
-	std::string getDateTimeAsString() {
-		char *ts = datetime_getDateTimeAsString();
-		std::string tss = ts;
-		free(ts);
+			return tss;
+		}
+		std::string getDateTimeAsString() {
+			char *ts = datetime_getDateTimeAsString();
+			std::string tss = ts;
+			free(ts);
 
-		return tss;
+			return tss;
+		}
 	}
 }
 #endif

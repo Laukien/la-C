@@ -32,6 +32,16 @@ char *number_uintToString(unsigned int num);
 
 #ifdef __cplusplus
 }
+#include <string>
+
+namespace la {
+	namespace number {
+		size_t intToSize(int num);
+		size_t uintToSize(unsigned int num);
+		std::string intToString(int num);
+		std::string uintToString(unsigned int num);
+	}
+}
 #endif
 
 #endif

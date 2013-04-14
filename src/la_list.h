@@ -50,6 +50,30 @@ int list_saveToFile(LIST *self, const char *filename);
 
 #ifdef __cplusplus
 }
+#include <string>
+
+namespace la {
+	class list {
+		private:
+			LIST *obj;
+		public:
+			list();
+			list(LIST *obj);
+			~list();
+			void add(const std::string &value);
+			void addUnique(const std::string &value);
+			bool exists(const std::string &value);
+			void remove(unsigned int index);
+			void clear();
+			void swap(unsigned int index1, unsigned int index2);
+			void reset();
+			std::string get(unsigned int index);
+			unsigned int size();
+			void show();
+			void loadFromFile(const std::string &filename);
+			void saveToFile(const std::string &filename);
+	};
+}
 #endif
 
 #endif

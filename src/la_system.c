@@ -259,67 +259,101 @@ int system_getCompilerArch() {
 }
 
 #ifdef __cplusplus
-	namespace la {
-		namespace system {
-			bool isOSTypeWindows() {
-				return system_isOSTypeWindows();
-			}
-			bool isOSTypeDOS() {
-				return system_isOSTypeDOS();
-			}
-			bool isOSTypeOS2() {
-				return system_isOSTypeOS2();
-			}
-			bool isOSTypeUNIX() {
-				return system_isOSTypeUNIX();
-			}
-			bool isOSTypeLinux() {
-				return system_isOSTypeLinux();
-			}
-			bool isOSTypeIRIX() {
-				return system_isOSTypeIRIX();
-			}
-			bool isOSTypeHPUX() {
-				return system_isOSTypeHPUX();
-			}
-			bool isOSTypeOSX();
-
-			bool isOSVendorMicrosoft() {
-				return system_isOSVendorMicrosoft();
-			}
-			bool isOSVendorSGI() {
-				return system_isOSVendorSGI();
-			}
-			bool isOSVendorHP() {
-				return system_isOSVendorHP();
-			}
-			bool isOSVendorIBM() {
-				return system_isOSVendorIBM();
-			}
-			bool isOSVendorApple() {
-				return system_isOSVendorApple();
-			}
-
-			int getOSArch() {
-				return system_getOSArch();
-			}
-
-			int getCPUArch() {
-				return system_getCPUArch();
-			}
-
-			int getBinaryArch() {
-				return system_getBinaryArch();
-			}
-			int getCompilerArch() {
-				return system_getCPUArch();
-			}
-
-			bool isCopyright() {
-				return system_isCopyright();
-			}
-
+namespace la {
+	namespace system {
+		bool isOSTypeWindows() {
+			return system_isOSTypeWindows();
 		}
-	}
+		bool isOSTypeDOS() {
+			return system_isOSTypeDOS();
+		}
+		bool isOSTypeOS2() {
+			return system_isOSTypeOS2();
+		}
+		bool isOSTypeUNIX() {
+			return system_isOSTypeUNIX();
+		}
+		bool isOSTypeLinux() {
+			return system_isOSTypeLinux();
+		}
+		bool isOSTypeIRIX() {
+			return system_isOSTypeIRIX();
+		}
+		bool isOSTypeHPUX() {
+			return system_isOSTypeHPUX();
+		}
+		bool isOSTypeOSX();
 
+		bool isOSVendorMicrosoft() {
+			return system_isOSVendorMicrosoft();
+		}
+		bool isOSVendorSGI() {
+			return system_isOSVendorSGI();
+		}
+		bool isOSVendorHP() {
+			return system_isOSVendorHP();
+		}
+		bool isOSVendorIBM() {
+			return system_isOSVendorIBM();
+		}
+		bool isOSVendorApple() {
+			return system_isOSVendorApple();
+		}
+
+		bool isArch32() {
+			return system_isArch32();
+		}
+
+		bool isArch64() {
+			return system_isArch64();
+		}
+
+	#ifdef SYSTEM_OS_TYPE_LINUX
+		int getOSArch() {
+			return system_getOSArch();
+		}
+
+		int getCPUArch() {
+			return system_getCPUArch();
+		}
+
+		int getBinaryArch() {
+			return system_getBinaryArch();
+		}
+
+		int getCompilerArch() {
+			return system_getCPUArch();
+		}
+
+		uptime::uptime() {
+			obj = system_getUptime();
+		}
+
+		int uptime::getDay() {
+			return obj.day;
+		}
+
+		int uptime::getHour() {
+			return obj.hour;
+		}
+
+		int uptime::getMinute() {
+			return obj.minute;
+		}
+
+		int uptime::getSecond() {
+			return obj.second;
+		}
+
+		int uptime::getMillisecond() {
+			return obj.millisecond;
+		}
+	#endif
+
+		bool isCopyright() {
+			return system_isCopyright();
+		}
+
+	}
+}
 #endif

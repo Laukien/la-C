@@ -50,6 +50,7 @@ char *parameter_getValueByIndex (PARAMETER *param, unsigned int index);
  * =====================================================================================
  */
 unsigned int parameter_getIndexByKey (PARAMETER *self, const char *key);
+char *parameter_getValueByKey(PARAMETER *param, const char *key);
 char *parameter_get (PARAMETER *param, const char *key);
 unsigned int parameter_size (PARAMETER *param);
 void parameter_show(PARAMETER *self);
@@ -57,6 +58,32 @@ int parameter_loadFromFile(PARAMETER *param, const char *filename);
 int parameter_saveToFile(PARAMETER *param, const char *filename);
 
 #ifdef __cplusplus
+}
+#include <string>
+
+namespace la {
+	class parameter {
+		private:
+			PARAMETER *obj;
+		public:
+			parameter();
+			parameter(PARAMETER *obj);
+			~parameter();
+			void add(const std::string &key, const std::string &value);
+			void remove(const std::string &key);
+			void clear();
+			void reset();
+			parameter getByIndex(unsigned int index);
+			std::string getKeyByIndex(unsigned int index);
+			std::string getValueByIndex(unsigned int index);
+			unsigned int getIndexByKey(const std::string &key);
+			std::string getValueByKey(const std::string &key);
+			std::string get(const std::string &key);
+			unsigned int size();
+			void show();
+			void loadFromFile(const std::string &filename);
+			void saveToFile(const std::string &filename);
+	};
 }
 #endif
 

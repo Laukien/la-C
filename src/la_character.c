@@ -55,21 +55,23 @@ char *character_replace(const char *str, const char from, const char to) {
 }
 
 #ifdef __cplusplus
-namespace character {
-	char fromHex(const char chr) {
-		return character_fromHex(chr);
-	}
+namespace la {
+	namespace character {
+		char fromHex(const char chr) {
+			return character_fromHex(chr);
+		}
 
-	char toHex(const char chr) {
-		return character_toHex(chr);
-	}
+		char toHex(const char chr) {
+			return character_toHex(chr);
+		}
 
-	std::string replace(const std::string &str, const char from, const char to) {
-		char *tmp = character_replace(str.c_str(), from, to);
-		std::string res = std::string(tmp);
-		free(tmp);
+		std::string replace(const std::string &str, const char from, const char to) {
+			char *tmp = character_replace(str.c_str(), from, to);
+			std::string res = std::string(tmp);
+			free(tmp);
 
-		return res;
+			return res;
+		}
 	}
 }
 #endif

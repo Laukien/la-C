@@ -141,26 +141,41 @@ LIST *file_list(const char *filename) {
 }
 
 #ifdef __cplusplus
-namespace file {
-	bool exists(const std::string filename) {
-		return file_exists(filename.c_str());
-	}
+namespace la {
+	namespace file {
+		bool exists(const std::string &filename) {
+			return file_exists(filename.c_str());
+		}
 
-	std::string name(const std::string filename) {
-		char *name = file_name(filename.c_str());	
-		std::string names = name;
-		free(name);
+		bool remove(const std::string &filename) {
+			return file_remove(filename.c_str());
+		}
 
-		return names;
-	}
+		std::string name(const std::string &filename) {
+			char *name = file_name(filename.c_str());	
+			std::string names = name;
+			free(name);
 
-	std::string temp() {
-		char *file = file_temp();
-		std::string tmp = file;
-		free(file);
+			return names;
+		}
 
-		return tmp;
+		std::string temp() {
+			char *file = file_temp();
+			std::string tmp = file;
+			free(file);
+
+			return tmp;
+		}
+
+		size_t size(const std::string &filename) {
+			return file_size(filename.c_str());
+		}
+
+		la::list list(const std::string &directoryname) {
+			LIST *l = file_list(directoryname.c_str());
+
+			return la::list(l);
+		}
 	}
 }
-
 #endif

@@ -129,3 +129,49 @@ void stringbuffer_reset(STRINGBUFFER *ptr) {
 	}
 	ptr->size = 0;
 }
+
+#ifdef __cplusplus
+namespace la {
+	stringbuffer::stringbuffer() {
+		this->obj = stringbuffer_new();
+	}
+
+	stringbuffer::stringbuffer(STRINGBUFFER *obj) {
+		this->obj = obj;
+	}
+
+	stringbuffer::~stringbuffer() {
+		stringbuffer_free(this->obj);
+	}
+
+	unsigned int stringbuffer::size() {
+		return stringbuffer_size(this->obj);
+	}
+
+	void stringbuffer::append(const std::string &string) {
+		stringbuffer_append(this->obj, string.c_str());
+	}
+
+	void stringbuffer::insert(const std::string &string, unsigned int pos) {
+		stringbuffer_insert(this->obj, string.c_str(), pos);
+	}
+
+	std::string stringbuffer::text() {
+		char *tmp = stringbuffer_text(this->obj);
+		std::string res = std::string(tmp);
+		free(tmp);
+
+		return res;
+	}
+
+	stringbuffer stringbuffer::clone() {
+		stringbuffer sb(stringbuffer_clone(this->obj));
+
+		return sb;
+	}
+
+	void stringbuffer::reset() {
+		stringbuffer_reset(this->obj);
+	}
+}
+#endif

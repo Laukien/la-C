@@ -60,3 +60,37 @@ void error_reset() {
 void error_show() {
 	fprintf (stderr, "ERROR: %s (%d)\n", _msg, _id);
 }
+
+#ifdef __cplusplus
+namespace la {
+	namespace error {
+		void init() {
+			error_init();
+		}
+
+		void set(int id, const std::string &msg) {
+			error_set(id, msg.c_str());
+		}
+
+		int getId() {
+			return error_getId();
+		}
+
+		std::string getMessage() {
+			return std::string(error_getMessage());
+		}
+
+		void show() {
+			error_show();
+		}
+
+		bool exists() {
+			return error_exists();
+		}
+
+		void reset() {
+			error_reset();
+		}
+	}
+}
+#endif

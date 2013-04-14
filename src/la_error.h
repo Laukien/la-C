@@ -40,6 +40,18 @@ void error_reset();
 
 #ifdef __cplusplus
 }
+#include <string>
+namespace la {
+	namespace error {
+		void init();
+		void set(int id, const std::string &msg);
+		int getId();
+		std::string getMessage();
+		void show();
+		bool exists();
+		void reset();
+	}
+}
 #endif
 
 #endif

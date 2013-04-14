@@ -25,8 +25,8 @@
 #include <ctype.h>
 #include <assert.h>
 
-char *string_toLower(const char *str) {
-	int len = strlen(str);	
+char *string_toLower(const char *string) {
+	int len = strlen(string);	
 
 	char *result = (char *)malloc (len + 1);
 	if ( result==NULL ) {
@@ -40,15 +40,15 @@ char *string_toLower(const char *str) {
 
 	int i;
 	for ( i = 0; i < len; ++i ) {
-		result[i] = tolower(str[i]);
+		result[i] = tolower(string[i]);
 	}
 	result[len] = '\0';
 
 	return result;
 }
 
-char *string_toUpper(const char *str) {
-	int len = strlen(str);	
+char *string_toUpper(const char *string) {
+	int len = strlen(string);	
 
 	char *result = (char *)malloc (len + 1);
 	if ( result==NULL ) {
@@ -62,7 +62,7 @@ char *string_toUpper(const char *str) {
 
 	int i;
 	for ( i = 0; i <= len; ++i ) {
-		result[i] = toupper(str[i]);
+		result[i] = toupper(string[i]);
 	}
 	result[len] = '\0';
 
@@ -70,11 +70,11 @@ char *string_toUpper(const char *str) {
 }
 
 
-char *string_trim(const char *str) {
+char *string_trim(const char *string) {
 	int idx_start = 0;
-	int idx_stop=strlen(str);
-	while (str[idx_start] != '\0' && iscntrl(str[idx_start])) idx_start++;
-	while (idx_stop>idx_start && iscntrl(str[idx_stop - 1])) idx_stop--;
+	int idx_stop=strlen(string);
+	while (string[idx_start] != '\0' && iscntrl(string[idx_start])) idx_start++;
+	while (idx_stop>idx_start && iscntrl(string[idx_stop - 1])) idx_stop--;
 	if (idx_start == idx_stop) return NULL;
 
 
@@ -84,7 +84,7 @@ char *string_trim(const char *str) {
 		exit (EXIT_FAILURE);
 	}
 
-	memcpy(trim, str+idx_start, idx_stop-idx_start);
+	memcpy(trim, string+idx_start, idx_stop-idx_start);
 	trim[idx_stop] = '\0';
 
 	return trim;
@@ -285,13 +285,13 @@ BOOL string_saveToFile(const char *filename, const char *str) {
 }
 
 #ifdef SYSTEM_OS_TYPE_LINUX
-char *string_regexp (char *string, char *patrn, int *begin, int *end) {     
+char *string_regexp (const char *string, const char *pattern, int *begin, int *end) {     
 	int i, len;                  
 	int w = 0;
 	char *word = NULL;
 	regex_t rgT;
 	regmatch_t match;
-	regcomp(&rgT, patrn, REG_EXTENDED);
+	regcomp(&rgT, pattern, REG_EXTENDED);
 	if ((regexec(&rgT, string, 1, &match, 0)) == 0) {
 		*begin = (int)match.rm_so;
 		*end = (int)match.rm_eo;
@@ -304,6 +304,7 @@ char *string_regexp (char *string, char *patrn, int *begin, int *end) {
 		word[w] = '\0';
 	}
 	regfree(&rgT);
+
 	return word;
 }
 #endif
@@ -355,3 +356,62 @@ char *string_toHex(const char *str) {
 	return result;
 }
 
+#ifdef __cplusplus
+namespace la {
+	namespace string {
+		std::string toLower(const std::string &string) {
+			return std::string(string_toLower(string.c_str()));
+		}
+
+		std::string toUpper(const std::string &string) {
+			return std::string(string_toUpper(string.c_str()));
+		}
+
+		std::string trim(const std::string &string) {
+			return std::string(string_trim(string.c_str()));
+		}
+
+		std::string replaceFirst(const std::string &string, const std::string &from, const std::string &to) {
+			return std::string(string_replaceFirst(string.c_str(), from.c_str(), to.c_str()));
+		}
+
+		std::string replace(const std::string &string, const std::string &from, const std::string &to) {
+			return std::string(string_replace(string.c_str(), from.c_str(), to.c_str()));
+		}
+
+		list split(const std::string &string, const std::string &delimiters) {
+			LIST *l = string_split(string.c_str(), delimiters.c_str());
+			list res(l);
+
+			return res;
+		}
+
+		bool isEmpty(const std::string &string) {
+			return string_isEmpty(string.c_str());
+		}
+
+		std::string loadFromFile(const std::string &filename) {
+			return std::string(string_loadFromFile(filename.c_str()));
+		}
+
+		bool saveToFile(const std::string &filename, const std::string &string) {
+			return string_saveToFile(filename.c_str(), string.c_str());
+		}
+
+	#ifdef SYSTEM_OS_TYPE_LINUX
+		std::string regexp(const std::string &string, const std::string &pattern, int &begin, int &end) {
+			return std::string(string_regexp(string.c_str(), pattern.c_str(), &begin, &end));
+		}
+	#endif
+
+		std::string fromHex(const std::string &string) {
+			return std::string(string_fromHex(string.c_str()));
+		}
+
+		std::string toHex(const std::string &string) {
+			return std::string(string_toHex(string.c_str()));
+		}
+
+	}
+}
+#endif

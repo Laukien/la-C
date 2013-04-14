@@ -20,12 +20,6 @@
 #define LA_CHARACTER
 
 #ifdef __cplusplus
-#include <string>
-namespace character {
-	char fromHex(const char chr);
-	char toHex(const char chr);
-	std::string replace(const std::string &str, const char from, const char to);
-}
 extern "C" {
 #endif
 
@@ -34,6 +28,15 @@ char character_toHex(const char chr);
 char *character_replace(const char *str, const char from, const char to);
 
 #ifdef __cplusplus
+}
+#include <string>
+
+namespace la {
+	namespace character {
+		char fromHex(const char chr);
+		char toHex(const char chr);
+		std::string replace(const std::string &str, const char from, const char to);
+	}
 }
 #endif
 

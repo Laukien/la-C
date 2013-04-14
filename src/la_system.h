@@ -106,32 +106,46 @@ SYSTEM_UPTIME system_getUptime();
 BOOL system_isCopyright();
 
 #ifdef __cplusplus
-	namespace la {
-		namespace system {
-			bool isOSTypeWindows();
-			bool isOSTypeDOS();
-			bool isOSTypeOS2();
-			bool isOSTypeUNIX();
-			bool isOSTypeLinux();
-			bool isOSTypeIRIX();
-			bool isOSTypeHPUX();
-			bool isOSTypeOSX();
+}
 
-			bool isOSVendorMicrosoft();
-			bool isOSVendorSGI();
-			bool isOSVendorHP();
-			bool isOSVendorIBM();
-			bool isOSVendorApple();
+namespace la {
+	namespace system {
+		bool isOSTypeWindows();
+		bool isOSTypeDOS();
+		bool isOSTypeOS2();
+		bool isOSTypeUNIX();
+		bool isOSTypeLinux();
+		bool isOSTypeIRIX();
+		bool isOSTypeHPUX();
+		bool isOSTypeOSX();
+
+		bool isOSVendorMicrosoft();
+		bool isOSVendorSGI();
+		bool isOSVendorHP();
+		bool isOSVendorIBM();
+		bool isOSVendorApple();
 
 #ifdef SYSTEM_OS_TYPE_LINUX
-			int getOSArch();
-			int getCPUArch();
-			int getBinaryArch();
-			int getCompilerArch();
+		bool isArch32();
+		bool isArch64();
+		int getOSArch();
+		int getCPUArch();
+		int getBinaryArch();
+		int getCompilerArch();
+		class uptime {
+			private:
+				SYSTEM_UPTIME obj;
+			public:
+				uptime();
+				int getDay();
+				int getHour();
+				int getMinute();
+				int getSecond();
+				int getMillisecond();
+		};
 #endif
 
-			bool isCopyright();
-		}
+		bool isCopyright();
 	}
 }
 #endif

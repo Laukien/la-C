@@ -18,20 +18,13 @@
 
 #ifndef LA_FILE_H
 #define LA_FILE_H
+#include "la_common.h"
+#include "la_list.h"
 #include <string.h>
 
 #ifdef __cplusplus
-#include <string>
-namespace file {
-	bool exists(const std::string filename);
-	std::string name(const std::string filename);
-	std::string temp();
-}
 extern "C" {
 #endif
-
-#include "la_common.h"
-#include "la_list.h"
 
 BOOL file_exists(const char *filename);
 BOOL file_remove(const char *filename);
@@ -41,6 +34,17 @@ size_t file_size(const char *filename);
 LIST *file_list(const char *directoryname);
 
 #ifdef __cplusplus
+}
+#include <string>
+namespace la {
+	namespace file {
+		bool exists(const std::string &filename);
+		bool remove(const std::string &filename);
+		std::string name(const std::string &filename);
+		std::string temp();
+		size_t size(const std::string &filename);
+		la::list list(const std::string &directoryname);
+	}
 }
 #endif
 

@@ -40,6 +40,24 @@ void stringbuffer_reset(STRINGBUFFER *ptr);
 
 #ifdef __cplusplus
 }
+#include <string>
+
+namespace la {
+	class stringbuffer {
+		private:
+			STRINGBUFFER *obj;
+		public:
+			stringbuffer();
+			stringbuffer(STRINGBUFFER *obj);
+			~stringbuffer();
+			unsigned int size();
+			void append(const std::string &string);
+			void insert(const std::string &string, unsigned int pos);
+			std::string text();
+			stringbuffer clone();
+			void reset();
+	};
+}
 #endif
 
 #endif

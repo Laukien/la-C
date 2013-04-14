@@ -124,21 +124,29 @@ LIST *directory_list(const char *directoryname) {
 }
 
 #ifdef __cplusplus
-namespace directory {
-	bool create(const std::string name) {
-		return directory_create(name.c_str());
-	}
+namespace la {
+	namespace directory {
+		bool create(const std::string name) {
+			return directory_create(name.c_str());
+		}
 
-	bool exists(const std::string name) {
-		return directory_exists(name.c_str());
-	}
+		bool exists(const std::string name) {
+			return directory_exists(name.c_str());
+		}
 
-	std::string temp() {
-		char *dir = directory_temp();
-		std::string tmp = dir;
-		free(dir);
+		std::string temp() {
+			char *dir = directory_temp();
+			std::string tmp = dir;
+			free(dir);
 
-		return tmp;
+			return tmp;
+		}
+
+		la::list list(const std::string &directoryname) {
+			LIST *l = directory_list(directoryname.c_str());
+
+			return la::list(l);
+		}
 	}
 }
 #endif
