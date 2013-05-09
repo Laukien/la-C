@@ -320,7 +320,7 @@ void database_postgresql_execute(DATABASE_POSTGRESQL *self, const char *query, .
 	va_end(args);
 	free(text);
 
-	self->result = PQexec(self->connection, sb->text);
+	self->result = PQexec(self->connection, stringbuffer_getTextPointer(sb));
 	stringbuffer_free(sb);
 	if (self->result == NULL) {
 		if (self->exception != NULL) exception_throw(self->exception, DATABASE_POSTGRESQL_ERROR_EXECUTE, "unable to execute");
