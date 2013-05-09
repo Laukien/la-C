@@ -126,11 +126,11 @@ LIST *directory_list(const char *directoryname) {
 #ifdef __cplusplus
 namespace la {
 	namespace directory {
-		bool create(const std::string name) {
+		bool create(const std::string &name) {
 			return directory_create(name.c_str());
 		}
 
-		bool exists(const std::string name) {
+		bool exists(const std::string &name) {
 			return directory_exists(name.c_str());
 		}
 
