@@ -12,7 +12,7 @@ GWXXFLAGS += -m32 -O3 -static-libgcc
 AR := ar
 ARFLAGS := -rcs
 NAME := la
-VERSION := 1.4.0
+VERSION := 1.4.1
 POSTGRESQL := -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir) -L$(shell pg_config --libdir) -lpq
 #MYSQL := $(shell mysql_config --include) $(shell mysql_config --libs)
 #ORACLE := -I$(ORACLE_HOME)/rdbms/public $(ORACLE_HOME)/lib/libclient11.a -Wl,-R$(ORACLE_HOME)/lib -L$(ORACLE_HOME)/lib -lclntsh
@@ -160,29 +160,34 @@ cc-example:
 	@echo
 	@echo === CC-EXAMPLE ===
 ifdef POSTGRESQL
-	$(CC) $(CFLAGS) -o example/database_postgresql_1 example/database_postgresql_1.c -L. bin/lib$(NAME).$(VERSION).a $(POSTGRESQL)
-	$(CC) $(CFLAGS) -o example/database_postgresql_2 example/database_postgresql_2.c -L. bin/lib$(NAME).$(VERSION).a $(POSTGRESQL)
-	$(CC) $(CFLAGS) -o example/database_postgresql_3 example/database_postgresql_3.c -L. bin/lib$(NAME).$(VERSION).a $(POSTGRESQL)
+	$(CC) $(CFLAGS) -I src -o example/database_postgresql_1 example/database_postgresql_1.c -L. bin/lib$(NAME).$(VERSION).a $(POSTGRESQL)
+	$(CC) $(CFLAGS) -I src -o example/database_postgresql_2 example/database_postgresql_2.c -L. bin/lib$(NAME).$(VERSION).a $(POSTGRESQL)
+	$(CC) $(CFLAGS) -I src -o example/database_postgresql_3 example/database_postgresql_3.c -L. bin/lib$(NAME).$(VERSION).a $(POSTGRESQL)
 endif
-	$(CC) $(CFLAGS) -o example/directory_1 example/directory_1.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/directory_2 example/directory_2.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/exception_1 example/exception_1.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/file_1 example/file_1.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/file_2 example/file_2.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/file_3 example/file_3.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/list_1 example/list_1.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/list_2 example/list_2.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/list_3 example/list_3.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/number_1 example/number_1.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/parameter_1 example/parameter_1.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/parameter_2 example/parameter_2.c -L. bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/string_1 example/string_1.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/string_2 example/string_2.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/string_3 example/string_3.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/string_4 example/string_4.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/stringbuffer_1 example/stringbuffer_1.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/system_1 example/system_1.c bin/lib$(NAME).$(VERSION).a
-	$(CC) $(CFLAGS) -o example/system_2 example/system_2.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/directory_1 example/directory_1.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/directory_2 example/directory_2.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/exception_1 example/exception_1.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/file_1 example/file_1.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/file_2 example/file_2.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/file_3 example/file_3.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/list_1 example/list_1.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/list_2 example/list_2.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/list_3 example/list_3.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/number_1 example/number_1.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/parameter_1 example/parameter_1.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/parameter_2 example/parameter_2.c -L. bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/string_1 example/string_1.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/string_2 example/string_2.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/string_3 example/string_3.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/string_4 example/string_4.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/stringbuffer_1 example/stringbuffer_1.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/system_1 example/system_1.c bin/lib$(NAME).$(VERSION).a
+	$(CC) $(CFLAGS) -I src -o example/system_2 example/system_2.c -L. bin/lib$(NAME).$(VERSION).a
+
+cxx-example:
+	@echo
+	@echo === CXX-EXAMPLE ===
+	$(CXX) $(CXXFLAGS) -I src -o example/directory_1 example/directory_1.cc bin/lib$(NAME)++.$(VERSION).a
 
 clean:
 	@echo
