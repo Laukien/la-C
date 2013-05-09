@@ -23,6 +23,12 @@
 #include "la_parameter.h"
 #include "la_string.h"
 
+struct la_parameter {
+	char *key;
+	char *value;
+	struct la_parameter *next;
+};
+
 PARAMETER *parameter_getNode (PARAMETER *self, unsigned int index) {
 	PARAMETER *node = self;
 	if (self->next == NULL) return NULL;       /* check if parameter-set is empty */
@@ -257,15 +263,15 @@ void parameter_free (PARAMETER *param) {
 	while (node->next != NULL) {
 		next = node->next;
 //		node->next=NULL;
-		if ( node->key != NULL ) free(node->key);
-		if ( node->value != NULL) free(node->value);
+		if (node->key != NULL ) free(node->key);
+		if (node->value != NULL) free(node->value);
 		free(node);
 		node = next;
 	}
 	
-	if ( node->key != NULL ) free(node->key);
-	if ( node->value != NULL) free(node->value);
-	free(node);
+	if (node->key != NULL ) free(node->key);
+	if (node->value != NULL) free(node->value);
+	if (node != NULL) free(node);               /* free only if there are items */
 	node = NULL;
 }
 
@@ -397,10 +403,6 @@ namespace la {
 
 	void parameter::remove(const std::string &key) {
 		parameter_remove(this->obj, key.c_str());
-	}
-
-	void parameter::clear() {
-		parameter_clear(this->obj);
 	}
 
 	void parameter::reset() {

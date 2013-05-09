@@ -13,13 +13,13 @@ int main(void) {
 	free(text);
 
 	stringbuffer_insert(str, "Das ist", 0);           /* insert string */
-	printf ( "STRING: %s\n", str->text );
+	printf ( "STRING: %s\n", stringbuffer_getTextPointer(str));
 
 	stringbuffer_insert(str, " ", 7);
-	printf ( "STRING: %s\n", str->text );
+	printf ( "STRING: %s\n", stringbuffer_getTextPointer(str));
 
-	stringbuffer_insert(str, "!!", stringbuffer_size(str));
-	printf ( "STRING: %s\n", str->text );
+	stringbuffer_insert(str, "!!", stringbuffer_getLength(str));
+	printf ( "STRING: %s\n", stringbuffer_getTextPointer(str));
 
 	printf ( "SIZE: %d\n", stringbuffer_size(str) );  /* show string-size */
 

@@ -24,17 +24,17 @@
 extern "C" {
 #endif
 
-typedef struct {
-	char *text;
-	unsigned int size;
-} STRINGBUFFER;
+typedef struct la_stringbuffer STRINGBUFFER;
 
 STRINGBUFFER *stringbuffer_new();
 void stringbuffer_free(STRINGBUFFER *ptr);
-unsigned int stringbuffer_size(STRINGBUFFER *ptr);
+unsigned int stringbuffer_size(STRINGBUFFER *ptr); /* deprecated */
+unsigned int stringbuffer_getLength(STRINGBUFFER *ptr);
 void stringbuffer_append(STRINGBUFFER *ptr, const char *str);
 void stringbuffer_insert(STRINGBUFFER *ptr, const char *str, unsigned int pos);
-char *stringbuffer_text(STRINGBUFFER *ptr);
+char *stringbuffer_text(STRINGBUFFER *ptr);     /* deprecated */
+char *stringbuffer_getText(STRINGBUFFER *ptr);
+char *stringbuffer_getTextPointer(STRINGBUFFER *ptr);
 STRINGBUFFER *stringbuffer_clone(STRINGBUFFER *ptr);
 void stringbuffer_reset(STRINGBUFFER *ptr);
 
@@ -50,10 +50,10 @@ namespace la {
 			stringbuffer();
 			stringbuffer(STRINGBUFFER *obj);
 			~stringbuffer();
-			unsigned int size();
+			unsigned int getLength();
 			void append(const std::string &string);
 			void insert(const std::string &string, unsigned int pos);
-			std::string text();
+			std::string getText();
 			stringbuffer clone();
 			void reset();
 	};

@@ -27,10 +27,6 @@
 extern "C" {
 #endif
 
-struct la_list {
-	char *value;
-	struct la_list *next;
-};
 typedef struct la_list LIST;
 
 LIST *list_new();
@@ -38,7 +34,6 @@ void list_add(LIST *self, const char *value);
 void list_addUnique(LIST *self, const char *value);
 BOOL list_exists(LIST *self, const char *value);
 void list_remove(LIST *self, unsigned int index);
-void list_clear(LIST *self);
 void list_swap(LIST *self, unsigned int index1, unsigned int index2);
 void list_free(LIST *self);
 void list_reset(LIST *self);
@@ -64,7 +59,6 @@ namespace la {
 			void addUnique(const std::string &value);
 			bool exists(const std::string &value);
 			void remove(unsigned int index);
-			void clear();
 			void swap(unsigned int index1, unsigned int index2);
 			void reset();
 			std::string get(unsigned int index);

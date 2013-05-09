@@ -24,6 +24,11 @@
 #include "la_list.h"
 #include "la_string.h"
 
+struct la_list {
+	char *value;
+	struct la_list *next;
+};
+
 LIST *list_getNode(LIST *self, unsigned int index) {
 	LIST *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
@@ -206,13 +211,13 @@ void list_free(LIST *self) {
 	while (node->next != NULL) {
 		next = node->next;
 //		node->next=NULL;
-		if ( node->value != NULL) free(node->value);
+		if (node->value != NULL) free(node->value);
 		free(node);
 		node = next;
 	}
 	
-	if ( node->value != NULL) free(node->value);
-	free(node);
+	if (node->value != NULL) free(node->value);
+    if (node != NULL) free(node);               /* free only if there are items */
 	node = NULL;
 }
 
@@ -336,10 +341,6 @@ namespace la {
 
 	void list::remove(unsigned int index) {
 		list_remove(this->obj, index);
-	}
-
-	void list::clear() {
-		list_clear(this->obj);
 	}
 
 	void list::swap(unsigned int index1, unsigned int index2) {

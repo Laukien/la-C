@@ -26,17 +26,11 @@
 extern "C" {
 #endif
 
-struct la_parameter {
-	char *key;
-	char *value;
-	struct la_parameter *next;
-};
 typedef struct la_parameter PARAMETER;
 
 PARAMETER *parameter_new();
 void parameter_add (PARAMETER *param, const char *key, const char *value);
 void parameter_remove (PARAMETER *param, const char *key);
-void parameter_clear (PARAMETER *param);
 void parameter_free (PARAMETER *param);
 void parameter_reset (PARAMETER *param);
 PARAMETER *parameter_getByIndex (PARAMETER *param, unsigned int index);
@@ -71,7 +65,6 @@ namespace la {
 			~parameter();
 			void add(const std::string &key, const std::string &value);
 			void remove(const std::string &key);
-			void clear();
 			void reset();
 			parameter getByIndex(unsigned int index);
 			std::string getKeyByIndex(unsigned int index);
