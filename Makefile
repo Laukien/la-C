@@ -12,7 +12,7 @@ GWXXFLAGS += -m32 -O3 -static-libgcc
 AR := ar
 ARFLAGS := -rcs
 NAME := la
-VERSION := 1.4.1
+VERSION := 1.5.0
 POSTGRESQL := -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir) -L$(shell pg_config --libdir) -lpq
 #MYSQL := $(shell mysql_config --include) $(shell mysql_config --libs)
 #ORACLE := -I$(ORACLE_HOME)/rdbms/public $(ORACLE_HOME)/lib/libclient11.a -Wl,-R$(ORACLE_HOME)/lib -L$(ORACLE_HOME)/lib -lclntsh
@@ -22,11 +22,12 @@ all: clean cc cxx cc-example
 
 cc: cc-static cc-dynamic cc-win
 
-cxx: cxx-static cc-dynamic cxx-win
+cxx: cxx-static cxx-dynamic cxx-win
 
 cc-static:
 	@echo
 	@echo === CC-STATIC ===
+	$(CC) $(CFLAGS) -c -o bin/la_boolean.o src/la_boolean.c
 	$(CC) $(CFLAGS) -c -o bin/la_character.o src/la_character.c
 	$(CC) $(CFLAGS) -O0 -c -o bin/la_console.o src/la_console.c
 ifdef POSTGRESQL
@@ -39,6 +40,7 @@ endif
 	$(CC) $(CFLAGS) -c -o bin/la_file.o src/la_file.c
 	$(CC) $(CFLAGS) -c -o bin/la_list.o src/la_list.c
 	$(CC) $(CFLAGS) -c -o bin/la_memory.o src/la_memory.c
+	$(CC) $(CFLAGS) -c -o bin/la_message.o src/la_message.c
 	$(CC) $(CFLAGS) -c -o bin/la_number.o src/la_number.c
 	$(CC) $(CFLAGS) -c -o bin/la_parameter.o src/la_parameter.c
 	$(CC) $(CFLAGS) -c -o bin/la_string.o src/la_string.c
@@ -50,6 +52,7 @@ cc-dynamic:
 	@echo
 	@echo === CC-DYNAMIC ===
 	$(CC) -shared -fPIC -Wl,-soname,lib$(NAME).$(VERSION).so -o bin/lib$(NAME).$(VERSION).so\
+		src/la_boolean.c\
 		src/la_character.c\
 		src/la_console.c\
 		src/la_datetime.c\
@@ -59,6 +62,7 @@ cc-dynamic:
 		src/la_file.c\
 		src/la_list.c\
 		src/la_memory.c\
+		src/la_message.c\
 		src/la_number.c\
 		src/la_parameter.c\
 		src/la_string.c\
@@ -71,6 +75,7 @@ endif
 cxx-static:
 	@echo
 	@echo === CXX-STATIC ===
+	$(CXX) $(CXXFLAGS) -c -o bin/la_boolean.o src/la_boolean.c
 	$(CXX) $(CXXFLAGS) -c -o bin/la_character.o src/la_character.c
 	$(CXX) $(CXXFLAGS) -O0 -c -o bin/la_console.o src/la_console.c
 ifdef POSTGRESQL
@@ -83,6 +88,7 @@ endif
 	$(CXX) $(CXXFLAGS) -c -o bin/la_file.o src/la_file.c
 	$(CXX) $(CXXFLAGS) -c -o bin/la_list.o src/la_list.c
 	$(CXX) $(CXXFLAGS) -c -o bin/la_memory.o src/la_memory.c
+	$(CXX) $(CXXFLAGS) -c -o bin/la_message.o src/la_message.c
 	$(CXX) $(CXXFLAGS) -c -o bin/la_number.o src/la_number.c
 	$(CXX) $(CXXFLAGS) -c -o bin/la_parameter.o src/la_parameter.c
 	$(CXX) $(CXXFLAGS) -c -o bin/la_string.o src/la_string.c
@@ -94,6 +100,7 @@ cxx-dynamic:
 	@echo
 	@echo === CXX-DYNAMIC ===
 	$(CXX) -shared -fPIC -Wl,-soname,lib$(NAME)++.$(VERSION).so -o bin/lib$(NAME)++.$(VERSION).so\
+		src/la_boolean.c\
 		src/la_character.c\
 		src/la_console.c\
 		src/la_datetime.c\
@@ -103,6 +110,7 @@ cxx-dynamic:
 		src/la_file.c\
 		src/la_list.c\
 		src/la_memory.c\
+		src/la_message.c\
 		src/la_number.c\
 		src/la_parameter.c\
 		src/la_string.c\
@@ -116,6 +124,7 @@ cc-win:
 	@echo
 	@echo === CC-WIN ===
 ifdef WIN
+	$(GW) $(GWFLAGS) -c -o bin/la_boolean.o src/la_boolean.c
 	$(GW) $(GWFLAGS) -c -o bin/la_character.o src/la_character.c
 	$(GW) $(GWFLAGS) -O0 -c -o bin/la_console.o src/la_console.c
 	$(GW) $(GWFLAGS) -c -o bin/la_datetime.o src/la_datetime.c
@@ -125,6 +134,7 @@ ifdef WIN
 	$(GW) $(GWFLAGS) -c -o bin/la_file.o src/la_file.c
 	$(GW) $(GWFLAGS) -c -o bin/la_list.o src/la_list.c
 	$(GW) $(GWFLAGS) -c -o bin/la_memory.o src/la_memory.c
+	$(GW) $(GWFLAGS) -c -o bin/la_message.o src/la_message.c
 	$(GW) $(GWFLAGS) -c -o bin/la_number.o src/la_number.c
 	$(GW) $(GWFLAGS) -c -o bin/la_parameter.o src/la_parameter.c
 	$(GW) $(GWFLAGS) -c -o bin/la_string.o src/la_string.c
@@ -138,6 +148,7 @@ cxx-win:
 	@echo
 	@echo === CXX-WIN ===
 ifdef WIN
+	$(GWXX) $(GWXXFLAGS) -c -o bin/la_boolean.o src/la_boolean.c
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_character.o src/la_character.c
 	$(GWXX) $(GWXXFLAGS) -O0 -c -o bin/la_console.o src/la_console.c
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_datetime.o src/la_datetime.c
@@ -147,6 +158,7 @@ ifdef WIN
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_file.o src/la_file.c
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_list.o src/la_list.c
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_memory.o src/la_memory.c
+	$(GWXX) $(GWXXFLAGS) -c -o bin/la_message.o src/la_message.c
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_number.o src/la_number.c
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_parameter.o src/la_parameter.c
 	$(GWXX) $(GWXXFLAGS) -c -o bin/la_string.o src/la_string.c
@@ -198,15 +210,15 @@ clean:
 install:
 	@echo
 	@echo === INSTALL ===
-	cp -f lib$(NAME).$(VERSION).a /usr/local/lib
+	cp -f bin/lib$(NAME).$(VERSION).a /usr/local/lib
 	ln -f -s /usr/local/lib/lib$(NAME).$(VERSION).a /usr/local/lib/lib$(NAME).a
-	cp -f lib$(NAME).$(VERSION).so /usr/local/lib
+	cp -f bin/lib$(NAME).$(VERSION).so /usr/local/lib
 	ln -f -s /usr/local/lib/lib$(NAME).$(VERSION).so /usr/local/lib/lib$(NAME).so
-	cp -f lib$(NAME)++.$(VERSION).a /usr/local/lib
+	cp -f bin/lib$(NAME)++.$(VERSION).a /usr/local/lib
 	ln -f -s /usr/local/lib/lib$(NAME)++.$(VERSION).a /usr/local/lib/lib$(NAME)++.a
-	cp -f lib$(NAME)++.$(VERSION).so /usr/local/lib
+	cp -f bin/lib$(NAME)++.$(VERSION).so /usr/local/lib
 	ln -f -s /usr/local/lib/lib$(NAME)++.$(VERSION).so /usr/local/lib/lib$(NAME)++.so
-	cp -f *.h /usr/local/include
+	cp -f src/*.h /usr/local/include
 	ldconfig /usr/local/lib
 
 deinstall:
