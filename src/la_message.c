@@ -5,7 +5,7 @@
 #include "la_message.h"
 
 void message_error(const char *text) {
-	fprintf(stderr, "%16s%s\n", "ERROR:", text);
+	fprintf(stderr, "ERROR:\t\t%s\n", text);
 	exit(EXIT_FAILURE);
 }
 
@@ -14,15 +14,16 @@ void message_debug(const char *text) {
 	if (env != NULL && strlen(env) > 0) {
 		char c = tolower(env[0]);
 		if (c == 'y' || c == 't' || c == '1')
-			printf("%16s%s\n", "DEBUG:", text);
+			printf("DEBUG:\t\t%s\n", text);
 	}
 }
+
 void message_info(const char *text) {
-	printf("%16s%s\n", "INFO:", text);
+	printf("INFO:\t\t%s\n", text);
 }
 
 void message_warn(const char *text) {
-	printf("%16s%s\n", "WARNING:", text);
+	printf("WARNING:\t%s\n", text);
 }
 
 #ifdef __cplusplus

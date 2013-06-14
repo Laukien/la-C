@@ -1,9 +1,5 @@
-#ifndef LA_LIST_H
-#define LA_LIST_H
-
-#define LIST_VALUE_SIZE 2048
-
-#include "la_common.h"
+#ifndef LA_MESSAGE_H
+#define LA_MESSAGE_H
 
 #ifdef __cplusplus
 extern "C" {
