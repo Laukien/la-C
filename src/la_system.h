@@ -19,11 +19,11 @@
 #ifndef LA_SYSTEM_H
 #define LA_SYSTEM_H
 
+#include "la_common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "la_common.h"
 
 /* OS-Type & OS-Vendor*/
 #if defined WIN32 || defined _WIN32 || defined _WIN32_ || defined __WIN32 || defined __WIN32__ || defined _MSC_VER || defined __NT__ || defined _Windows

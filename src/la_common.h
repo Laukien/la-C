@@ -19,21 +19,17 @@
 #ifndef LA_COMMON_H
 #define LA_COMMON_H
 
+#include "la_boolean.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* info */
 #define LA_NAME "la-C"
-#define LA_VERSION "1.4.1"
+#define LA_VERSION "1.5.0"
 #define LA_AUTHOR "Stephan Laukien"
 
-/* boolean type */
-#ifndef BOOL
-#define BOOL int
-#define TRUE 1
-#define FALSE 0 
-#endif
 
 #ifdef __cplusplus
 }

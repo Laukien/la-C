@@ -19,11 +19,11 @@
 #ifndef LA_ERROR_H
 #define LA_ERROR_H
 
+#include "la_common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "la_common.h"
 
 #define ERROR_MESSAGE_SIZE 1024
 
@@ -40,7 +40,9 @@ void error_reset();
 
 #ifdef __cplusplus
 }
+
 #include <string>
+
 namespace la {
 	namespace error {
 		void init();
