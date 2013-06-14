@@ -412,12 +412,16 @@ namespace la {
 	parameter parameter::getByIndex(unsigned int index) {
 		PARAMETER *p;
 		p = parameter_getByIndex(this->obj, index);
+		if (p == NULL)
+			return NULL;
 
 		return parameter(p);
 	}
 
 	std::string parameter::getKeyByIndex(unsigned int index) {
 		char *tmp = parameter_getKeyByIndex(this->obj, index);
+		if (tmp == NULL)
+			return std::string();
 		std::string res = std::string(tmp);
 		free(tmp);
 
@@ -426,6 +430,8 @@ namespace la {
 
 	std::string parameter::getValueByIndex(unsigned int index) {
 		char *tmp = parameter_getValueByIndex(this->obj, index);
+		if (tmp == NULL)
+			return std::string();
 		std::string res = std::string(tmp);
 		free(tmp);
 
@@ -438,6 +444,8 @@ namespace la {
 
 	std::string parameter::getValueByKey(const std::string &key) {
 		char *tmp = parameter_getValueByKey(this->obj, key.c_str());
+		if (tmp == NULL)
+			return std::string();
 		std::string res = std::string(tmp);
 		free(tmp);
 
@@ -446,6 +454,8 @@ namespace la {
 
 	std::string parameter::get(const std::string &key) {
 		char *tmp = parameter_get(this->obj, key.c_str());
+		if (tmp == NULL)
+			return std::string();
 		std::string res = std::string(tmp);
 		free(tmp);
 
