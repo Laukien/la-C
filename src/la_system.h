@@ -19,7 +19,7 @@
 #ifndef LA_SYSTEM_H
 #define LA_SYSTEM_H
 
-#include "la_common.h"
+#include "la_boolean.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -104,6 +104,7 @@ SYSTEM_UPTIME system_getUptime();
 
 /* OTHER */
 BOOL system_isCopyright();
+BOOL system_isDebug();
 
 #ifdef __cplusplus
 }
@@ -146,6 +147,7 @@ namespace la {
 #endif
 
 		bool isCopyright();
+		bool isDebug();
 	}
 }
 #endif

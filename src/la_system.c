@@ -16,11 +16,11 @@
  * =====================================================================================
  */
 
-#include "la_system.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "la_system.h"
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 #undef BOOL
@@ -181,10 +181,18 @@ BOOL system_isCopyright() {
 	char *env = getenv("COPYRIGHT");
 	if (env == NULL || strlen(env) < 1) return TRUE;
 
+
+	return boolean_isFalse();
+}
+
+BOOL system_isDebug() {
+	char *env = getenv("DEBUG");
+	if (env == NULL || strlen(env) < 1) return FALSE;
+
 	char chr = env[0];
 	chr = tolower(chr);
 
-	return !(chr == 'n' || chr == 'f' || chr == '0');
+	return boolean_isTrue(env);
 }
 
 int system_getOSArch() {
@@ -354,6 +362,9 @@ namespace la {
 			return system_isCopyright();
 		}
 
+		bool isDebug() {
+			return system_isDebug();
+		}
 	}
 }
 #endif
