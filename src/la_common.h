@@ -27,7 +27,7 @@ extern "C" {
 
 /* info */
 #define LA_NAME "la-C"
-#define LA_VERSION "1.5.3"
+#define LA_VERSION "1.5.4"
 #define LA_AUTHOR "Stephan Laukien"
 
 
