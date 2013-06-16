@@ -24,11 +24,18 @@ extern "C" {
 #endif
 
 #include <string.h>
+#include "la_boolean.h"
 
-size_t number_intToSize(int num);
-size_t number_uintToSize(unsigned int num);
-char *number_intToString(int num);
-char *number_uintToString(unsigned int num);
+BOOL number_isNumber(const char *str);
+BOOL number_isInteger(const char *str);
+BOOL number_isUnsignedInteger(const char *str);
+BOOL number_isSigned(const char *str);
+int number_toInteger(const char *str);
+unsigned int number_toUnsignedInteger(const char *str);
+size_t number_getIntegerLength(int num);
+size_t number_getUnsignedIntegerLength(unsigned int num);
+char *number_integerToString(int num);
+char *number_unsignedIntegerToString(unsigned int num);
 
 #ifdef __cplusplus
 }
@@ -36,10 +43,16 @@ char *number_uintToString(unsigned int num);
 
 namespace la {
 	namespace number {
-		size_t intToSize(int num);
-		size_t uintToSize(unsigned int num);
-		std::string intToString(int num);
-		std::string uintToString(unsigned int num);
+		bool isNumber(const std::string &str);
+		bool isInteger(const std::string &str);
+		bool isUnsignedInteger(const std::string &str);
+		bool isSigned(const std::string &str);
+		int toInteger(const std::string &str);
+		unsigned int toUnsignedInteger(const std::string &str);
+		size_t getLength(int num);
+		size_t getLength(unsigned int num);
+		std::string toString(int num);
+		std::string toString(unsigned int num);
 	}
 }
 #endif

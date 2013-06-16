@@ -78,9 +78,9 @@ char *file_temp() {
 	srand((unsigned int) t);
 
 	int pid = getpid();
-	char *pid_s = number_intToString(pid);
+	char *pid_s = number_integerToString(pid);
 	int rnd = rand();
-	char *rnd_s = number_intToString(rnd);
+	char *rnd_s = number_integerToString(rnd);
 
 	char *dir = directory_temp();	
 	size_t size = strlen(dir) + 1 + strlen(pid_s) + 1 + strlen(rnd_s);
