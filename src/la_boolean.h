@@ -11,7 +11,7 @@ extern "C" {
 	#define FALSE 0 
 #endif
 
-BOOL boolean_isValid(const char *value);
+BOOL boolean_isBoolean(const char *value);
 BOOL boolean_toBoolean(const char *value);
 BOOL boolean_isTrue(const char *value);
 BOOL boolean_isFalse(const char *value);
@@ -27,7 +27,7 @@ char *boolean_toString(BOOL value);
 
 namespace la {
 	namespace boolean {
-		bool isValid(std::string &value);
+		bool isBoolean(std::string &value);
 		bool isTrue(const std::string &value);
 		bool isFalse(const std::string &value);
 		bool toBoolean(std::string &value);

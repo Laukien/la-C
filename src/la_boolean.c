@@ -6,7 +6,7 @@
 #include "la_string.h"
 #include "la_boolean.h"
 
-BOOL boolean_isValid(const char *value) {
+BOOL boolean_isBoolean(const char *value) {
 	if (value == NULL)
 		return FALSE;
 	int len = strlen(value);
@@ -132,8 +132,8 @@ char *boolean_toString(BOOL value) {
 #ifdef __cplusplus
 	namespace la {
 		namespace boolean {
-			bool isValid(const std::string &value) {
-				return boolean_isValid(value.c_str());
+			bool isBoolean(const std::string &value) {
+				return boolean_isBoolean(value.c_str());
 			}
 
 			bool isTrue(const std::string &value) {
