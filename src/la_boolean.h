@@ -12,8 +12,10 @@ extern "C" {
 #endif
 
 BOOL boolean_isValid(const char *value);
-//BOOL boolean_isTrue(const char *value);
-//BOOL boolean_isFalse(const char *value);
+BOOL boolean_toBoolean(const char *value);
+BOOL boolean_isTrue(const char *value);
+BOOL boolean_isFalse(const char *value);
+char *boolean_toString(BOOL value);
 
 #ifdef __cplusplus
 }
@@ -25,9 +27,11 @@ BOOL boolean_isValid(const char *value);
 
 namespace la {
 	namespace boolean {
-		bool isValid(std::string value);
-//		isTrue(const string &value);
-//		isFalse(const string &value);
+		bool isValid(std::string &value);
+		bool isTrue(const std::string &value);
+		bool isFalse(const std::string &value);
+		bool toBoolean(std::string &value);
+		std::string toString(bool value);
 	}
 }
 #endif
