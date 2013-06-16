@@ -182,7 +182,7 @@ BOOL system_isCopyright() {
 	if (env == NULL || strlen(env) < 1) return TRUE;
 
 
-	return boolean_isFalse();
+	return boolean_isFalse(env);
 }
 
 BOOL system_isDebug() {
