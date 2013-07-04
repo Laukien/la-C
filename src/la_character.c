@@ -54,6 +54,18 @@ char *character_replace(const char *str, const char from, const char to) {
 	return res;
 }
 
+unsigned int character_count(const char *str, const char chr) {
+	unsigned int i;
+	unsigned int count = 0;
+
+	for (i = 0; i < strlen(str); ++i) {
+		if (str[i] == chr)
+			++count;
+	}
+
+	return count;
+}
+
 #ifdef __cplusplus
 namespace la {
 	namespace character {
@@ -71,6 +83,10 @@ namespace la {
 			free(tmp);
 
 			return res;
+		}
+
+		unsigned int count(const std::string &str, const char chr) {
+			return character_count(str.c_str(), chr);
 		}
 	}
 }

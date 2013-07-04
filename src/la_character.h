@@ -26,6 +26,7 @@ extern "C" {
 char character_fromHex(const char chr);
 char character_toHex(const char chr);
 char *character_replace(const char *str, const char from, const char to);
+unsigned int character_count(const char *str, const char chr);
 
 #ifdef __cplusplus
 }
@@ -36,6 +37,7 @@ namespace la {
 		char fromHex(const char chr);
 		char toHex(const char chr);
 		std::string replace(const std::string &str, const char from, const char to);
+		unsigned int count(const std::string &str, const char chr);
 	}
 }
 #endif
