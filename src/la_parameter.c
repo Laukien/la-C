@@ -346,6 +346,10 @@ int parameter_loadFromFile(PARAMETER *param, const char *filename) {
 		key = string_trim(line);
         ++sep;                                  /* move one byte right */
 		value = string_trim(sep);
+		if (value == NULL) {
+			free(key);
+			continue;
+		}
 
 		parameter_add(param, key, value);
 		++count;
