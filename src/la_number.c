@@ -119,7 +119,7 @@ int number_toInteger(const char *str) {
 	if (min) {
 		old = res;
 		res *= -1;                              /* add sign */
-		if (res != old)
+		if (res > old)
 			message_error("integer overflow");
 	}
 
