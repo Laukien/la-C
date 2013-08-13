@@ -68,6 +68,26 @@ BOOL directory_exists(const char *name) {
 	return (stat(name, &st) == 0);
 }
 
+char *directory_name(const char *filename) {
+	int i;
+	for (i = strlen(filename)-1; i >= -1; i--) {
+		if (i == -1) break;                     /* not found */
+		if (filename[i] == DIRECTORY_SEPARATOR_CHAR) break;
+	}
+
+    int l = i;                                  /* len */
+	char *name = (char *) malloc(l + 1);
+	if(name == NULL) {
+		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
+		exit (EXIT_FAILURE);
+	}
+
+	memcpy(name, filename, l);
+	name[l] = '\0';
+
+	return name;
+}
+
 char *directory_temp() {
 	char *dir;
 #ifdef SYSTEM_OS_TYPE_UNIX
@@ -132,6 +152,15 @@ namespace la {
 
 		bool exists(const std::string &name) {
 			return directory_exists(name.c_str());
+		}
+
+		std::string name(const std::string &filename) {
+			std::string res;
+			char *name = directory_name(filename.c_str());
+			res = name;
+			free(name);
+
+			return res;
 		}
 
 		std::string temp() {

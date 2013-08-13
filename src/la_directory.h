@@ -37,6 +37,7 @@ extern "C" {
 
 BOOL directory_create(const char *directoryname);
 BOOL directory_exists(const char *directoryname);
+char *directory_name(const char *filename);
 char *directory_temp();
 LIST *directory_list(const char *directoryname);
 
@@ -47,6 +48,7 @@ namespace la {
 	namespace directory {
 		bool create(const std::string &name);
 		bool exists(const std::string &name);
+		std::string name(const std::string &filename);
 		std::string temp();
 		la::list list(const std::string &directoryname);
 	}
