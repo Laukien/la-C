@@ -5,7 +5,7 @@
  *
  *    Description:  common definitions
  *
- *        Version:  1.3.10
+ *        Version:  1.5.9
  *        Created:  03/09/2012 09:40:12 AM
  *       Revision:  none
  *       Compiler:  gcc
@@ -27,7 +27,7 @@ extern "C" {
 
 /* info */
 #define LA_NAME "la-C"
-#define LA_VERSION "1.5.8"
+#define LA_VERSION "1.5.9"
 #define LA_AUTHOR "Stephan Laukien"
 
 
