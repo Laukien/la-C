@@ -266,9 +266,12 @@ int list_loadFromFile(LIST *self, const char *filename) {
 //	memset(line, '\0', len);
 	while (fgets(line, len, file) != NULL) {
 		/* correct string */
-		char *c = string_replaceFirst(line, "#", "\0");
+//		char *c = string_replaceFirst(line, "#", "\0");
+		char *c = strchr(line, '#');
+		if (c) {
+			c[0] = '\0';
+		}
 		char *t = string_trim(c);
-		free(c);
 
 		if ( t == NULL ) continue;
 		if ( strlen(t) == 0) {
