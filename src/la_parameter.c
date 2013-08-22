@@ -325,15 +325,9 @@ int parameter_loadFromFile(PARAMETER *param, const char *filename) {
 	while (fgets(line, len, file) != NULL) {
 		/* correct string */
 //		char *c = string_replaceFirst(line, "#", "\0");
-		char *c = strchr(line, '#');
-		if (c) {
-			c[0] = '\0';
-		}
-		char *t = string_trim(c);
-		free(c);
-
-		if ( t == NULL ) continue;
-		if ( strlen(t) == 0) {
+		char *t = string_trim(line);
+		if (t == NULL) continue;
+		if (t[0] == '#') {
 			free(t);
 			continue;
 		}
