@@ -27,10 +27,10 @@ char *boolean_toString(BOOL value);
 
 namespace la {
 	namespace boolean {
-		bool isBoolean(std::string &value);
+		bool isBoolean(const std::string &value);
 		bool isTrue(const std::string &value);
 		bool isFalse(const std::string &value);
-		bool toBoolean(std::string &value);
+		bool toBoolean(const std::string &value);
 		std::string toString(bool value);
 	}
 }
