@@ -71,8 +71,10 @@ char *string_toUpper(const char *string) {
 
 
 char *string_trim(const char *string) {
+	if (string == NULL) return NULL;
 	int idx_start = 0;
-	int idx_stop=strlen(string);
+	int idx_stop = strlen(string);
+		
 	while (string[idx_start] != '\0' && iscntrl(string[idx_start])) idx_start++;
 	while (idx_stop>idx_start && iscntrl(string[idx_stop - 1])) idx_stop--;
 	if (idx_start == idx_stop) return NULL;

@@ -65,7 +65,10 @@ BOOL directory_create(const char *directoryname) {
 
 BOOL directory_exists(const char *name) {
 	struct stat st;
-	return (stat(name, &st) == 0);
+	if (!stat(name, &st) == 0) {
+		return FALSE;
+	}
+	return (st.st_mode & S_IFDIR);
 }
 
 char *directory_name(const char *filename) {
@@ -119,7 +122,7 @@ LIST *directory_list(const char *directoryname) {
 	struct dirent *ep;
 	struct stat st;
 	char *filename;
-	LIST *list = list_new();
+	LIST *names = list_new();
 
 	dp = opendir(directoryname);
 	if (dp != NULL) {
@@ -133,14 +136,15 @@ LIST *directory_list(const char *directoryname) {
 			strcat(filename, DIRECTORY_SEPARATOR_STRING);
 			strcat(filename, ep->d_name);
 			stat(filename, &st);
+			free(filename);
 
-			if (st.st_mode & S_IFDIR) continue;
-			list_add(list, ep->d_name);
+			if (st.st_mode & S_IFDIR)
+				list_add(names, ep->d_name);
 		}
 		closedir(dp);
 	}
 
-	return list;
+	return names;
 }
 
 #ifdef __cplusplus

@@ -41,11 +41,19 @@
 #include <dirent.h>
 
 BOOL file_exists(const char *filename) {
+/* 
 	FILE *pFile = fopen(filename, "r");
 	if ( pFile == NULL) return FALSE;
 
 	fclose(pFile);
 	return TRUE;
+*/
+
+	struct stat st;
+	if (!stat(filename, &st) == 0) {
+		return FALSE;
+	}
+	return (st.st_mode & S_IFREG);
 }
 
 BOOL file_remove(const char *filename) {
@@ -124,7 +132,13 @@ void _file_list(const char *directoryname, LIST *list) {
 			strcat(filename, ep->d_name);
 			stat(filename, &st);
 
-			if (st.st_mode & S_IFDIR) _file_list(filename, list);
+			/* call its self */
+			if (st.st_mode & S_IFDIR) {
+				_file_list(filename, list);
+				free(filename);
+				continue;
+			}
+
 			list_add(list, filename);
 			free(filename);
 		}
