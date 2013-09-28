@@ -19,7 +19,7 @@
 #ifndef LA_DIRECTORY_H
 #define LA_DIRECTORY_H
 
-#include "la_common.h"
+#include "la_boolean.h"
 #include "la_list.h"
 #include "la_system.h"
 
@@ -39,7 +39,7 @@ BOOL directory_create(const char *directoryname);
 BOOL directory_exists(const char *directoryname);
 char *directory_name(const char *filename);
 char *directory_temp();
-LIST *directory_list(const char *directoryname);
+LIST *directory_list(const char *directoryname, BOOL recursive);
 
 #ifdef __cplusplus
 }
@@ -50,7 +50,7 @@ namespace la {
 		bool exists(const std::string &name);
 		std::string name(const std::string &filename);
 		std::string temp();
-		la::list list(const std::string &directoryname);
+		la::list list(const std::string &directoryname, bool recursive = true);
 	}
 }
 #endif

@@ -18,7 +18,7 @@
 
 #ifndef LA_FILE_H
 #define LA_FILE_H
-#include "la_common.h"
+#include "la_boolean.h"
 #include "la_list.h"
 #include <string.h>
 
@@ -31,7 +31,7 @@ BOOL file_remove(const char *filename);
 char *file_name(const char *file);
 char *file_temp();
 size_t file_size(const char *filename);
-LIST *file_list(const char *directoryname);
+LIST *file_list(const char *directoryname, BOOL recursive);
 
 #ifdef __cplusplus
 }
@@ -43,7 +43,7 @@ namespace la {
 		std::string name(const std::string &filename);
 		std::string temp();
 		size_t size(const std::string &filename);
-		la::list list(const std::string &directoryname);
+		la::list list(const std::string &directoryname, bool recursive = true);
 	}
 }
 #endif

@@ -117,13 +117,11 @@ char *directory_temp() {
 	return dir;
 }
 
-LIST *directory_list(const char *directoryname) {
+void _directory_list(const char *directoryname, BOOL recursive, LIST *list) {
 	DIR *dp;	
 	struct dirent *ep;
 	struct stat st;
-	char *filename;
-	LIST *names = list_new();
-
+	char *name;
 	dp = opendir(directoryname);
 	if (dp != NULL) {
 		while ((ep = readdir(dp)) != NULL) {
@@ -131,20 +129,30 @@ LIST *directory_list(const char *directoryname) {
 			if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0) continue;
 
 			/* build filename */
-			filename = (char *) malloc(strlen(directoryname) + 1 + strlen(ep->d_name) + 1);
-			strcpy(filename, directoryname);
-			strcat(filename, DIRECTORY_SEPARATOR_STRING);
-			strcat(filename, ep->d_name);
-			stat(filename, &st);
-			free(filename);
+			name = (char *) malloc(strlen(directoryname) + 1 + strlen(ep->d_name) + 1);
+			strcpy(name, directoryname);
+			strcat(name, DIRECTORY_SEPARATOR_STRING);
+			strcat(name, ep->d_name);
+			stat(name, &st);
 
-			if (st.st_mode & S_IFDIR)
-				list_add(names, ep->d_name);
+			/* call its self */
+			if (recursive && (st.st_mode & S_IFDIR)) {
+				list_add(list, name);
+				_directory_list(name, TRUE, list);
+			}
+
+			free(name);
 		}
 		closedir(dp);
 	}
+}
 
-	return names;
+LIST *directory_list(const char *directoryname, BOOL recursive) {
+	LIST *list = list_new();
+
+	_directory_list(directoryname, recursive, list);
+
+	return list;
 }
 
 #ifdef __cplusplus
@@ -175,8 +183,8 @@ namespace la {
 			return tmp;
 		}
 
-		la::list list(const std::string &directoryname) {
-			LIST *l = directory_list(directoryname.c_str());
+		la::list list(const std::string &directoryname, bool recursive) {
+			LIST *l = directory_list(directoryname.c_str(), recursive);
 
 			return la::list(l);
 		}
