@@ -9,7 +9,7 @@ PREFIX := /usr/local
 CFLAGS += -O3 -Wall
 
 #WINDOWS
-ifdef WITH_WIN32
+ifdef WIN32
 AR := i686-pc-mingw32-ar
 ARFLAGS := -rcs
 ifdef WITH_CPP
@@ -60,7 +60,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_boolean.o src/la_boolean.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_character.o src/la_character.c
 	$(CC) $(CFLAGS) -O0 -c -o $(OBJDIR)/la_console.o src/la_console.c
-ifndef WITH_WIN32
+ifndef WIN32
 ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_postgresql.o src/la_database_postgresql.c
 endif
@@ -86,7 +86,7 @@ else
 endif
 
 dynamic:
-ifndef WITH_WIN32
+ifndef WIN32
 	@echo
 	@echo === DYNAMIC ===
 	$(CC) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBDIR)/$(SONAME)\
@@ -117,7 +117,7 @@ test:
 ifdef WITH_CPP
 	$(CC) $(CXXFLAGS) -I src -o example/directory_1 example/directory_1.cc $(LIBDIR)/$(ARNAME)
 else
-ifndef WITH_WIN32
+ifndef WIN32
 ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_1 example/database_postgresql_1.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_2 example/database_postgresql_2.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
