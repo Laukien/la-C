@@ -10,11 +10,12 @@ int main(void) {
 	else printf ( "Unknown" );
 	printf ( "\n" );
 
+#ifndef SYSTEM_OS_TYPE_WINDOWS
 	/* Uptime */
 	SYSTEM_UPTIME ut;
 	ut = system_getUptime();
 	printf ( "Uptime: %d.%d.%d.%d.%d\n",ut.day, ut.hour, ut.minute, ut.second, ut.millisecond );
-
+#endif
 	return EXIT_SUCCESS;
 
 }

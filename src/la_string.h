@@ -18,7 +18,7 @@
 #ifndef LA_STRING_H
 #define LA_STRING_H
 
-#include "la_common.h"
+#include "la_boolean.h"
 #include "la_list.h"
 #include "la_system.h"
 #ifdef SYSTEM_OS_TYPE_LINUX

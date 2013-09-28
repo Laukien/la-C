@@ -1,3 +1,4 @@
+#include "la_boolean.h"
 #include "la_directory.h"
 #include "la_system.h"
 #include <stdio.h>
@@ -6,9 +7,9 @@
 int main(void) {
 	LIST *list;
 #ifdef SYSTEM_OS_TYPE_WINDOWS
-	list = directory_list("C:\\WINDOWS");
+	list = directory_list("C:\\WINDOWS", TRUE);
 #else
-	list = directory_list("/etc");
+	list = directory_list("/etc", TRUE);
 #endif
 
 	list_show(list);

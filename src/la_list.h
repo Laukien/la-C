@@ -21,7 +21,7 @@
 
 #define LIST_VALUE_SIZE 2048
 
-#include "la_common.h"
+#include "la_boolean.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -19,7 +19,7 @@
 #ifndef LA_EXCEPTION_H
 #define LA_EXCEPTION_H
 
-#include "la_common.h"
+#include "la_boolean.h"
 
 #ifdef __cplusplus
 extern "C" {
