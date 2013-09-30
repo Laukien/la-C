@@ -119,6 +119,7 @@ void _file_list(const char *directoryname, BOOL recursive, LIST *list) {
 	struct dirent *ep;
 	struct stat st;
 	char *name;
+	int len = strlen(directoryname);
 	dp = opendir(directoryname);
 	if (dp != NULL) {
 		while ((ep = readdir(dp)) != NULL) {
@@ -126,7 +127,7 @@ void _file_list(const char *directoryname, BOOL recursive, LIST *list) {
 			if (strcmp(ep->d_name, ".") == 0 || strcmp(ep->d_name, "..") == 0) continue;
 
 			/* build filename */
-			name = (char *) malloc(strlen(directoryname) + 1 + strlen(ep->d_name) + 1);
+			name = (char *) malloc(len + 1 + strlen(ep->d_name) + 1);
 			strcpy(name, directoryname);
 			strcat(name, DIRECTORY_SEPARATOR_STRING);
 			strcat(name, ep->d_name);
@@ -140,7 +141,7 @@ void _file_list(const char *directoryname, BOOL recursive, LIST *list) {
 			}
 
 			if (st.st_mode & S_IFREG) {
-				list_add(list, name);
+				list_add(list, name + len);
 			}
 
 			free(name);
