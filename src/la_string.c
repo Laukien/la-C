@@ -94,8 +94,8 @@ char *string_trim(const char *string) {
 
 LIST *string_split(const char *string, const char *delimiters) {
 	LIST *list = list_new();
-	const char* s = string;
-	const char* e = s;
+	const char *s = string;
+	const char *e = s;
 	size_t len;
 	char *token;
 
