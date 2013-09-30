@@ -119,7 +119,7 @@ void _file_list(const char *directoryname, BOOL recursive, LIST *list) {
 	struct dirent *ep;
 	struct stat st;
 	char *name;
-	int len = strlen(directoryname);
+	size_t len = strlen(directoryname);
 	dp = opendir(directoryname);
 	if (dp != NULL) {
 		while ((ep = readdir(dp)) != NULL) {
@@ -141,7 +141,7 @@ void _file_list(const char *directoryname, BOOL recursive, LIST *list) {
 			}
 
 			if (st.st_mode & S_IFREG) {
-				list_add(list, name + len);
+				list_add(list, name + len + 1);
 			}
 
 			free(name);
