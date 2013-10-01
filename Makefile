@@ -52,7 +52,7 @@ endif
 endif
 
 
-all: init static dynamic test
+all: init static dynamic
 
 static:
 	@echo
