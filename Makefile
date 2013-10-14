@@ -162,13 +162,13 @@ clean:
 install:
 	@echo
 	@echo === INSTALL ===
-	install -s -o root -g root $(LIBDIR)/$(ARNAME) $(DESTDIR)$(PREFIX)/lib
+	install -o root -g root $(LIBDIR)/$(ARNAME) $(DESTDIR)$(PREFIX)/lib
 ifdef WITH_CPP
 	ln -f -s $(DESTDIR)$(PREFIX)/lib/$(ARNAME) $(DESTDIR)$(PREFIX)/lib/lib$(NAME)++.a
 else
 	ln -f -s $(DESTDIR)$(PREFIX)/lib/$(ARNAME) $(DESTDIR)$(PREFIX)/lib/lib$(NAME).a
 endif
-	install -s -o root -g root $(LIBDIR)/$(SONAME) $(DESTDIR)$(PREFIX)/lib
+	install -o root -g root $(LIBDIR)/$(SONAME) $(DESTDIR)$(PREFIX)/lib
 ifdef WITH_CPP
 	ln -f -s $(DESTDIR)$(PREFIX)/lib/$(SONAME) $(DESTDIR)$(PREFIX)/lib/lib$(NAME)++.so
 else
