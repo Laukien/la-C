@@ -138,7 +138,7 @@ void _directory_list(const char *directoryname, BOOL recursive, LIST *list) {
 
 			/* call its self */
 			if (st.st_mode & S_IFDIR) {
-				list_add(list, name + len + 1);
+				list_add(list, name);
 				if (recursive) {
 					_directory_list(name, TRUE, list);
 				}

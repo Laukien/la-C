@@ -141,7 +141,7 @@ void _file_list(const char *directoryname, BOOL recursive, LIST *list) {
 			}
 
 			if (st.st_mode & S_IFREG) {
-				list_add(list, name + len + 1);
+				list_add(list, name);
 			}
 
 			free(name);
