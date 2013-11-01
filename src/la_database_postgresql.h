@@ -14,6 +14,7 @@
 #define DATABASE_POSTGRESQL_ERROR_RESULT 6
 #define DATABASE_POSTGRESQL_ERROR_FORMAT 7
 
+#define DATABASE_POSTGRESQL_PORT 5432
 #define DATABASE_POSTGRESQL_CONNECTION_SIZE 512
 #define DATABASE_POSTGRESQL_QUERY_SIZE 4096
 #define DATABASE_POSTGRESQL_NUMBER_SIZE 64
@@ -22,23 +23,10 @@
 extern "C" {
 #endif
 
-typedef struct {
-	EXCEPTION *exception;
-	char *host;
-	int port;
-	char *name;
-	char *user;
-	char *password;
-	char *schema;
-	int resultCol;
-	int resultRow;
-	int resultCur;
-	PGconn *connection;
-	PGresult *result;
-	char error[ERROR_MESSAGE_SIZE + 1];
-} DATABASE_POSTGRESQL;
+typedef struct la_database_postgresql DATABASE_POSTGRESQL;
 
 DATABASE_POSTGRESQL *database_postgresql_new();
+void database_postgresql_setError(DATABASE_POSTGRESQL *self, ERROR *e);
 void database_postgresql_setException(DATABASE_POSTGRESQL *self, EXCEPTION *e);
 void database_postgresql_free(DATABASE_POSTGRESQL *self);
 void database_postgresql_open(DATABASE_POSTGRESQL *self);

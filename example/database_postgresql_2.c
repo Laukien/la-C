@@ -5,9 +5,12 @@
 
 int main(void) {
 
+	ERROR *err = error_new();
 	DATABASE_POSTGRESQL *db = database_postgresql_new();
-	if (error_exists()) {
-		error_show();
+	database_postgresql_setError(db, err);
+	if (error_exists(err)) {
+		error_show(err);
+		error_free(err);
 		exit (1);
 	}
 
@@ -17,8 +20,9 @@ int main(void) {
 	database_postgresql_setPassword(db, "postgres");
 
 	database_postgresql_open(db);
-	if (error_exists()) {
-		error_show();
+	if (error_exists(err)) {
+		error_show(err);
+		error_free(err);
 		exit (1);
 	}
 
@@ -45,22 +49,26 @@ int main(void) {
 		free(datistemplate);
 		free(datallowconn);
 	}
-	if (error_exists()) {
-		error_show();
+	if (error_exists(err)) {
+		error_show(err);
+		error_free(err);
 		exit (1);
 	}
 
 	database_postgresql_close(db);
-	if (error_exists()) {
-		error_show();
+	if (error_exists(err)) {
+		error_show(err);
+		error_free(err);
 		exit (1);
 	}
 
 	database_postgresql_free(db);
-	if (error_exists()) {
-		error_show();
+	if (error_exists(err)) {
+		error_show(err);
+		error_free(err);
 		exit (1);
 	}
 
+	error_free(err);
 	return 0;
 }

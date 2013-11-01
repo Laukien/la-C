@@ -10,7 +10,7 @@ typedef struct {
 } DATA;
 
 void except(int id, const char *msg, void *ptr) {
-	fprintf (stderr, "\nAn exception has been thrown: %d - %s\n", id, msg );
+	fprintf (stderr, "\nAn exception has been thrown: %s (%d)\n", msg, id );
 
 	DATA *data = (DATA *)ptr;
 	if (data->ver != NULL) {
@@ -69,6 +69,7 @@ int main(void) {
 
 	printf ( "FREE\n" );
 	database_postgresql_free(data.db);
+	exception_free(data.e);
 
 	return 0;
 }
