@@ -25,18 +25,29 @@
 extern "C" {
 #endif
 
-#define ERROR_MESSAGE_SIZE 1024
-
 #define ERROR_NONE 0
 #define ERROR_UNKNOWN -1
 
-void error_init();
-void error_set(int id, const char *msg);
-int error_getId();
-char *error_getMessage();
-void error_show();
-BOOL error_exists();
-void error_reset();
+#define ERROR_MESSAGE_SIZE 1024
+
+typedef struct la_error ERROR;
+
+ERROR *error_new();
+void error_free(ERROR *self);
+void error_set(ERROR *self, int id, const char *txt, ...);
+void error_setId(ERROR*self, int id);
+int error_getId(ERROR *self);
+void error_setMessage(ERROR*self, const char *txt, ...);
+char *error_getMessage(ERROR *self);
+void error_setComment(ERROR*self, const char *txt);
+char *error_getComment(ERROR *self);
+void error_setCause(ERROR*self, const char *txt);
+char *error_getCause(ERROR *self);
+void error_setAction(ERROR*self, const char *txt);
+char *error_getAction(ERROR *self);
+void error_show(ERROR *self);
+BOOL error_exists(ERROR *self);
+void error_reset(ERROR *self);
 
 #ifdef __cplusplus
 }
@@ -44,15 +55,27 @@ void error_reset();
 #include <string>
 
 namespace la {
-	namespace error {
-		void init();
-		void set(int id, const std::string &msg);
-		int getId();
-		std::string getMessage();
-		void show();
-		bool exists();
-		void reset();
-	}
+	class error {
+		private:
+			ERROR *obj;
+		public:
+			error();
+			~error();
+			void set(int id, const std::string &txt);
+			void setId(int id);
+			int getId();
+			void setMessage(std::string &txt);
+			std::string getMessage();
+			void setComment(std::string &txt);
+			std::string getComment();
+			void setCause(std::string &txt);
+			std::string getCause();
+			void setAction(std::string &txt);
+			std::string getAction();
+			void show();
+			bool exists();
+			void reset();
+	};
 }
 #endif
 

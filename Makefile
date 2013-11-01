@@ -1,5 +1,5 @@
 NAME := la
-VERSION := 1.6.2
+VERSION := 1.6.3
 
 BINDIR := bin
 OBJDIR := obj
@@ -126,23 +126,24 @@ endif
 endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1 example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_2 example/directory_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/exception_1 example/exception_1.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_1 example/file_1.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_2 example/file_2.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_3 example/file_3.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_1 example/list_1.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_2 example/list_2.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_3 example/list_3.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/number_1 example/number_1.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_1 example/parameter_1.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_2 example/parameter_2.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/error_1 example/error_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/exception_1 example/exception_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_1 example/file_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_2 example/file_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_3 example/file_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_1 example/list_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_2 example/list_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_3 example/list_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/number_1 example/number_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_1 example/parameter_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_2 example/parameter_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_1 example/string_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_2 example/string_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_3 example/string_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_4 example/string_4.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/stringbuffer_1 example/stringbuffer_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_1 example/system_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_2 example/system_2.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_2 example/system_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 endif
 
 init:
