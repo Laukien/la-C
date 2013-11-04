@@ -1,25 +1,25 @@
-#include "la_database_postgresql.h"
-#include "la_error.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "la_database_postgresql.h"
+#include "la_error.h"
 
 int main(void) {
 
 	ERROR *err = error_new();
-	DATABASE_POSTGRESQL *db = database_postgresql_new();
-	database_postgresql_setError(db, err);
+	DATABASE *db = database_new();
+	database_setError(db, err);
 	if (error_exists(err)) {
 		error_show(err);
 		error_free(err);
 		exit (1);
 	}
 
-	database_postgresql_setHost(db, "localhost");
-	database_postgresql_setName(db, "template1");
-	database_postgresql_setUser(db, "postgres");
-	database_postgresql_setPassword(db, "postgres");
+	database_setHost(db, "localhost");
+	database_setName(db, "template1");
+	database_setUser(db, "postgres");
+	database_setPassword(db, "postgres");
 
-	database_postgresql_open(db);
+	database_open(db);
 	if (error_exists(err)) {
 		error_show(err);
 		error_free(err);
@@ -31,15 +31,15 @@ int main(void) {
 	char *encoding;
 	char *datistemplate;
 	char *datallowconn;
-	database_postgresql_execute(db, "SELECT * FROM pg_database WHERE datname NOT LIKE '%?%' AND datdba < ?;", "template", 100);
+	database_execute(db, "SELECT * FROM pg_database WHERE datname NOT LIKE '%?%' AND datdba < ?;", "template", 100);
 	printf ( "| %15s | %15s | %15s | %15s | %15s |\n", "datname", "datdba", "encoding", "datistemplate", "datallowconn" );
 	printf ( "|-----------------+-----------------+-----------------+-----------------+-----------------|\n" );
-	while (database_postgresql_nextResult(db)) {
-		datname = database_postgresql_getString(db, 0);
-		datdba = database_postgresql_getString(db, 1);
-		encoding = database_postgresql_getString(db, 2);
-		datistemplate = database_postgresql_getString(db, 3);
-		datallowconn = database_postgresql_getString(db, 4);
+	while (database_nextResult(db)) {
+		datname = database_getString(db, 0);
+		datdba = database_getString(db, 1);
+		encoding = database_getString(db, 2);
+		datistemplate = database_getString(db, 3);
+		datallowconn = database_getString(db, 4);
 
 		printf ( "| %15s | %15s | %15s | %15s | %15s |\n", datname, datdba, encoding, datistemplate, datallowconn );
 
@@ -55,14 +55,14 @@ int main(void) {
 		exit (1);
 	}
 
-	database_postgresql_close(db);
+	database_close(db);
 	if (error_exists(err)) {
 		error_show(err);
 		error_free(err);
 		exit (1);
 	}
 
-	database_postgresql_free(db);
+	database_free(db);
 	if (error_exists(err)) {
 		error_show(err);
 		error_free(err);

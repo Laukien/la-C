@@ -1,5 +1,5 @@
 NAME := la
-VERSION := 1.6.3
+VERSION := 1.6.4
 
 BINDIR := bin
 OBJDIR := obj
@@ -61,6 +61,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_character.o src/la_character.c
 	$(CC) $(CFLAGS) -O0 -c -o $(OBJDIR)/la_console.o src/la_console.c
 ifndef WIN32
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c
 ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_postgresql.o src/la_database_postgresql.c
 endif
@@ -93,6 +94,7 @@ ifndef WIN32
 		src/la_boolean.c\
 		src/la_character.c\
 		src/la_console.c\
+		src/la_database.c\
 		src/la_datetime.c\
 		src/la_directory.c\
 		src/la_error.c\

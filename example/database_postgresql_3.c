@@ -1,11 +1,11 @@
-#include "la_database_postgresql.h"
-#include "la_exception.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "la_database_postgresql.h"
+#include "la_exception.h"
 
 typedef struct {
 	EXCEPTION *e;
-	DATABASE_POSTGRESQL *db;
+	DATABASE *db;
 	char *ver;
 } DATA;
 
@@ -18,7 +18,7 @@ void except(int id, const char *msg, void *ptr) {
 		data->ver = NULL;
 	}
 	if (data->db != NULL) {
-		database_postgresql_free(data->db);
+		database_free(data->db);
 		data->db = NULL;
 	}
 	if (data->e != NULL) {
@@ -43,32 +43,32 @@ int main(void) {
 	exception_addCallback(data.e, except, &data);
 
 	printf ( "NEW\n" );
-	data.db = database_postgresql_new();
+	data.db = database_new();
 	if (data.db == NULL) {
 		fprintf(stderr, "Unable to init database\n");
 		return(EXIT_FAILURE);
 	}
-	database_postgresql_setException(data.db, data.e);
+	database_setException(data.db, data.e);
 
 	printf ( "PARAM\n" );
-	database_postgresql_setHost(data.db, "localhosxt");
-	database_postgresql_setName(data.db, "template1");
-	database_postgresql_setUser(data.db, "postgres");
-	database_postgresql_setPassword(data.db, "postgres");
+	database_setHost(data.db, "localhosxt");
+	database_setName(data.db, "template1");
+	database_setUser(data.db, "postgres");
+	database_setPassword(data.db, "postgres");
 
 	printf ( "OPEN\n" );
-	database_postgresql_open(data.db);
+	database_open(data.db);
 
 	printf ( "VERSION" );
-	data.ver = database_postgresql_getVersion(data.db);
+	data.ver = database_getVersion(data.db);
 	printf ( " (%s)\n", data.ver );
 	free(data.ver);
 
 	printf ( "CLOSE\n" );
-	database_postgresql_close(data.db);
+	database_close(data.db);
 
 	printf ( "FREE\n" );
-	database_postgresql_free(data.db);
+	database_free(data.db);
 	exception_free(data.e);
 
 	return 0;
