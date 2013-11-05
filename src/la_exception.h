@@ -26,23 +26,65 @@ extern "C" {
 #endif
 
 #define EXCEPTION_CALLBACK_SIZE 16
+#define EXCEPTION_NONE 0
+#define EXCEPTION_UNKNOWN -1
 
-typedef void (*EXCEPTION_CALLBACK)(int id, const char *message, void *pointer);
-typedef struct {
-	int level;
-	EXCEPTION_CALLBACK callback[EXCEPTION_CALLBACK_SIZE];
-	void *pointer[EXCEPTION_CALLBACK_SIZE];
-} EXCEPTION;
+#define EXCEPTION_MESSAGE_SIZE 1024
+
+typedef struct la_exception EXCEPTION;
+typedef void (*EXCEPTION_CALLBACK)(EXCEPTION * self, void *pointer);
 
 EXCEPTION *exception_new();
+void exception_free(EXCEPTION *e);
 void exception_addCallback(EXCEPTION *e, EXCEPTION_CALLBACK callback, void *pointer);
 void exception_delCallback(EXCEPTION *e);
-void exception_throw(EXCEPTION *e, int id, const char *message);
-int exception_level(EXCEPTION *e);
+BOOL exception_isCallback(EXCEPTION *e);
+void exception_throwCallback(EXCEPTION *e);
+void exception_setShort(EXCEPTION *self, int id, const char *message, ...);
+void exception_setLong(EXCEPTION *self, int id, const char *message, const char *cause, const char *action);
+void exception_setId(EXCEPTION *self, int id);
+int exception_getId(EXCEPTION *self);
+void exception_setMessage(EXCEPTION *self, const char *txt, ...);
+char *exception_getMessage(EXCEPTION *self);
+void exception_setCause(EXCEPTION *self, const char *txt);
+char *exception_getCause(EXCEPTION *self);
+void exception_setAction(EXCEPTION *self, const char *txt);
+char *exception_getAction(EXCEPTION *self);
+void exception_setComment(EXCEPTION *self, const char *txt);
+char *exception_getComment(EXCEPTION *self);
+void exception_show(EXCEPTION *self);
 BOOL exception_exists(EXCEPTION *e);
-void exception_free(EXCEPTION *e);
+void exception_reset(EXCEPTION *self);
+void exception_throw(EXCEPTION *e);
 
 #ifdef __cplusplus
+}
+
+#include <string>
+
+namespace la {
+	class exception {
+		private:
+			EXCEPTION *obj;
+		public:
+			exception();
+			~exception();
+			void setShort(int id, const std::string &message);
+			void setLong(int id, const std::string &message, const std::string &cause = "", const std::string &action = "");
+			void setId(int id);
+			int getId();
+			void setMessage(std::string &txt);
+			std::string getMessage();
+			void setCause(std::string &txt);
+			std::string getCause();
+			void setAction(std::string &txt);
+			std::string getAction();
+			void setComment(std::string &txt);
+			std::string getComment();
+			void show();
+			bool exists();
+			void reset();
+	};
 }
 #endif
 

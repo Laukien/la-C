@@ -9,8 +9,8 @@ typedef struct {
 	char *ver;
 } DATA;
 
-void except(int id, const char *msg, void *ptr) {
-	fprintf (stderr, "\nAn exception has been thrown: %s (%d)\n", msg, id );
+void except(EXCEPTION *e, void *ptr) {
+	exception_show(e);
 
 	DATA *data = (DATA *)ptr;
 	if (data->ver != NULL) {
@@ -51,7 +51,7 @@ int main(void) {
 	database_setException(data.db, data.e);
 
 	printf ( "PARAM\n" );
-	database_setHost(data.db, "localhosxt");
+	database_setHost(data.db, "localhost");
 	database_setName(data.db, "template1");
 	database_setUser(data.db, "postgres");
 	database_setPassword(data.db, "postgres");
@@ -67,7 +67,7 @@ int main(void) {
 	printf ( "CLOSE\n" );
 	database_close(data.db);
 
-	printf ( "FREE\n" );
+	printf ( "---->FREE\n" );
 	database_free(data.db);
 	exception_free(data.e);
 

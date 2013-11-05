@@ -14,10 +14,11 @@ typedef struct {
 /*-----------------------------------------------------------------------------
  *  callback
  *-----------------------------------------------------------------------------*/
-void mainException(int id, const char *msg, void *ptr) {
-	printf ( "MAIN: %d - %s\n", id, msg );
+void mainException(EXCEPTION *e, void *ptr) {
+	exception_show(e);
+
 	if (ptr != NULL) {
-		printf ( "DATA: %s\n", ((DATA *)ptr)->text );
+		printf ( "     DATA:\t%s\n", ((DATA *)ptr)->text );
 	}
 }
 
@@ -31,18 +32,28 @@ int main() {
 
 	/* simple */
 	exception_addCallback(e, mainException, NULL);
-	exception_throw(e, 1, "Eins!");
+	exception_setShort(e, 1, "This is a short message.");
+	exception_throwCallback(e);
 	exception_delCallback(e);
+
+	/* clean */
+	exception_reset(e);
 
 	/* data  */
 	DATA data;
 	strcpy(data.text, "Test");
 	exception_addCallback(e, mainException, &data);
-	exception_throw(e, 2, "Zwei!");
+	exception_setLong(e, 2, "This is a long message.", "...to learn...", "Learn!");
+	exception_throwCallback(e);
 	exception_delCallback(e);
 
+	/* clean */
+	exception_reset(e);
+
 	/* none */
-	exception_throw(e, 3, "Drei!");
+	exception_setShort(e, 3, "Count: %c, %d, %s", '1', 2, "3");
+	exception_throwCallback(e);                 /* nothing will happen */
+	exception_show(e);
 
 	/* free */
 	exception_free(e);

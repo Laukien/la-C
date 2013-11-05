@@ -1,19 +1,15 @@
 #include "la_database.h"
-#include "la_error.h"
+#include "la_exception.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(void) {
-	ERROR *err = error_new();
+	EXCEPTION *e = exception_new();
 
 	printf ( "NEW\n" );
 	DATABASE *db = database_new();
-	database_setError(db, err);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	database_setException(db, e);
+	exception_throw(e);
 
 	printf ( "PARAM\n" );
 	database_setHost(db, "localhost");
@@ -23,40 +19,24 @@ int main(void) {
 
 	printf ( "OPEN\n" );
 	database_open(db);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
 
 	printf ( "VERSION" );
 	char *ver = database_getVersion(db);
-	if (error_exists(err)) {
-		printf ( "\n" );
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
+
 	printf ( " (%s)\n", ver );
 	free(ver);
 
 	printf ( "CLOSE\n" );
 	database_close(db);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
 
 	printf ( "FREE\n" );
 	database_free(db);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
 
-	error_free(err);
+	exception_free(e);
 
 	return 0;
 }

@@ -68,7 +68,6 @@ endif
 endif
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_datetime.o src/la_datetime.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_directory.o src/la_directory.c
-	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_error.o src/la_error.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_exception.o src/la_exception.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_file.o src/la_file.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_list.o src/la_list.c
@@ -97,7 +96,6 @@ ifndef WIN32
 		src/la_database.c\
 		src/la_datetime.c\
 		src/la_directory.c\
-		src/la_error.c\
 		src/la_exception.c\
 		src/la_file.c\
 		src/la_list.c\
@@ -128,7 +126,6 @@ endif
 endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1 example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_2 example/directory_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/error_1 example/error_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/exception_1 example/exception_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_1 example/file_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_2 example/file_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
@@ -193,7 +190,6 @@ ifdef POSTGRESQL
 endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_datetime.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_directory.h
-	rm -f $(DESTDIR)$(PREFIX)/include/la_error.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_exception.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_file.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_list.h

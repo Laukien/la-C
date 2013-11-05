@@ -1,18 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "la_database_postgresql.h"
-#include "la_error.h"
+#include "la_exception.h"
 
 int main(void) {
+	EXCEPTION *e = exception_new();
 
-	ERROR *err = error_new();
 	DATABASE *db = database_new();
-	database_setError(db, err);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	database_setException(db, e);
+	exception_throw(e);
 
 	database_setHost(db, "localhost");
 	database_setName(db, "template1");
@@ -20,11 +16,7 @@ int main(void) {
 	database_setPassword(db, "postgres");
 
 	database_open(db);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
 
 	char *datname;
 	char *datdba;
@@ -49,26 +41,14 @@ int main(void) {
 		free(datistemplate);
 		free(datallowconn);
 	}
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
 
 	database_close(db);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
 
 	database_free(db);
-	if (error_exists(err)) {
-		error_show(err);
-		error_free(err);
-		exit (1);
-	}
+	exception_throw(e);
 
-	error_free(err);
+	exception_free(e);
 	return 0;
 }

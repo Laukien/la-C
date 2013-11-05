@@ -39,7 +39,6 @@ extern "C" {
 #endif
 
 struct la_database {
-	ERROR *error;
 	EXCEPTION *exception;
 	char *host;
 	int port;
@@ -65,7 +64,6 @@ struct la_database {
 typedef struct la_database DATABASE;
 
 DATABASE *database_new();
-void database_setError(DATABASE *self, ERROR *e);
 void database_setException(DATABASE *self, EXCEPTION *e);
 void database_free(DATABASE *self);
 void database_open(DATABASE *self);

@@ -35,7 +35,6 @@ DATABASE *database_new() {
 	}
 
 	self->exception = NULL;
-	self->error = NULL;
 	self->name = NULL;
 	self->user = NULL;
 	self->password = NULL;
@@ -56,34 +55,25 @@ void database_free(DATABASE *self) {
 	if (database_isOpen(self)) database_close(self);
 
 	/* free strings */
-	if (self->name != NULL) free (self->name);
-	if (self->user != NULL) free (self->user);
-	if (self->password != NULL) free (self->password);
+	if (self->name != NULL) free(self->name);
+	if (self->user != NULL) free(self->user);
+	if (self->password != NULL) free(self->password);
+#ifdef DATABASE_POSTGRESQL
+	if (self->schema != NULL) free(self->schema);
+#endif
 
 	/* free database */
-	free (self);
+	free(self);
 }
 
 void database_throwError(DATABASE *self, int id, const char *message, const char *cause, const char *action) {
 		assert(self);
 
-		if (self->error) {
-			error_set(self->error, id, message);
-			error_setComment(self->error, "database");
-			error_setCause(self->error, cause);
-			error_setAction(self->error, action);
-		}
-
 		if (self->exception) {
-			exception_throw(self->exception, id, message);
+			exception_setLong(self->exception, id, message, cause, action);
+			exception_setComment(self->exception, "database");
+			exception_throw(self->exception);
 		}
-}
-
-void database_setError(DATABASE *self, ERROR *e) {
-	assert(self != NULL);
-	assert(e != NULL);
-
-	self->error = e;
 }
 
 void database_setException(DATABASE *self, EXCEPTION *e) {
@@ -101,7 +91,7 @@ BOOL database_checkParameter(DATABASE *self) {
 		||
 		self->name == NULL
 		||
-		_database_checkParameter(self)
+		!_database_checkParameter(self)
 	) {
 		database_throwError(self, DATABASE_ERROR_PARAMETER, "wrong or un-set parameter", "invalid parameter", "check parameters");
 		return FALSE;

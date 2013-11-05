@@ -34,8 +34,6 @@ BOOL _database_checkParameter(DATABASE *self) {
 		self->host == NULL
 		||
 		self->port <= 0
-		||
-		self->schema == NULL
 	) {
 		database_throwError(self, DATABASE_ERROR_PARAMETER, "wrong or un-set parameter", "invalid parameter", "check parameters");
 		return FALSE;
