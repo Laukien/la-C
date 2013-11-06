@@ -68,6 +68,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_list.o src/la_list.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_memory.o src/la_memory.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_message.o src/la_message.c
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_network.o src/la_network.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_number.o src/la_number.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_parameter.o src/la_parameter.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_string.o src/la_string.c
@@ -102,6 +103,7 @@ ifndef WIN32
 		src/la_list.c\
 		src/la_memory.c\
 		src/la_message.c\
+		src/la_network.c\
 		src/la_number.c\
 		src/la_parameter.c\
 		src/la_string.c\
@@ -195,6 +197,7 @@ endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_file.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_list.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_memory.h
+	rm -f $(DESTDIR)$(PREFIX)/include/la_network.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_number.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_parameter.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_string.h
