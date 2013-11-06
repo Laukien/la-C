@@ -55,15 +55,33 @@ void database_free(DATABASE *self) {
 	if (database_isOpen(self)) database_close(self);
 
 	/* free strings */
-	if (self->name != NULL) free(self->name);
-	if (self->user != NULL) free(self->user);
-	if (self->password != NULL) free(self->password);
+	if (self->name)  {
+		free(self->name);
+		self->name = NULL;
+	}
+	if (self->user) {
+		free(self->user);
+		self->user = NULL;
+	}
+	if (self->password) {
+		free(self->password);
+		self->password = NULL;
+	}
 #ifdef DATABASE_POSTGRESQL
-	if (self->schema != NULL) free(self->schema);
+	if (self->host) {
+		free(self->host);
+		self->host = NULL;
+	}
+	self->port = 0;
+	if (self->schema) {
+		free(self->schema);
+		self->schema = NULL;
+	}
 #endif
 
 	/* free database */
 	free(self);
+	self = NULL;
 }
 
 void database_throwError(DATABASE *self, int id, const char *message, const char *cause, const char *action) {

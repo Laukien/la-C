@@ -1,10 +1,6 @@
 #ifndef LA_DATABASE_H
 #define LA_DATABASE_H
 
-#include "la_boolean.h"
-#include "la_error.h"
-#include "la_exception.h"
-
 #define DATABASE_ERROR_INIT 1
 #define DATABASE_ERROR_MEMORY 2
 #define DATABASE_ERROR_PARAMETER 3
@@ -33,6 +29,10 @@
 #define DATABASE_SQL_RANDOM ""
 #define DATABASE_SQL_VERSION ""
 #endif
+
+#include "la_boolean.h"
+#include "la_error.h"
+#include "la_exception.h"
 
 #ifdef __cplusplus
 extern "C" {

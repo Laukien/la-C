@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "la_database_postgresql.h"
+#include "la_database.h"
 #include "la_exception.h"
 
 int main(void) {

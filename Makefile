@@ -1,5 +1,5 @@
 NAME := la
-VERSION := 1.6.4
+VERSION := 1.6.5
 
 BINDIR := bin
 OBJDIR := obj
@@ -57,15 +57,10 @@ all: init static dynamic
 static:
 	@echo
 	@echo === STATIC ===
+	rm -f $(OBJDIR)/*
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_boolean.o src/la_boolean.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_character.o src/la_character.c
 	$(CC) $(CFLAGS) -O0 -c -o $(OBJDIR)/la_console.o src/la_console.c
-ifndef WIN32
-	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c
-ifdef WITH_POSTGRESQL
-	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_postgresql.o src/la_database_postgresql.c
-endif
-endif
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_datetime.o src/la_datetime.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_directory.o src/la_directory.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_exception.o src/la_exception.c
@@ -84,6 +79,13 @@ ifdef WITH_CPP
 else
 	ln -fs $(ARNAME) $(LIBDIR)/libla.a
 endif
+ifndef WIN32
+ifdef WITH_POSTGRESQL
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_POSTGRESQL
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_postgresql.o src/la_database_postgresql.c -D DATABASE_POSTGRESQL
+	$(AR) $(ARFLAGS) $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(OBJDIR)/la_database.o $(OBJDIR)/la_database_postgresql.o
+endif
+endif
 
 dynamic:
 ifndef WIN32
@@ -93,7 +95,6 @@ ifndef WIN32
 		src/la_boolean.c\
 		src/la_character.c\
 		src/la_console.c\
-		src/la_database.c\
 		src/la_datetime.c\
 		src/la_directory.c\
 		src/la_exception.c\
@@ -107,7 +108,7 @@ ifndef WIN32
 		src/la_stringbuffer.c\
 		src/la_system.c
 ifdef WITH_POSTGRESQL
-	$(CC) -shared -fPIC -Wl,-soname,lib$(NAME)-postgresql.$(VERSION).so -o $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).so src/la_database_postgresql.c
+	$(CC) -shared -fPIC -Wl,-soname,lib$(NAME)-postgresql.$(VERSION).so -o $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).so src/la_database.c src/la_database_postgresql.c -D DATABASE_POSTGRESQL
 endif
 endif
 
@@ -119,9 +120,9 @@ ifdef WITH_CPP
 else
 ifndef WIN32
 ifdef WITH_POSTGRESQL
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_1 example/database_postgresql_1.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_2 example/database_postgresql_2.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_3 example/database_postgresql_3.c -L. $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_1 example/database_postgresql_1.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_2 example/database_postgresql_2.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_3 example/database_postgresql_3.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 endif
 endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1 example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
@@ -185,7 +186,7 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/include/la_common.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_console.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_database.h
-ifdef POSTGRESQL
+ifdef WITH_POSTGRESQL
 	rm -f $(DESTDIR)$(PREFIX)/include/la_database_postgresql.h
 endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_datetime.h

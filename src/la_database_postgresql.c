@@ -1,9 +1,10 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "la_error.h"
 #include "la_message.h"
-#include "la_database_postgresql.h"
+#include "la_database.h"
 
 #ifdef PG_MODULE_MAGIC
 PG_MODULE_MAGIC;
@@ -11,24 +12,6 @@ PG_MODULE_MAGIC;
 
 extern void database_throwError(DATABASE *self, int id, const char *message, const char *cause, const char *action);
 
-/*
-struct la_database {
-	ERROR *error;
-	EXCEPTION *exception;
-	char *host;
-	int port;
-	char *name;
-	char *user;
-	char *password;
-	char *schema;
-	int resultCol;
-	int resultRow;
-	int resultCur;
-	PGconn *connection;
-	PGresult *result;
-};
-*/
-	
 BOOL _database_checkParameter(DATABASE *self) {
 	if (
 		self->host == NULL
@@ -66,8 +49,8 @@ void _database_open(DATABASE *self) {
 }
 
 void _database_close(DATABASE *self) {
-		PQfinish(self->connection);
-		self->connection = NULL;
+	PQfinish(self->connection);
+	self->connection = NULL;
 }
 
 BOOL _database_isOpen(DATABASE *self) {
