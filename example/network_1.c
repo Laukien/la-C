@@ -15,8 +15,19 @@ void client(NETWORK *self, void *object) {
 	printf("\tSTRING:\t\t%s\n", s);
 	free(s);
 
-	int i= network_readNumber(self);
-	printf("\tNUMBER:\t\t%d\n", i);
+	int n= network_readNumber(self);
+	printf("\tNUMBER:\t\t%d\n", n);
+
+	network_readFile(self, "network.tmp");
+
+	NETWORK_DATA *d = network_readData(self);
+	printf ( "\tDATA:\t\t");
+	size_t i;
+	for(i = 0; i < d->size; ++i) {
+		printf ( ":%d:", d->content[i] );
+	}
+	free(d);
+	printf ( "\n" );
 }
 
 int main(void) {

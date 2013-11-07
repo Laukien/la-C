@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <fcntl.h>
 #include "la_boolean.h"
 #include "la_message.h"
 #include "la_number.h"
@@ -265,10 +266,11 @@ void network_serverOpen(NETWORK *self) {
 	struct timeval timeout;
 	timeout.tv_sec = self->timeout;
 	timeout.tv_usec = 0;
+	/*
 	if (setsockopt (self->socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
 		_network_error(self, NETWORK_ERROR_OPTION, "unable to set recv-timeout", strerror(errno), NULL);
 		return;
-	}
+	}*/
 	if (setsockopt (self->socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
 		_network_error(self, NETWORK_ERROR_OPTION, "unable to set send-timeout", strerror(errno), NULL);
 		return;
@@ -395,6 +397,78 @@ int network_readNumber(NETWORK *self) {
 	free(tmp);
 
 	return num;
+}
+
+size_t network_readFile(NETWORK *self, const char *filename) {
+	assert(self);
+	assert(self->client);
+
+	/* create and open file */
+	int fd;
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	fd = open(filename, O_WRONLY|O_CREAT|O_BINARY, 0644);
+#else
+	fd = open(filename, O_WRONLY|O_CREAT, 0644);
+#endif
+	if (fd == -1) {
+		_network_error(self, NETWORK_ERROR_SYSTEM, "unable to open file", strerror(errno), "check the system");
+		return -1;
+	}
+
+	/* write file */
+	size_t len = 0;
+	char buf[NETWORK_BUFFER_SIZE];
+	int rc;
+	while ((rc = recv(self->client->socket, buf, NETWORK_BUFFER_SIZE, 0))) {
+		if (rc < 0) {
+			_network_error(self, NETWORK_ERROR_READ, "error while reading", strerror(errno), "check the server-client-communication");
+			return -1;
+		}
+
+		len += rc;
+		write(fd, buf, rc);
+
+		if (rc < NETWORK_BUFFER_SIZE) {
+			break;
+		}
+	}
+	close(fd);
+
+	return len;
+}
+
+NETWORK_DATA *network_readData(NETWORK *self) {
+	assert(self);
+	assert(self->client);
+
+	size_t len = 0;
+	char buf[NETWORK_BUFFER_SIZE];
+	int count = 0;
+	char *content = (char *)malloc(1);
+	int rc;
+	while ((rc = recv(self->client->socket, buf, NETWORK_BUFFER_SIZE, 0))) {
+//		content = realloc(content, (count + 1) * NETWORK_BUFFER_SIZE);
+		content = realloc(content, count * NETWORK_BUFFER_SIZE + rc);
+		memcpy(content + (count * NETWORK_BUFFER_SIZE), buf, rc);
+
+		len += rc;
+
+		if (rc < NETWORK_BUFFER_SIZE) {
+			break;
+		}
+		++count;
+	}
+
+	NETWORK_DATA *data = (NETWORK_DATA *)malloc(sizeof(NETWORK_DATA));
+	if (!data) {
+		_network_error(self, NETWORK_ERROR_SYSTEM, "unable to get memory", strerror(errno), "check the system");
+		return NULL;
+	}
+
+	data->size = len;
+	data->content = content;
+
+	return data;
 }
 
 void network_client_init(NETWORK *self) {
