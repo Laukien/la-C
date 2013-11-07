@@ -13,11 +13,12 @@
 
 #define NETWORK_BUFFER_SIZE 1024
 
+#include "la_system.h"
 #include "la_exception.h"
 
 typedef struct la_network NETWORK;
 typedef struct la_network_client NETWORK_CLIENT;
-#ifdef __WIN32
+#ifdef SYSTEM_OS_TYPE_WINDOWS
 	#define NETWORK_SOCKET_ERROR SOCKET_ERROR
 	typedef SOCKET NETWORK_SOCKET;
 	typedef int NETWORK_SEND;
