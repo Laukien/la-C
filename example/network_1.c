@@ -1,33 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <la_exception.h>
+#include <la_file.h>
 #include <la_network.h>
 
 void client(NETWORK *self, void *object) {
 	printf("CLIENT:\n" );
-	printf("\tSOCKET:\t\t%d\n", network_client_getSocket(self));
-	char *adr = network_client_getAddress(self);
+	printf("\tSOCKET:\t\t%d\n", network_accept_getSocket(self));
+	char *adr = network_accept_getAddress(self);
 	printf("\tADDRESS:\t%s\n", adr);
 	free(adr);
-	printf("\tPORT:\t\t%d\n", network_client_getPort(self));
+	printf("\tPORT:\t\t%d\n", network_accept_getPort(self));
 
 	char *s = network_readString(self);
 	printf("\tSTRING:\t\t%s\n", s);
 	free(s);
 
-	int n= network_readNumber(self);
+	int n = network_readNumber(self);
 	printf("\tNUMBER:\t\t%d\n", n);
 
-	network_readFile(self, "network.tmp");
+	network_readFile(self, "network.bin");
+	printf ( "\tFILE:\t\t%ld bytes\n", file_size("network.bin") );
 
-	NETWORK_DATA *d = network_readData(self);
+	network_readData(self);
 	printf ( "\tDATA:\t\t");
 	size_t i;
-	for(i = 0; i < d->size; ++i) {
-		printf ( ":%d:", d->content[i] );
+	char *data = network_data_getContent(self);
+	for(i = 0; i < network_data_getSize(self); ++i) {
+		printf ( ":%d:", data[i] );
+		fflush(stdout);
 	}
-	free(d);
-	printf ( "\n" );
+	printf ( " (%ld bytes)\n", network_data_getSize(self) );
+	free(data);
+	network_data_free(self);
 }
 
 int main(void) {

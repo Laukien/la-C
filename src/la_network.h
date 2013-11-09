@@ -12,17 +12,15 @@
 #define NETWORK_ERROR_READ 9
 #define NETWORK_ERROR_WRITE 10
 
-#define NETWORK_BUFFER_SIZE 1024
+#define NETWORK_BUFFER_SIZE 1024                /* 1 KB */
+#define NETWORK_DATA_SIZE 1024 * 1024           /* 1 MB */
 
 #include "la_system.h"
 #include "la_exception.h"
 
 typedef struct la_network NETWORK;
-typedef struct la_network_client NETWORK_CLIENT;
-typedef struct la_network_data {
-	size_t size;
-	char *content;
-} NETWORK_DATA;
+typedef struct la_network_accept NETWORK_ACCEPT;
+typedef struct la_network_data NETWORK_DATA;
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	#define NETWORK_SOCKET_ERROR SOCKET_ERROR
@@ -56,12 +54,22 @@ char *network_readString(NETWORK *self);
 void network_writeNumber(NETWORK *self, int num);
 int network_readNumber(NETWORK *self);
 void network_writeFile(NETWORK *self, const char *filename);
-size_t network_readFile(NETWORK *self, const char *filename);
-void network_writeData(NETWORK *self, NETWORK_DATA *data);
-NETWORK_DATA *network_readData(NETWORK *self);
+void network_readFile(NETWORK *self, const char *filename);
+void network_writeData(NETWORK *self);
+void network_readData(NETWORK *self);
 
-NETWORK_SOCKET network_client_getSocket(NETWORK *self);
-char *network_client_getAddress(NETWORK *self);
-NETWORK_PORT network_client_getPort(NETWORK *self);
+NETWORK_SOCKET network_accept_getSocket(NETWORK *self);
+char *network_accept_getAddress(NETWORK *self);
+NETWORK_PORT network_accept_getPort(NETWORK *self);
+BOOL network_accept_exists(NETWORK *self);
+
+
+void network_data_init(NETWORK *self);
+void network_data_free(NETWORK *self);
+void network_data_setLimit(NETWORK *self, size_t limit);
+size_t network_data_getLimit(NETWORK *self);
+void network_data_setContent(NETWORK *self, size_t size, const char *content);
+size_t network_data_getSize(NETWORK *self);
+char *network_data_getContent(NETWORK *self);
 
 #endif

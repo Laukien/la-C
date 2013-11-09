@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -25,29 +26,34 @@
 struct la_network {
 	EXCEPTION *exception;
 	NETWORK_SOCKET socket;
-	NETWORK_CLIENT *client;
+	NETWORK_ACCEPT *accept;
+	NETWORK_DATA *data;
 	BOOL connect;
 	char *address;
 	int port;
 	int timeout;
 	int queue;
-	char *data;
-	size_t size;
 };
 
-struct la_network_client {
+struct la_network_accept {
 	int socket;
 	char *address;
 	int port;
 };
 
-/* define internal client functions */
-void network_client_init(NETWORK *self);
-void network_client_setSocket(NETWORK *self, NETWORK_SOCKET socket);
-void network_client_setAddress(NETWORK *self, const char *address);
-void network_client_setPort(NETWORK *self, NETWORK_PORT port);
-void network_client_close(NETWORK *self);
-void network_client_free(NETWORK *self);
+struct la_network_data {
+	size_t limit;
+	size_t size;
+	char *content;
+};
+
+/* define internal accept functions */
+void network_accept_init(NETWORK *self);
+void network_accept_setSocket(NETWORK *self, NETWORK_SOCKET socket);
+void network_accept_setAddress(NETWORK *self, const char *address);
+void network_accept_setPort(NETWORK *self, NETWORK_PORT port);
+void network_accept_close(NETWORK *self);
+void network_accept_free(NETWORK *self);
 
 void _network_error(NETWORK *self, int id, const char *message, const char *cause, const char *action) {
 	assert(self);
@@ -89,7 +95,7 @@ NETWORK *network_new() {
 
 	memset(self, 0, sizeof(NETWORK));
 	self->socket = 0;
-	self->client = NULL;
+	self->accept = NULL;
 	self->timeout = 10;
 	self->queue = 3;
 
@@ -114,8 +120,6 @@ void network_free(NETWORK *self) {
 		free(self->data);
 		self->data = NULL;
 	}
-
-	self->size = 0;
 
 	free(self);
 	self = NULL;
@@ -313,28 +317,63 @@ void network_serverAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void 
 			return;
 		}
 
-		/* create client */
-		network_client_init(self);
-		network_client_setSocket(self, client_socket);
+		/* create client socket */
+		network_accept_init(self);
+		network_accept_setSocket(self, client_socket);
 		char str[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &(client_address.sin_addr), str, INET_ADDRSTRLEN);
-		network_client_setAddress(self, str);
-		network_client_setPort(self, ntohs(client_address.sin_port));
+		network_accept_setAddress(self, str);
+		network_accept_setPort(self, ntohs(client_address.sin_port));
 
 		/* call callback */
 		callback(self, object);
 
 		/* close & free client object */
-		network_client_close(self);
-		network_client_free(self);
+		network_accept_close(self);
+		network_accept_free(self);
 	}
+}
+
+void network_writeString(NETWORK *self, const char *str) {
+	assert(self);
+
+	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
+	size_t size = strlen(str);
+
+	/* add line break */
+	char *tmp = (char *)malloc(size + 2 + 1);
+	if (!tmp) {
+		_network_error(self, NETWORK_ERROR_INIT, "unable to get memory", strerror(errno), "check the system");
+		return;
+	}
+	strcpy(tmp, str);
+	strcat(tmp, "\r\n");
+	size += 2;                                  /* add 2 characters for line break */
+
+	size_t sent = 0;
+	int rc;
+	int len;
+	do {
+		if ((size - sent) > NETWORK_BUFFER_SIZE) {
+			len = NETWORK_BUFFER_SIZE;
+		} else {
+			len = size - sent;
+		}
+		rc = send(socket, tmp + sent, len, 0);
+		if (rc == -1) {
+			_network_error(self, NETWORK_ERROR_WRITE, "unable to send data", strerror(errno), "check the network stack");
+			return;
+		}
+
+		sent += rc;
+	} while (sent < size);
+	free(tmp);
 }
 
 char *network_readString(NETWORK *self) {
 	assert(self);
-	assert(self->client);
 
-	NETWORK_SOCKET socket = network_client_getSocket(self);
+	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
 	char buf[NETWORK_BUFFER_SIZE + 1];
 	int rc;
 	size_t len = 1;
@@ -358,31 +397,23 @@ char *network_readString(NETWORK *self) {
 	}
 
 	char *str = string_trim(tmp);
+//	if (!str) printf ( "NULL\n" );
 	free(tmp);
 	return str;
 }
 
+void network_writeNumber(NETWORK *self, int num) {
+	assert(self);
+
+	char *str = number_integerToString(num);
+	network_writeString(self, str);
+	free(str);
+}
+
 int network_readNumber(NETWORK *self) {
 	assert(self);
-	assert(self->client);
 
-	NETWORK_SOCKET socket = network_client_getSocket(self);
-	char buf[NETWORK_BUFFER_SIZE + 1];
-	int rc;
-
-	rc = recv(socket, buf, NETWORK_BUFFER_SIZE, 0);
-	if (rc < 0) {
-		_network_error(self, NETWORK_ERROR_READ, "error while reading", strerror(errno), "check the server-client-communication");
-		return -1;
-	}
-	if (rc == NETWORK_BUFFER_SIZE) {
-		_network_error(self, NETWORK_ERROR_READ, "read string has wrong size", "number too long", "check the server-client-communication");
-		return -1;
-	}
-	
-	buf[rc] = '\0';
-
-	char *tmp = string_trim(buf);
+	char *tmp = network_readString(self);
 	if (!tmp) {
 		_network_error(self, NETWORK_ERROR_READ, "read string is wrong", "string is empty", "check the server-client-communication");
 		return -1;
@@ -399,9 +430,44 @@ int network_readNumber(NETWORK *self) {
 	return num;
 }
 
-size_t network_readFile(NETWORK *self, const char *filename) {
+void network_writeFile(NETWORK *self, const char *filename) {
 	assert(self);
-	assert(self->client);
+
+	/* create and open file */
+	int fd;
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	fd = open(filename, O_RDONLY|O_BINARY);
+#else
+	fd = open(filename, O_RDONLY);
+#endif
+	if (fd == -1) {
+		_network_error(self, NETWORK_ERROR_SYSTEM, "unable to open file", strerror(errno), "check the file permission");
+		return;
+	}
+
+	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
+	/* write file */
+	size_t len = 0;
+	char buf[NETWORK_BUFFER_SIZE];
+	int rc;
+	while ((rc = read(fd, buf, NETWORK_BUFFER_SIZE))) {
+		if (rc < 0) {
+			_network_error(self, NETWORK_ERROR_READ, "error while reading file", strerror(errno), "check the file permission");
+			return;
+		}
+
+		len += rc;
+		send(socket, buf, rc, 0);
+
+		if (rc < NETWORK_BUFFER_SIZE) {
+			break;
+		}
+	}
+	close(fd);
+}
+
+void network_readFile(NETWORK *self, const char *filename) {
+	assert(self);
 
 	/* create and open file */
 	int fd;
@@ -411,18 +477,19 @@ size_t network_readFile(NETWORK *self, const char *filename) {
 	fd = open(filename, O_WRONLY|O_CREAT, 0644);
 #endif
 	if (fd == -1) {
-		_network_error(self, NETWORK_ERROR_SYSTEM, "unable to open file", strerror(errno), "check the system");
-		return -1;
+		_network_error(self, NETWORK_ERROR_SYSTEM, "unable to open file", strerror(errno), "check the permission");
+		return;
 	}
 
+	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
 	/* write file */
 	size_t len = 0;
 	char buf[NETWORK_BUFFER_SIZE];
 	int rc;
-	while ((rc = recv(self->client->socket, buf, NETWORK_BUFFER_SIZE, 0))) {
+	while ((rc = recv(socket, buf, NETWORK_BUFFER_SIZE, 0))) {
 		if (rc < 0) {
 			_network_error(self, NETWORK_ERROR_READ, "error while reading", strerror(errno), "check the server-client-communication");
-			return -1;
+			return;
 		}
 
 		len += rc;
@@ -433,22 +500,55 @@ size_t network_readFile(NETWORK *self, const char *filename) {
 		}
 	}
 	close(fd);
-
-	return len;
 }
 
-NETWORK_DATA *network_readData(NETWORK *self) {
+void network_writeData(NETWORK *self) {
 	assert(self);
-	assert(self->client);
+	assert(self->data);
 
+	if (self->data->size > self->data->limit) {
+		_network_error(self, NETWORK_ERROR_INIT, "size to huge", "limit is less than size", "change the limit or check the size");
+		return;
+	}
+
+	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
+	size_t size = self->data->size;
+	char *data = self->data->content;
+	size_t sent = 0;
+	int rc;
+	int len;
+	do {
+		if ((size - sent) > NETWORK_BUFFER_SIZE) {
+			len = NETWORK_BUFFER_SIZE;
+		} else {
+			len = size - sent;
+		}
+		rc = send(socket, data + sent, len, 0);
+		if (rc == -1) {
+			_network_error(self, NETWORK_ERROR_WRITE, "unable to send data", strerror(errno), "check the network stack");
+			return;
+		}
+
+		sent += rc;
+	} while (sent < size);
+}
+
+void network_readData(NETWORK *self) {
+	assert(self);
+
+	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
 	size_t len = 0;
 	char buf[NETWORK_BUFFER_SIZE];
-	int count = 0;
+	unsigned long count = 0;
 	char *content = (char *)malloc(1);
 	int rc;
-	while ((rc = recv(self->client->socket, buf, NETWORK_BUFFER_SIZE, 0))) {
+	while ((rc = recv(socket, buf, NETWORK_BUFFER_SIZE, 0))) {
 //		content = realloc(content, (count + 1) * NETWORK_BUFFER_SIZE);
 		content = realloc(content, count * NETWORK_BUFFER_SIZE + rc);
+		if (!content) {
+			_network_error(self, NETWORK_ERROR_INIT, "unable to get memory", strerror(errno), "check the network communicaton");
+			return;
+		}
 		memcpy(content + (count * NETWORK_BUFFER_SIZE), buf, rc);
 
 		len += rc;
@@ -459,99 +559,196 @@ NETWORK_DATA *network_readData(NETWORK *self) {
 		++count;
 	}
 
-	NETWORK_DATA *data = (NETWORK_DATA *)malloc(sizeof(NETWORK_DATA));
-	if (!data) {
-		_network_error(self, NETWORK_ERROR_SYSTEM, "unable to get memory", strerror(errno), "check the system");
-		return NULL;
-	}
-
-	data->size = len;
-	data->content = content;
-
-	return data;
+	network_data_init(self);
+	network_data_setLimit(self, len);
+	network_data_setContent(self, len, content);
+	free(content);
 }
 
-void network_client_init(NETWORK *self) {
+void network_accept_init(NETWORK *self) {
 	assert(self);
-	assert(!self->client);
+	assert(!self->accept);
 
-	NETWORK_CLIENT *client = (NETWORK_CLIENT *)malloc(sizeof(NETWORK_CLIENT));
+	NETWORK_ACCEPT *client = (NETWORK_ACCEPT *)malloc(sizeof(NETWORK_ACCEPT));
 	if (!client) {
 		_network_error(self, NETWORK_ERROR_INIT, "unable to get memory", strerror(errno), "check the system");
 		return;
 	}
-	memset(client, '\0', sizeof(NETWORK_CLIENT));
+	memset(client, '\0', sizeof(NETWORK_ACCEPT));
 
-	self->client = client;
+	self->accept = client;
 }
 
-void network_client_setSocket(NETWORK *self, NETWORK_SOCKET socket) {
+void network_accept_setSocket(NETWORK *self, NETWORK_SOCKET socket) {
 	assert(self);
-	assert(self->client);
+	assert(self->accept);
 
-	self->client->socket = socket;
+	self->accept->socket = socket;
 }
 
-NETWORK_SOCKET network_client_getSocket(NETWORK *self) {
+NETWORK_SOCKET network_accept_getSocket(NETWORK *self) {
 	assert(self);
-	assert(self->client);
+	assert(self->accept);
 
-	return self->client->socket;
+	return self->accept->socket;
 }
 
-void network_client_setAddress(NETWORK *self, const char *address) {
+void network_accept_setAddress(NETWORK *self, const char *address) {
 	assert(self);
-	assert(self->client);
-	assert(!self->client->address);
+	assert(self->accept);
+	assert(!self->accept->address);
 
-	self->client->address = strdup(address);
+	self->accept->address = strdup(address);
 }
 
-char *network_client_getAddress(NETWORK *self) {
+char *network_accept_getAddress(NETWORK *self) {
 	assert(self);
-	assert(self->client);
+	assert(self->accept);
 
-	return strdup(self->client->address);
+	return strdup(self->accept->address);
 }
 
-void network_client_setPort(NETWORK *self, NETWORK_PORT port) {
+void network_accept_setPort(NETWORK *self, NETWORK_PORT port) {
 	assert(self);
-	assert(self->client);
+	assert(self->accept);
 
-	self->client->port = port;
+	self->accept->port = port;
 }
 
-NETWORK_PORT network_client_getPort(NETWORK *self) {
+NETWORK_PORT network_accept_getPort(NETWORK *self) {
 	assert(self);
-	assert(self->client);
+	assert(self->accept);
 
-	return self->client->port;
+	return self->accept->port;
 }
 
-void network_client_close(NETWORK *self) {
+BOOL network_accept_exists(NETWORK *self) {
 	assert(self);
-	assert(self->client);
+
+	return self->accept ? TRUE : FALSE;
+}
+
+void network_accept_close(NETWORK *self) {
+	assert(self);
+	assert(self->accept);
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 		WSACleanup();
-		closesocket(self->client->socket);
+		closesocket(self->accept->socket);
 #else
-		close(self->client->socket);
+		close(self->accept->socket);
 #endif
-		self->client->socket = 0;
+		self->accept->socket = 0;
 }
 
-void network_client_free(NETWORK *self) {
+void network_accept_free(NETWORK *self) {
 	assert(self);
-	assert(self->client);
+	assert(self->accept);
 
-	self->client->socket = 0;
-	if(self->client->address) {
-		free(self->client->address);
-		self->client->address = NULL;
+	self->accept->socket = 0;
+	if(self->accept->address) {
+		free(self->accept->address);
+		self->accept->address = NULL;
 	}
-	self->client->port = 0;
+	self->accept->port = 0;
 
-	free(self->client);
-	self->client = NULL;
+	free(self->accept);
+	self->accept = NULL;
+}
+
+void network_data_init(NETWORK *self) {
+	assert(self);
+
+	/* free memory */
+	if (self->data) {
+		network_data_free(self);
+	}
+
+	NETWORK_DATA *data = (NETWORK_DATA *)malloc(sizeof(NETWORK_DATA));
+	if (!data) {
+		_network_error(self, NETWORK_ERROR_SYSTEM, "unable to get memory", strerror(errno), "check the system");
+		return;
+	}
+	
+	data->limit = NETWORK_DATA_SIZE;
+	data->size = 0;
+	data->content = NULL;
+
+	self->data = data;
+}
+
+void network_data_free(NETWORK *self) {
+	assert(self);
+	assert(self->data);
+
+	self->data->limit = NETWORK_DATA_SIZE;
+	self->data->size = 0;
+	if (self->data->content) {
+		free(self->data->content);
+		self->data->content = NULL;
+	}
+
+	free(self->data);
+	self->data = NULL;
+
+}
+
+void network_data_setLimit(NETWORK *self, size_t limit) {
+	assert(self);
+	assert(self->data);
+
+	self->data->limit = limit;
+}
+
+size_t network_data_getLimit(NETWORK *self) {
+	assert(self);
+	assert(self->data);
+
+	return self->data->limit;
+}
+
+void network_data_setContent(NETWORK *self, size_t size, const char *content) {
+	assert(self);
+	assert(self->data);
+
+	self->data->size = size;
+
+	/* check, free and set content */
+	if (self->data->content) {
+		free(self->data->content);
+		self->data->content = NULL;
+	}
+	self->data->content = (char *)malloc(size);
+	if (!self->data->content) {
+		_network_error(self, NETWORK_ERROR_INIT, "unable to get memory", strerror(errno), "check system memory");
+		self->data->size = 0;
+		return;
+	}
+	memcpy(self->data->content, content, size);
+}
+
+size_t network_data_getSize(NETWORK *self) {
+	assert(self);
+	assert(self->data);
+
+	return self->data->size;
+}
+
+char *network_data_getContent(NETWORK *self) {
+	assert(self);
+	assert(self->data);
+
+	/* check, free and set content */
+	if (self->data->size == 0 || !self->data->content) {
+		return NULL;
+	}
+
+	char *content = (char *)malloc(self->data->size);
+	if (!content) {
+		_network_error(self, NETWORK_ERROR_INIT, "unable to get memory", strerror(errno), "check system memory");
+		return NULL;
+	}
+	memcpy(content, self->data->content, self->data->size);
+
+	return content;
 }
