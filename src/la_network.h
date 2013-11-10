@@ -52,6 +52,8 @@ void network_writeString(NETWORK *self, const char *str);
 char *network_readString(NETWORK *self);
 void network_writeNumber(NETWORK *self, int num);
 int network_readNumber(NETWORK *self);
+void network_writeStatus(NETWORK *self, BOOL status);
+BOOL network_readStatus(NETWORK *self);
 void network_writeFile(NETWORK *self, const char *filename);
 void network_readFile(NETWORK *self, const char *filename);
 void network_writeData(NETWORK *self);

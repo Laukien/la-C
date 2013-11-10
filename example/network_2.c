@@ -15,6 +15,8 @@ int main(int argc, char *argv[]) {
 
 	network_writeString(net, "string");
 	sleep(1);
+	network_writeStatus(net, TRUE);
+	sleep(1);
 	network_writeNumber(net, 123);
 	sleep(1);
 	network_writeFile(net, argv[0]);

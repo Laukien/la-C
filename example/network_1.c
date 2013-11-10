@@ -16,6 +16,9 @@ void client(NETWORK *self, void *object) {
 	printf("\tSTRING:\t\t%s\n", s);
 	free(s);
 
+	BOOL b = network_readStatus(self);
+	printf("\tSTATUS:\t\t%s\n", b ? "TRUE" : "FALSE");
+
 	int n = network_readNumber(self);
 	printf("\tNUMBER:\t\t%d\n", n);
 

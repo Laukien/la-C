@@ -435,6 +435,34 @@ int network_readNumber(NETWORK *self) {
 	return num;
 }
 
+void network_writeStatus(NETWORK *self, BOOL status) {
+	assert(self);
+
+	char *str = boolean_toString(status);
+	network_writeString(self, str);
+	free(str);
+}
+
+BOOL network_readStatus(NETWORK *self) {
+	assert(self);
+
+	char *tmp = network_readString(self);
+	if (!tmp) {
+		_network_error(self, NETWORK_ERROR_READ, "read string is wrong", "string is empty", "check the server-client-communication");
+		return FALSE;
+	}
+	if (!boolean_isBoolean(tmp)) {
+		_network_error(self, NETWORK_ERROR_READ, "read string is wrong", "string is not a valid boolean value", "check the server-client-communication");
+		free(tmp);
+		return FALSE;
+	}
+
+	BOOL status = boolean_toBoolean(tmp);
+	free(tmp);
+
+	return status;
+}
+
 void network_writeFile(NETWORK *self, const char *filename) {
 	assert(self);
 
