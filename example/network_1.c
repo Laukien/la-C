@@ -42,7 +42,7 @@ int main(void) {
 	network_setException(net, e);
 	network_setPort(net, 8888);
 	network_open(net);
-	network_serverAccept(net, client, NULL);
+	network_accept(net, client, NULL);
 	network_close(net);
 	network_free(net);
 

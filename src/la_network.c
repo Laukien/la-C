@@ -304,8 +304,10 @@ BOOL network_isOpen(NETWORK *self) {
 	return self->connect;
 }
 
-void network_serverAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *object) {
+void network_accept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *object) {
 	assert(self);
+	assert(self->socket);
+	assert(!self->accept);
 	assert(callback);
 
 	NETWORK_SOCKET client_socket;
