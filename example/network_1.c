@@ -41,7 +41,7 @@ int main(void) {
 	NETWORK *net = network_new();
 	network_setException(net, e);
 	network_setPort(net, 8888);
-	network_serverOpen(net);
+	network_open(net);
 	network_serverAccept(net, client, NULL);
 	network_close(net);
 	network_free(net);

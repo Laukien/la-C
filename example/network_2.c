@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 	network_setException(net, e);
 	network_setAddress(net, "127.0.0.1");
 	network_setPort(net, 8888);
-	network_clientOpen(net);
+	network_open(net);
 
 	network_writeString(net, "string");
 	sleep(1);

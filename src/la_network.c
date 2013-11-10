@@ -73,18 +73,111 @@ void _network_error(NETWORK *self, int id, const char *message, const char *caus
 	}
 }
 
-void _network_open(NETWORK *self) {
-#ifdef SYSTEM_OS_TYPE_WINDOWS
-	WSADATA wsaData;
-	if (WSAStartup(MAKEWORD(2 ,0), &wsaData)) {
-		int errCode = WSAGetLastError();
-		LPSTR errString = NULL;
-		int size = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errCode, 0, (LPSTR)&errString, 0, 0);
-		_network_error(self, NETWORK_ERROR_INIT, "unable to init winsock", errString, "check up Windows network stack");
-		LocalFree(errString);
+void _network_open_client(NETWORK *self) {
+	/* create socket */
+	self->socket = socket(AF_INET, SOCK_STREAM, 0);
+	if (self->socket == NETWORK_SOCKET_ERROR) {
+		_network_error(self, NETWORK_ERROR_INIT, "unable to open socket", strerror(errno), "check your netowrk stack");
 		return;
 	}
+
+	/* timeout */
+	struct timeval timeout;
+	timeout.tv_sec = self->timeout;
+	timeout.tv_usec = 0;
+	if (setsockopt (self->socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
+		_network_error(self, NETWORK_ERROR_OPTION, "unable to set recv-timeout", strerror(errno), NULL);
+		return;
+	}
+	if (setsockopt (self->socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
+		_network_error(self, NETWORK_ERROR_OPTION, "unable to set send-timeout", strerror(errno), NULL);
+		return;
+	}
+
+	/* connect to server */
+	struct sockaddr_in server;
+	memset(&server, 0, sizeof(server));         /* clean structure */
+
+	/* check right address */
+	unsigned long addr;
+	if ((addr = inet_addr(self->address)) != INADDR_NONE) {
+		memcpy((char *)&server.sin_addr, &addr, sizeof(addr));
+	} else {
+		struct hostent *host_info;
+		host_info = gethostbyname(self->address);
+		if (!host_info) {
+			_network_error(self, NETWORK_ERROR_INFORMATION, "unable to resolve address", strerror(errno), NULL);
+			return;
+		}
+		memcpy((char *)&server.sin_addr, host_info->h_addr, host_info->h_length);
+	}
+	server.sin_family = AF_INET;
+	server.sin_port = htons(self->port);
+
+	int c = connect(self->socket, (struct sockaddr *)&server, sizeof(server));
+	if (c == NETWORK_SOCKET_ERROR) {
+		_network_error(self, NETWORK_ERROR_CONNECTION, "unable to connect to server", strerror(errno), NULL);
+		return;
+	}
+
+	self->connect = TRUE;
+}
+
+void _network_open_server(NETWORK *self) {
+	/* catch ctrl-c */
+//	signal(SIGINT, active_server_quit_server);                /* CTRL-C */
+//	signal(SIGPIPE, active_server_quit_client);               /* lost connection */
+#ifdef SYSTEM_OS_TYPE_UNIX
+//	signal(SIGPIPE, SIG_IGN);                   /* ignore SIGPIPE */
 #endif
+
+	/* create socket */
+	self->socket = socket(AF_INET, SOCK_STREAM, 0);
+	if (self->socket == NETWORK_SOCKET_ERROR) {
+		_network_error(self, NETWORK_ERROR_INIT, "unable to open socket", strerror(errno), "check your netowrk stack");
+		return;
+	}
+
+	/* reuse socket */
+	int iSetOption = 1;
+	if (setsockopt(self->socket, SOL_SOCKET, SO_REUSEADDR, (char*)&iSetOption, sizeof(iSetOption)) < 0) {
+		_network_error(self, NETWORK_ERROR_OPTION, "unable to set port-reusement", strerror(errno), NULL);
+		return;
+	}
+
+	/* timeout */
+	struct timeval timeout;
+	timeout.tv_sec = self->timeout;
+	timeout.tv_usec = 0;
+	/*
+	if (setsockopt (self->socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
+		_network_error(self, NETWORK_ERROR_OPTION, "unable to set recv-timeout", strerror(errno), NULL);
+		return;
+	}*/
+	if (setsockopt (self->socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
+		_network_error(self, NETWORK_ERROR_OPTION, "unable to set send-timeout", strerror(errno), NULL);
+		return;
+	}
+
+	/* bind port to socket */
+	struct sockaddr_in server;
+    memset(&server, 0, sizeof (server));        /* clean structure */
+
+	server.sin_family = AF_INET;
+	server.sin_addr.s_addr = INADDR_ANY;
+	server.sin_port = htons(self->port);
+
+	int b = bind(self->socket, (struct sockaddr *)&server, sizeof(server));
+	if (b == NETWORK_SOCKET_ERROR) {
+		_network_error(self, NETWORK_ERROR_BIND, "unable to bind port", strerror(errno), NULL);
+		return;
+	}
+
+	int l = listen(self->socket, self->queue);
+	if (l == NETWORK_SOCKET_ERROR) {
+		_network_error(self, NETWORK_ERROR_LISTEN, "unable to listen", strerror(errno), NULL);
+		return;
+	}
 }
 
 NETWORK *network_new() {
@@ -157,60 +250,32 @@ void network_setTimeout(NETWORK *self, int timeout) {
 	self->timeout = timeout;
 }
 
-void network_clientOpen(NETWORK *self) {
+void network_open(NETWORK *self) {
 	assert(self);
+	assert(!self->socket);
+	assert(self->port > 0);
+	assert(self->timeout > 0);
+	assert(self->queue > 0);
 	assert(!network_isOpen(self));
-	assert(self->address);
 
-	_network_open(self);
-
-	/* create socket */
-	self->socket = socket(AF_INET, SOCK_STREAM, 0);
-	if (self->socket == NETWORK_SOCKET_ERROR) {
-		_network_error(self, NETWORK_ERROR_INIT, "unable to open socket", strerror(errno), "check your netowrk stack");
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2 ,0), &wsaData)) {
+		int errCode = WSAGetLastError();
+		LPSTR errString = NULL;
+		int size = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errCode, 0, (LPSTR)&errString, 0, 0);
+		_network_error(self, NETWORK_ERROR_INIT, "unable to init winsock", errString, "check up Windows network stack");
+		LocalFree(errString);
 		return;
 	}
+#endif
 
-	/* timeout */
-	struct timeval timeout;
-	timeout.tv_sec = self->timeout;
-	timeout.tv_usec = 0;
-	if (setsockopt (self->socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
-		_network_error(self, NETWORK_ERROR_OPTION, "unable to set recv-timeout", strerror(errno), NULL);
-		return;
-	}
-	if (setsockopt (self->socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
-		_network_error(self, NETWORK_ERROR_OPTION, "unable to set send-timeout", strerror(errno), NULL);
-		return;
-	}
-
-	/* connect to server */
-	struct sockaddr_in server;
-	memset(&server, 0, sizeof(server));         /* clean structure */
-
-	/* check right address */
-	unsigned long addr;
-	if ((addr = inet_addr(self->address)) != INADDR_NONE) {
-		memcpy((char *)&server.sin_addr, &addr, sizeof(addr));
+	if (self->address) {
+		_network_open_client(self);
 	} else {
-		struct hostent *host_info;
-		host_info = gethostbyname(self->address);
-		if (!host_info) {
-			_network_error(self, NETWORK_ERROR_INFORMATION, "unable to resolve address", strerror(errno), NULL);
-			return;
-		}
-		memcpy((char *)&server.sin_addr, host_info->h_addr, host_info->h_length);
-	}
-	server.sin_family = AF_INET;
-	server.sin_port = htons(self->port);
-
-	int c = connect(self->socket, (struct sockaddr *)&server, sizeof(server));
-	if (c == NETWORK_SOCKET_ERROR) {
-		_network_error(self, NETWORK_ERROR_CONNECTION, "unable to connect to server", strerror(errno), NULL);
-		return;
+		_network_open_server(self);
 	}
 
-	self->connect = TRUE;
 }
 
 void network_close(NETWORK *self) {
@@ -234,71 +299,6 @@ BOOL network_isOpen(NETWORK *self) {
 	assert(self);
 
 	return self->connect;
-}
-
-void network_serverOpen(NETWORK *self) {
-	assert(self);
-	assert(self->port > 0);
-	assert(self->timeout > 0);
-	assert(self->queue > 0);
-	assert(!network_isOpen(self));
-
-	_network_open(self);
-
-	/* catch ctrl-c */
-//	signal(SIGINT, active_server_quit_server);                /* CTRL-C */
-//	signal(SIGPIPE, active_server_quit_client);               /* lost connection */
-#ifdef SYSTEM_OS_TYPE_UNIX
-//	signal(SIGPIPE, SIG_IGN);                   /* ignore SIGPIPE */
-#endif
-
-	/* create socket */
-	self->socket = socket(AF_INET, SOCK_STREAM, 0);
-	if (self->socket == NETWORK_SOCKET_ERROR) {
-		_network_error(self, NETWORK_ERROR_INIT, "unable to open socket", strerror(errno), "check your netowrk stack");
-		return;
-	}
-
-	/* reuse socket */
-	int iSetOption = 1;
-	if (setsockopt(self->socket, SOL_SOCKET, SO_REUSEADDR, (char*)&iSetOption, sizeof(iSetOption)) < 0) {
-		_network_error(self, NETWORK_ERROR_OPTION, "unable to set port-reusement", strerror(errno), NULL);
-		return;
-	}
-
-	/* timeout */
-	struct timeval timeout;
-	timeout.tv_sec = self->timeout;
-	timeout.tv_usec = 0;
-	/*
-	if (setsockopt (self->socket, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
-		_network_error(self, NETWORK_ERROR_OPTION, "unable to set recv-timeout", strerror(errno), NULL);
-		return;
-	}*/
-	if (setsockopt (self->socket, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0) {
-		_network_error(self, NETWORK_ERROR_OPTION, "unable to set send-timeout", strerror(errno), NULL);
-		return;
-	}
-
-	/* bind port to socket */
-	struct sockaddr_in server;
-    memset(&server, 0, sizeof (server));        /* clean structure */
-
-	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(self->port);
-
-	int b = bind(self->socket, (struct sockaddr *)&server, sizeof(server));
-	if (b == NETWORK_SOCKET_ERROR) {
-		_network_error(self, NETWORK_ERROR_BIND, "unable to bind port", strerror(errno), NULL);
-		return;
-	}
-
-	int l = listen(self->socket, self->queue);
-	if (l == NETWORK_SOCKET_ERROR) {
-		_network_error(self, NETWORK_ERROR_LISTEN, "unable to listen", strerror(errno), NULL);
-		return;
-	}
 }
 
 void network_serverAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *object) {
@@ -577,6 +577,7 @@ void network_accept_init(NETWORK *self) {
 	memset(client, '\0', sizeof(NETWORK_ACCEPT));
 
 	self->accept = client;
+	self->connect = TRUE;
 }
 
 void network_accept_setSocket(NETWORK *self, NETWORK_SOCKET socket) {
@@ -639,6 +640,7 @@ void network_accept_close(NETWORK *self) {
 		close(self->accept->socket);
 #endif
 		self->accept->socket = 0;
+		self->connect = FALSE;
 }
 
 void network_accept_free(NETWORK *self) {
