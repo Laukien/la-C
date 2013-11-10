@@ -209,9 +209,12 @@ void network_free(NETWORK *self) {
 
 	self->port = 0;
 
+	if (self->accept) {
+		network_accept_close(self);
+		network_accept_free(self);
+	}
 	if (self->data) {
-		free(self->data);
-		self->data = NULL;
+		network_data_free(self);
 	}
 
 	free(self);
@@ -313,7 +316,7 @@ void network_serverAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void 
 		client_length = sizeof(client_address);
 		client_socket = accept(self->socket, (struct sockaddr *)&client_address, &client_length);
 		if (client_socket == NETWORK_SOCKET_ERROR) {
-			_network_error(self, NETWORK_ERROR_ACCEPT, "unable to connect to client", strerror(errno), "check your connction");
+			_network_error(self, NETWORK_ERROR_ACCEPT, "unable to connect to client", strerror(errno), "check your connection");
 			return;
 		}
 
@@ -561,7 +564,7 @@ void network_readData(NETWORK *self) {
 
 	network_data_init(self);
 	network_data_setLimit(self, len);
-	network_data_setContent(self, len, content);
+	network_data_setBinary(self, content, len);
 	free(content);
 }
 
@@ -709,7 +712,14 @@ size_t network_data_getLimit(NETWORK *self) {
 	return self->data->limit;
 }
 
-void network_data_setContent(NETWORK *self, size_t size, const char *content) {
+size_t network_data_getSize(NETWORK *self) {
+	assert(self);
+	assert(self->data);
+
+	return self->data->size;
+}
+
+void network_data_setBinary(NETWORK *self, const char *content, size_t size) {
 	assert(self);
 	assert(self->data);
 
@@ -729,14 +739,13 @@ void network_data_setContent(NETWORK *self, size_t size, const char *content) {
 	memcpy(self->data->content, content, size);
 }
 
-size_t network_data_getSize(NETWORK *self) {
+void network_data_setString(NETWORK *self, const char *content) {
 	assert(self);
-	assert(self->data);
 
-	return self->data->size;
+	network_data_setBinary(self, content, strlen(content));
 }
 
-char *network_data_getContent(NETWORK *self) {
+char *network_data_getBinary(NETWORK *self) {
 	assert(self);
 	assert(self->data);
 
@@ -753,4 +762,15 @@ char *network_data_getContent(NETWORK *self) {
 	memcpy(content, self->data->content, self->data->size);
 
 	return content;
+}
+
+char *network_data_getString(NETWORK *self) {
+	assert(self);
+
+	size_t size = network_data_getSize(self);
+	char *str = network_data_getBinary(self);
+	str = (char *)realloc(str, size + 1);
+	str[size] = '\0';
+
+	return str;
 }

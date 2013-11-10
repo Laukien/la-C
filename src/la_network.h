@@ -67,8 +67,10 @@ void network_data_init(NETWORK *self);
 void network_data_free(NETWORK *self);
 void network_data_setLimit(NETWORK *self, size_t limit);
 size_t network_data_getLimit(NETWORK *self);
-void network_data_setContent(NETWORK *self, size_t size, const char *content);
 size_t network_data_getSize(NETWORK *self);
-char *network_data_getContent(NETWORK *self);
+void network_data_setBinary(NETWORK *self, const char *content, size_t size);
+void network_data_setString(NETWORK *self, const char *content);
+char *network_data_getBinary(NETWORK *self);
+char *network_data_getString(NETWORK *self);
 
 #endif

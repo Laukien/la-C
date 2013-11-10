@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	network_writeFile(net, argv[0]);
 	sleep(1);
 	network_data_init(net);
-	network_data_setContent(net, 5, "Test!");
+	network_data_setBinary(net, "Test!", 5);
 	network_writeData(net);
 	network_data_free(net);
 

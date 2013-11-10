@@ -25,7 +25,7 @@ void client(NETWORK *self, void *object) {
 	network_readData(self);
 	printf ( "\tDATA:\t\t");
 	size_t i;
-	char *data = network_data_getContent(self);
+	char *data = network_data_getBinary(self);
 	for(i = 0; i < network_data_getSize(self); ++i) {
 		printf ( ":%d:", data[i] );
 		fflush(stdout);
