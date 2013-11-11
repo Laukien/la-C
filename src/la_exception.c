@@ -104,6 +104,8 @@ int exception_level(EXCEPTION *self) {
 void exception_setShort(EXCEPTION *self, int id, const char *message, ...) {
 	assert(self);
 
+	exception_reset(self);
+
 	/* set id */
 	self->id = id;
 
