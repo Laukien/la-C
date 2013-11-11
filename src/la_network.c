@@ -576,8 +576,8 @@ void network_readData(NETWORK *self) {
 	char *content = (char *)malloc(1);
 	int rc;
 	while ((rc = recv(socket, buf, NETWORK_BUFFER_SIZE, 0))) {
-//		content = realloc(content, (count + 1) * NETWORK_BUFFER_SIZE);
-		content = realloc(content, count * NETWORK_BUFFER_SIZE + rc);
+//		content = (char *)realloc(content, (count + 1) * NETWORK_BUFFER_SIZE);
+		content = (char *)realloc(content, count * NETWORK_BUFFER_SIZE + rc);
 		if (!content) {
 			_network_error(self, NETWORK_ERROR_INIT, "unable to get memory", strerror(errno), "check the network communicaton");
 			return;

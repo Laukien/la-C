@@ -313,8 +313,12 @@ namespace la {
 		exception_free(this->obj);
 	}
 
-	void exception::setAll(int id, const std::string &message, const std::string &cause, const std::string &action) {
-		exception_setAll(this->obj, id, message.c_str(), (cause.empty() ? NULL : cause.c_str()), (action.empty() ? NULL : action.c_stR()));
+	void exception::setShort(int id, const std::string &message) {
+		exception_setShort(this->obj, id, message.c_str());
+	}
+
+	void exception::setLong(int id, const std::string &message, const std::string &cause, const std::string &action) {
+		exception_setLong(this->obj, id, message.c_str(), (cause.empty() ? NULL : cause.c_str()), (action.empty() ? NULL : action.c_str()));
 	}
 
 	void exception::setId(int id) {
