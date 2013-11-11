@@ -4,6 +4,7 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <signal.h>
 #include "la_boolean.h"
 #include "la_message.h"
 #include "la_number.h"
@@ -55,10 +56,16 @@ void network_setAcceptPort(NETWORK *self, NETWORK_PORT port);
 void network_closeAccept(NETWORK *self);
 void network_freeAccept(NETWORK *self);
 
-void _network_error(NETWORK *self, int id, const char *message, const char *cause, const char *action) {
-	assert(self);
+void _network_signal_quit(int sig) {
+	_network_error(NULL, NETWORK_ERROR_QUIT, "process has been quit", NULL, NULL);
+}
 
-	if (self->exception) {
+void _network_signal_lost(int sig) {
+	message_info("lost connection");
+}
+
+void _network_error(NETWORK *self, int id, const char *message, const char *cause, const char *action) {
+	if (self && self->exception) {
 		exception_setLong(self->exception, id, message, cause, action);
 		exception_throw(self->exception);
 	} else {
@@ -124,13 +131,6 @@ void _network_open_client(NETWORK *self) {
 }
 
 void _network_open_server(NETWORK *self) {
-	/* catch ctrl-c */
-//	signal(SIGINT, active_server_quit_server);                /* CTRL-C */
-//	signal(SIGPIPE, active_server_quit_client);               /* lost connection */
-#ifdef SYSTEM_OS_TYPE_UNIX
-//	signal(SIGPIPE, SIG_IGN);                   /* ignore SIGPIPE */
-#endif
-
 	/* create socket */
 	self->socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (self->socket == NETWORK_SOCKET_ERROR) {
@@ -260,6 +260,13 @@ void network_open(NETWORK *self) {
 	assert(self->timeout > 0);
 	assert(self->queue > 0);
 	assert(!network_isOpen(self));
+
+	/* catch signals */
+    signal(SIGINT, _network_signal_quit);       /* CTRL-C */
+    signal(SIGPIPE, _network_signal_lost);      /* lost connection */
+#ifdef SYSTEM_OS_TYPE_UNIX
+	signal(SIGPIPE, SIG_IGN);                   /* ignore SIGPIPE */
+#endif
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	WSADATA wsaData;
