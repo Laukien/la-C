@@ -56,14 +56,6 @@ void network_setAcceptPort(NETWORK *self, NETWORK_PORT port);
 void network_closeAccept(NETWORK *self);
 void network_freeAccept(NETWORK *self);
 
-void _network_signal_quit(int sig) {
-	_network_error(NULL, NETWORK_ERROR_QUIT, "process has been quit", NULL, NULL);
-}
-
-void _network_signal_lost(int sig) {
-	message_info("lost connection");
-}
-
 void _network_error(NETWORK *self, int id, const char *message, const char *cause, const char *action) {
 	if (self && self->exception) {
 		exception_setLong(self->exception, id, message, cause, action);
@@ -78,6 +70,14 @@ void _network_error(NETWORK *self, int id, const char *message, const char *caus
 		free(num);
 		message_error(str);
 	}
+}
+
+void _network_signal_quit(int sig) {
+	_network_error(NULL, NETWORK_ERROR_QUIT, "process has been quit", NULL, NULL);
+}
+
+void _network_signal_lost(int sig) {
+	message_info("lost connection");
 }
 
 void _network_open_client(NETWORK *self) {
