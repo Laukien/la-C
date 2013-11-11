@@ -48,12 +48,12 @@ struct la_network_data {
 };
 
 /* define internal accept functions */
-void network_accept_init(NETWORK *self);
-void network_accept_setSocket(NETWORK *self, NETWORK_SOCKET socket);
-void network_accept_setAddress(NETWORK *self, const char *address);
-void network_accept_setPort(NETWORK *self, NETWORK_PORT port);
-void network_accept_close(NETWORK *self);
-void network_accept_free(NETWORK *self);
+void network_initAccept(NETWORK *self);
+void network_setAcceptSocket(NETWORK *self, NETWORK_SOCKET socket);
+void network_setAcceptAddress(NETWORK *self, const char *address);
+void network_setAcceptPort(NETWORK *self, NETWORK_PORT port);
+void network_closeAccept(NETWORK *self);
+void network_freeAccept(NETWORK *self);
 
 void _network_error(NETWORK *self, int id, const char *message, const char *cause, const char *action) {
 	assert(self);
@@ -210,11 +210,11 @@ void network_free(NETWORK *self) {
 	self->port = 0;
 
 	if (self->accept) {
-		network_accept_close(self);
-		network_accept_free(self);
+		network_closeAccept(self);
+		network_freeAccept(self);
 	}
 	if (self->data) {
-		network_data_free(self);
+		network_freeData(self);
 	}
 
 	free(self);
@@ -302,41 +302,6 @@ BOOL network_isOpen(NETWORK *self) {
 	assert(self);
 
 	return self->connect;
-}
-
-void network_accept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *object) {
-	assert(self);
-	assert(self->socket);
-	assert(!self->accept);
-	assert(callback);
-
-	NETWORK_SOCKET client_socket;
-	struct sockaddr_in client_address;
-	socklen_t client_length;
-
-	while (1) {
-		client_length = sizeof(client_address);
-		client_socket = accept(self->socket, (struct sockaddr *)&client_address, &client_length);
-		if (client_socket == NETWORK_SOCKET_ERROR) {
-			_network_error(self, NETWORK_ERROR_ACCEPT, "unable to connect to client", strerror(errno), "check your connection");
-			return;
-		}
-
-		/* create client socket */
-		network_accept_init(self);
-		network_accept_setSocket(self, client_socket);
-		char str[INET_ADDRSTRLEN];
-		inet_ntop(AF_INET, &(client_address.sin_addr), str, INET_ADDRSTRLEN);
-		network_accept_setAddress(self, str);
-		network_accept_setPort(self, ntohs(client_address.sin_port));
-
-		/* call callback */
-		callback(self, object);
-
-		/* close & free client object */
-		network_accept_close(self);
-		network_accept_free(self);
-	}
 }
 
 void network_writeString(NETWORK *self, const char *str) {
@@ -592,13 +557,48 @@ void network_readData(NETWORK *self) {
 		++count;
 	}
 
-	network_data_init(self);
-	network_data_setLimit(self, len);
-	network_data_setBinary(self, content, len);
+	network_initData(self);
+	network_setDataLimit(self, len);
+	network_setDataBinary(self, content, len);
 	free(content);
 }
 
-void network_accept_init(NETWORK *self) {
+void network_callAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *object) {
+	assert(self);
+	assert(self->socket);
+	assert(!self->accept);
+	assert(callback);
+
+	NETWORK_SOCKET client_socket;
+	struct sockaddr_in client_address;
+	socklen_t client_length;
+
+	while (1) {
+		client_length = sizeof(client_address);
+		client_socket = accept(self->socket, (struct sockaddr *)&client_address, &client_length);
+		if (client_socket == NETWORK_SOCKET_ERROR) {
+			_network_error(self, NETWORK_ERROR_ACCEPT, "unable to connect to client", strerror(errno), "check your connection");
+			return;
+		}
+
+		/* create client socket */
+		network_initAccept(self);
+		network_setAcceptSocket(self, client_socket);
+		char str[INET_ADDRSTRLEN];
+		inet_ntop(AF_INET, &(client_address.sin_addr), str, INET_ADDRSTRLEN);
+		network_setAcceptAddress(self, str);
+		network_setAcceptPort(self, ntohs(client_address.sin_port));
+
+		/* call callback */
+		callback(self, object);
+
+		/* close & free client object */
+		network_closeAccept(self);
+		network_freeAccept(self);
+	}
+}
+
+void network_initAccept(NETWORK *self) {
 	assert(self);
 	assert(!self->accept);
 
@@ -613,21 +613,21 @@ void network_accept_init(NETWORK *self) {
 	self->connect = TRUE;
 }
 
-void network_accept_setSocket(NETWORK *self, NETWORK_SOCKET socket) {
+void network_setAcceptSocket(NETWORK *self, NETWORK_SOCKET socket) {
 	assert(self);
 	assert(self->accept);
 
 	self->accept->socket = socket;
 }
 
-NETWORK_SOCKET network_accept_getSocket(NETWORK *self) {
+NETWORK_SOCKET network_getAcceptSocket(NETWORK *self) {
 	assert(self);
 	assert(self->accept);
 
 	return self->accept->socket;
 }
 
-void network_accept_setAddress(NETWORK *self, const char *address) {
+void network_setAcceptAddress(NETWORK *self, const char *address) {
 	assert(self);
 	assert(self->accept);
 	assert(!self->accept->address);
@@ -635,34 +635,34 @@ void network_accept_setAddress(NETWORK *self, const char *address) {
 	self->accept->address = strdup(address);
 }
 
-char *network_accept_getAddress(NETWORK *self) {
+char *network_getAcceptAddress(NETWORK *self) {
 	assert(self);
 	assert(self->accept);
 
 	return strdup(self->accept->address);
 }
 
-void network_accept_setPort(NETWORK *self, NETWORK_PORT port) {
+void network_setAcceptPort(NETWORK *self, NETWORK_PORT port) {
 	assert(self);
 	assert(self->accept);
 
 	self->accept->port = port;
 }
 
-NETWORK_PORT network_accept_getPort(NETWORK *self) {
+NETWORK_PORT network_getAcceptPort(NETWORK *self) {
 	assert(self);
 	assert(self->accept);
 
 	return self->accept->port;
 }
 
-BOOL network_accept_exists(NETWORK *self) {
+BOOL network_isAccept(NETWORK *self) {
 	assert(self);
 
 	return self->accept ? TRUE : FALSE;
 }
 
-void network_accept_close(NETWORK *self) {
+void network_closeAccept(NETWORK *self) {
 	assert(self);
 	assert(self->accept);
 
@@ -676,7 +676,7 @@ void network_accept_close(NETWORK *self) {
 		self->connect = FALSE;
 }
 
-void network_accept_free(NETWORK *self) {
+void network_freeAccept(NETWORK *self) {
 	assert(self);
 	assert(self->accept);
 
@@ -691,12 +691,12 @@ void network_accept_free(NETWORK *self) {
 	self->accept = NULL;
 }
 
-void network_data_init(NETWORK *self) {
+void network_initData(NETWORK *self) {
 	assert(self);
 
 	/* free memory */
 	if (self->data) {
-		network_data_free(self);
+		network_freeData(self);
 	}
 
 	NETWORK_DATA *data = (NETWORK_DATA *)malloc(sizeof(NETWORK_DATA));
@@ -712,7 +712,7 @@ void network_data_init(NETWORK *self) {
 	self->data = data;
 }
 
-void network_data_free(NETWORK *self) {
+void network_freeData(NETWORK *self) {
 	assert(self);
 	assert(self->data);
 
@@ -728,28 +728,28 @@ void network_data_free(NETWORK *self) {
 
 }
 
-void network_data_setLimit(NETWORK *self, size_t limit) {
+void network_setDataLimit(NETWORK *self, size_t limit) {
 	assert(self);
 	assert(self->data);
 
 	self->data->limit = limit;
 }
 
-size_t network_data_getLimit(NETWORK *self) {
+size_t network_getDataLimit(NETWORK *self) {
 	assert(self);
 	assert(self->data);
 
 	return self->data->limit;
 }
 
-size_t network_data_getSize(NETWORK *self) {
+size_t network_getDataSize(NETWORK *self) {
 	assert(self);
 	assert(self->data);
 
 	return self->data->size;
 }
 
-void network_data_setBinary(NETWORK *self, const char *content, size_t size) {
+void network_setDataBinary(NETWORK *self, const char *content, size_t size) {
 	assert(self);
 	assert(self->data);
 
@@ -769,13 +769,7 @@ void network_data_setBinary(NETWORK *self, const char *content, size_t size) {
 	memcpy(self->data->content, content, size);
 }
 
-void network_data_setString(NETWORK *self, const char *content) {
-	assert(self);
-
-	network_data_setBinary(self, content, strlen(content));
-}
-
-char *network_data_getBinary(NETWORK *self) {
+char *network_getDataBinary(NETWORK *self) {
 	assert(self);
 	assert(self->data);
 
@@ -794,13 +788,171 @@ char *network_data_getBinary(NETWORK *self) {
 	return content;
 }
 
-char *network_data_getString(NETWORK *self) {
+void network_setDataString(NETWORK *self, const char *content) {
 	assert(self);
 
-	size_t size = network_data_getSize(self);
-	char *str = network_data_getBinary(self);
+	network_setDataBinary(self, content, strlen(content));
+}
+
+char *network_getDataString(NETWORK *self) {
+	assert(self);
+
+	size_t size = network_getDataSize(self);
+	char *str = network_getDataBinary(self);
 	str = (char *)realloc(str, size + 1);
 	str[size] = '\0';
 
 	return str;
 }
+
+#ifdef __cplusplus
+namespace la {
+	network::network() {
+		this->obj = network_new();
+	}
+
+	network::~network() {
+		network_free(this->obj);
+	}
+
+	void network::setException(EXCEPTION *e) {
+		network_setException(this->obj, e);
+	}
+
+	void network::setAddress(const std::string &adr) {
+		network_setAddress(this->obj, adr.c_str());
+	}
+
+	void network::setPort(NETWORK_PORT port) {
+		network_setPort(this->obj, port);
+	}
+
+	void network::setTimeout(int timeout) {
+		network_setTimeout(this->obj, timeout);
+	}
+
+	void network::setQueue(int queue) {
+		network_setQueue(this->obj, queue);
+	}
+
+	void network::open() {
+		network_open(this->obj);
+	}
+
+	bool network::isOpen() {
+		return network_isOpen(this->obj);
+	}
+
+	void network::close() {
+		network_close(this->obj);
+	}
+
+	void network::writeString(const std::string &str) {
+		network_writeString(this->obj, str.c_str());
+	}
+
+	std::string network::readString() {
+		char *tmp = network_readString(this->obj);
+		std::string res = std::string(tmp);
+		free(tmp);
+
+		return res;
+	}
+
+	void network::writeNumber(int num) {
+		return network_writeNumber(this->obj, num);
+	}
+
+	int network::readNumber() {
+		return network_readNumber(this->obj);
+	}
+
+	void network::writeStatus(bool status) {
+		network_writeStatus(this->obj, status);
+	}
+
+	bool network::readStatus() {
+		return network_readStatus(this->obj);
+	}
+
+	void network::writeFile(const std::string &filename) {
+		network_writeFile(this->obj, filename.c_str());
+	}
+
+	void network::readFile(const std::string &filename) {
+		network_readFile(this->obj, filename.c_str());
+	}
+
+	void network::writeData() {
+		network_writeData(this->obj);
+	}
+
+	void network::readData() {
+		network_readData(this->obj);
+	}
+
+	void network::callAccept(NETWORK_ACCEPT_CALLBACK callback, void *object) {
+		network_callAccept(this->obj, callback, object);
+	}
+
+	NETWORK_SOCKET network::getAcceptSocket() {
+		return network_getAcceptSocket(this->obj);
+	}
+
+	std::string network::getAcceptAddress() {
+		char *tmp = network_getAcceptAddress(this->obj);
+		std::string res = std::string(tmp);
+		free(tmp);
+
+		return res;
+	}
+
+	NETWORK_PORT network::getAcceptPort() {
+		return network_getAcceptPort(this->obj);
+	}
+
+	bool network::isAccept() {
+		return network_isAccept(this->obj);
+	}
+
+	void network::initData() {
+		return network_initData(this->obj);
+	}
+
+	void network::freeData() {
+		return network_freeData(this->obj);
+	}
+
+	void network::setDataLimit(size_t limit) {
+		return network_setDataLimit(this->obj, limit);
+	}
+
+	size_t network::getDataLimit() {
+		return network_getDataLimit(this->obj);
+	}
+
+	size_t network::getDataSize() {
+		return network_getDataSize(this->obj);
+	}
+
+	void network::setDataBinary(const char *content, size_t size) {
+		network_setDataBinary(this->obj, content, size);
+	}
+
+	char *network::getDataBinary() {
+		return network_getDataBinary(this->obj);
+	}
+
+	void network::setDataString(const std::string &content) {
+		network_setDataString(this->obj, content.c_str());
+	}
+
+	std::string network::getDataString() {
+		char *tmp = network_getDataString(this->obj);
+		std::string res = std::string(tmp);
+		free(tmp);
+
+		return res;
+	}
+}
+#endif

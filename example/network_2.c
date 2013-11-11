@@ -21,10 +21,10 @@ int main(int argc, char *argv[]) {
 	sleep(1);
 	network_writeFile(net, argv[0]);
 	sleep(1);
-	network_data_init(net);
-	network_data_setBinary(net, "Test!", 5);
+	network_initData(net);
+	network_setDataBinary(net, "Test!", 5);
 	network_writeData(net);
-	network_data_free(net);
+	network_freeData(net);
 
 	network_close(net);
 	network_free(net);

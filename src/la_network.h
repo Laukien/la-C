@@ -18,6 +18,10 @@
 #include "la_system.h"
 #include "la_exception.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct la_network NETWORK;
 typedef struct la_network_accept NETWORK_ACCEPT;
 typedef struct la_network_data NETWORK_DATA;
@@ -41,12 +45,11 @@ NETWORK *network_new();
 void network_free(NETWORK *self);
 void network_setException(NETWORK *self, EXCEPTION *e);
 void network_setAddress(NETWORK *self, const char *adr);
-void network_setPort(NETWORK *self, int port);
+void network_setPort(NETWORK *self, NETWORK_PORT port);
 void network_setTimeout(NETWORK *self, int timeout);
 void network_setQueue(NETWORK *self, int queue);
 void network_open(NETWORK *self);
 BOOL network_isOpen(NETWORK *self);
-void network_accept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *object);
 void network_close(NETWORK *self);
 void network_writeString(NETWORK *self, const char *str);
 char *network_readString(NETWORK *self);
@@ -59,20 +62,69 @@ void network_readFile(NETWORK *self, const char *filename);
 void network_writeData(NETWORK *self);
 void network_readData(NETWORK *self);
 
-NETWORK_SOCKET network_accept_getSocket(NETWORK *self);
-char *network_accept_getAddress(NETWORK *self);
-NETWORK_PORT network_accept_getPort(NETWORK *self);
-BOOL network_accept_exists(NETWORK *self);
+void network_callAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *object);
+NETWORK_SOCKET network_getAcceptSocket(NETWORK *self);
+char *network_getAcceptAddress(NETWORK *self);
+NETWORK_PORT network_getAcceptPort(NETWORK *self);
+BOOL network_isAccept(NETWORK *self);
 
+void network_initData(NETWORK *self);
+void network_freeData(NETWORK *self);
+void network_setDataLimit(NETWORK *self, size_t limit);
+size_t network_getDataLimit(NETWORK *self);
+size_t network_getDataSize(NETWORK *self);
+void network_setDataBinary(NETWORK *self, const char *content, size_t size);
+char *network_getDataBinary(NETWORK *self);
+void network_setDataString(NETWORK *self, const char *content);
+char *network_getDataString(NETWORK *self);
 
-void network_data_init(NETWORK *self);
-void network_data_free(NETWORK *self);
-void network_data_setLimit(NETWORK *self, size_t limit);
-size_t network_data_getLimit(NETWORK *self);
-size_t network_data_getSize(NETWORK *self);
-void network_data_setBinary(NETWORK *self, const char *content, size_t size);
-void network_data_setString(NETWORK *self, const char *content);
-char *network_data_getBinary(NETWORK *self);
-char *network_data_getString(NETWORK *self);
+#ifdef __cplusplus
+}
 
+#include <string>
+
+namespace la {
+	class network {
+		private:
+			NETWORK *obj;
+		public:
+			network();
+			~network();
+			void setException(EXCEPTION *e);
+			void setAddress(const std::string &adr);
+			void setPort(NETWORK_PORT port);
+			void setTimeout(int timeout);
+			void setQueue(int queue);
+			void open();
+			bool isOpen();
+			void close();
+			void writeString(const std::string &str);
+			std::string readString();
+			void writeNumber(int num);
+			int readNumber();
+			void writeStatus(bool status);
+			bool readStatus();
+			void writeFile(const std::string &filename);
+			void readFile(const std::string &filename);
+			void writeData();
+			void readData();
+
+			void callAccept(NETWORK_ACCEPT_CALLBACK callback, void *object);
+			NETWORK_SOCKET getAcceptSocket();
+			std::string getAcceptAddress();
+			NETWORK_PORT getAcceptPort();
+			bool isAccept();
+
+			void initData();
+			void freeData();
+			void setDataLimit(size_t limit);
+			size_t getDataLimit();
+			size_t getDataSize();
+			void setDataBinary(const char *content, size_t size);
+			char *getDataBinary();
+			void setDataString(const std::string &content);
+			std::string getDataString();
+	};
+}
+#endif
 #endif
