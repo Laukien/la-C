@@ -266,9 +266,9 @@ void network_open(NETWORK *self) {
 
 	/* catch signals */
     signal(SIGINT, _network_signal_quit);       /* CTRL-C */
-    signal(SIGPIPE, _network_signal_lost);      /* lost connection */
 #ifdef SYSTEM_OS_TYPE_UNIX
-	signal(SIGPIPE, SIG_IGN);                   /* ignore SIGPIPE */
+    signal(SIGPIPE, _network_signal_lost);      /* lost connection */
+//	signal(SIGPIPE, SIG_IGN);                   /* ignore SIGPIPE */
 #endif
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
@@ -276,7 +276,7 @@ void network_open(NETWORK *self) {
 	if (WSAStartup(MAKEWORD(2 ,0), &wsaData)) {
 		int errCode = WSAGetLastError();
 		LPSTR errString = NULL;
-		int size = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errCode, 0, (LPSTR)&errString, 0, 0);
+		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errCode, 0, (LPSTR)&errString, 0, 0);
 		_network_error(self, NETWORK_ERROR_INIT, "unable to init winsock", errString, "check up Windows network stack");
 		LocalFree(errString);
 		return;
@@ -631,7 +631,11 @@ void network_callAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *o
 		network_initAccept(self);
 		network_setAcceptSocket(self, client_socket);
 		char str[INET_ADDRSTRLEN];
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+		strcpy(str, inet_ntoa(client_address.sin_addr)); /* deprecated */
+#else
 		inet_ntop(AF_INET, &(client_address.sin_addr), str, INET_ADDRSTRLEN);
+#endif
 		network_setAcceptAddress(self, str);
 		network_setAcceptPort(self, ntohs(client_address.sin_port));
 

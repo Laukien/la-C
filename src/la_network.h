@@ -29,9 +29,11 @@ typedef struct la_network_data NETWORK_DATA;
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	#define NETWORK_SOCKET_ERROR SOCKET_ERROR
-	typedef SOCKET NETWORK_SOCKET;
+	#define INET_ADDRSTRLEN 16
+	typedef int NETWORK_SOCKET;
 	typedef int NETWORK_SEND;
 	typedef int NETWORK_RECV;
+	typedef int socklen_t;
 #else
 	#define NETWORK_SOCKET_ERROR -1
 	typedef int NETWORK_SOCKET;
