@@ -359,9 +359,6 @@ void network_writeString(NETWORK *self, const char *str) {
 char *network_readString(NETWORK *self) {
 	assert(self);
 
-	/* debug */
-	message_debug("network_readString");
-
 	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
 	char buf[NETWORK_BUFFER_SIZE + 1];
 	int rc;
@@ -388,6 +385,10 @@ char *network_readString(NETWORK *self) {
 	char *str = string_trim(tmp);
 //	if (!str) printf ( "NULL\n" );
 	free(tmp);
+
+	/* debug */
+	message_debug("network_readString(%s)", str);
+
 	return str;
 }
 
@@ -405,9 +406,6 @@ void network_writeNumber(NETWORK *self, int num) {
 int network_readNumber(NETWORK *self) {
 	assert(self);
 
-	/* debug */
-	message_debug("network_readNumber");
-
 	char *tmp = network_readString(self);
 	if (!tmp) {
 		_network_error(self, NETWORK_ERROR_READ, "read string is wrong", "string is empty", "check the server-client-communication");
@@ -421,6 +419,9 @@ int network_readNumber(NETWORK *self) {
 
 	int num = number_toInteger(tmp);
 	free(tmp);
+
+	/* debug */
+	message_debug("network_readNumber(%d)", num);
 
 	return num;
 }
@@ -439,9 +440,6 @@ void network_writeStatus(NETWORK *self, BOOL status) {
 BOOL network_readStatus(NETWORK *self) {
 	assert(self);
 
-	/* debug */
-	message_debug("network_readStatus");
-
 	char *tmp = network_readString(self);
 	if (!tmp) {
 		_network_error(self, NETWORK_ERROR_READ, "read string is wrong", "string is empty", "check the server-client-communication");
@@ -455,6 +453,9 @@ BOOL network_readStatus(NETWORK *self) {
 
 	BOOL status = boolean_toBoolean(tmp);
 	free(tmp);
+
+	/* debug */
+	message_debug("network_readStatus(%s)", status ? "TRUE": "FALSE");
 
 	return status;
 }
