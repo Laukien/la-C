@@ -430,7 +430,7 @@ void network_writeStatus(NETWORK *self, BOOL status) {
 	assert(self);
 
 	/* debug */
-	message_debug("network_writeStatus (%s)", status ? "TRUE" : "FALSE");
+	message_debug("network_writeStatus(%s)", status ? "TRUE" : "FALSE");
 
 	char *str = boolean_toString(status);
 	network_writeString(self, str);
@@ -639,6 +639,9 @@ void network_callAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *o
 #endif
 		network_setAcceptAddress(self, str);
 		network_setAcceptPort(self, ntohs(client_address.sin_port));
+
+		/* debug */
+		message_debug("accept(%s)", str);
 
 		/* call callback */
 		callback(self, object);
