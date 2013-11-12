@@ -253,6 +253,13 @@ void network_setTimeout(NETWORK *self, int timeout) {
 	self->timeout = timeout;
 }
 
+void network_setQueue(this->obj, queue) {
+	assert(self);
+	assert(queue > 0);
+
+	self->queue = queue;
+}
+
 void network_open(NETWORK *self) {
 	assert(self);
 	assert(!self->socket);
