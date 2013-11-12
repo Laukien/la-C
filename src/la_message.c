@@ -28,7 +28,7 @@ void message_debug(const char *text, ...) {
 			va_start(args, text);
 			vsnprintf(buf, MESSAGE_SIZE, text, args);
 
-			printf("DEBUG:\t\t%s\n", text);
+			printf("DEBUG:\t\t%s\n", buf);
 
 			va_end(args);
 		}
@@ -41,7 +41,7 @@ void message_info(const char *text, ...) {
 	va_start(args, text);
 	vsnprintf(buf, MESSAGE_SIZE, text, args);
 
-	printf("INFO:\t\t%s\n", text);
+	printf("INFO:\t\t%s\n", buf);
 
 	va_end(args);
 }
@@ -52,7 +52,7 @@ void message_warn(const char *text, ...) {
 	va_start(args, text);
 	vsnprintf(buf, MESSAGE_SIZE, text, args);
 
-	printf("WARNING:\t%s\n", text);
+	printf("WARNING:\t%s\n", buf);
 
 	va_end(args);
 }
