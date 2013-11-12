@@ -261,6 +261,9 @@ void network_open(NETWORK *self) {
 	assert(self->queue > 0);
 	assert(!network_isOpen(self));
 
+	/* debug */
+	message_debug("network_open");
+
 	/* catch signals */
     signal(SIGINT, _network_signal_quit);       /* CTRL-C */
     signal(SIGPIPE, _network_signal_lost);      /* lost connection */
@@ -292,6 +295,9 @@ void network_close(NETWORK *self) {
 	assert(self);
 	assert(self->socket);
 
+	/* debug */
+	message_debug("network_close");
+
 	/* close socket */
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	WSACleanup();
@@ -313,6 +319,9 @@ BOOL network_isOpen(NETWORK *self) {
 
 void network_writeString(NETWORK *self, const char *str) {
 	assert(self);
+
+	/* debug */
+	message_debug("network_writeString(%s)", str);
 
 	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
 	size_t size = strlen(str);
@@ -350,6 +359,9 @@ void network_writeString(NETWORK *self, const char *str) {
 char *network_readString(NETWORK *self) {
 	assert(self);
 
+	/* debug */
+	message_debug("network_readString");
+
 	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
 	char buf[NETWORK_BUFFER_SIZE + 1];
 	int rc;
@@ -382,6 +394,9 @@ char *network_readString(NETWORK *self) {
 void network_writeNumber(NETWORK *self, int num) {
 	assert(self);
 
+	/* debug */
+	message_debug("network_writeNumber(%d)", num);
+
 	char *str = number_integerToString(num);
 	network_writeString(self, str);
 	free(str);
@@ -389,6 +404,9 @@ void network_writeNumber(NETWORK *self, int num) {
 
 int network_readNumber(NETWORK *self) {
 	assert(self);
+
+	/* debug */
+	message_debug("network_readNumber");
 
 	char *tmp = network_readString(self);
 	if (!tmp) {
@@ -410,6 +428,9 @@ int network_readNumber(NETWORK *self) {
 void network_writeStatus(NETWORK *self, BOOL status) {
 	assert(self);
 
+	/* debug */
+	message_debug("network_writeStatus (%s)", status ? "TRUE" : "FALSE");
+
 	char *str = boolean_toString(status);
 	network_writeString(self, str);
 	free(str);
@@ -417,6 +438,9 @@ void network_writeStatus(NETWORK *self, BOOL status) {
 
 BOOL network_readStatus(NETWORK *self) {
 	assert(self);
+
+	/* debug */
+	message_debug("network_readStatus");
 
 	char *tmp = network_readString(self);
 	if (!tmp) {
@@ -437,6 +461,9 @@ BOOL network_readStatus(NETWORK *self) {
 
 void network_writeFile(NETWORK *self, const char *filename) {
 	assert(self);
+
+	/* debug */
+	message_debug("network_writeFile(%s)", filename);
 
 	/* create and open file */
 	int fd;
@@ -473,6 +500,9 @@ void network_writeFile(NETWORK *self, const char *filename) {
 
 void network_readFile(NETWORK *self, const char *filename) {
 	assert(self);
+
+	/* debug */
+	message_debug("network_readFile(%s)", filename);
 
 	/* create and open file */
 	int fd;
@@ -511,6 +541,9 @@ void network_writeData(NETWORK *self) {
 	assert(self);
 	assert(self->data);
 
+	/* debug */
+	message_debug("network_writeData");
+
 	if (self->data->size > self->data->limit) {
 		_network_error(self, NETWORK_ERROR_INIT, "size to huge", "limit is less than size", "change the limit or check the size");
 		return;
@@ -540,6 +573,9 @@ void network_writeData(NETWORK *self) {
 
 void network_readData(NETWORK *self) {
 	assert(self);
+
+	/* debug */
+	message_debug("network_readData");
 
 	NETWORK_SOCKET socket = self->accept ? self->accept->socket : self->socket;
 	size_t len = 0;
@@ -575,6 +611,9 @@ void network_callAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *o
 	assert(self->socket);
 	assert(!self->accept);
 	assert(callback);
+
+	/* debug */
+	message_debug("network_callAccept");
 
 	NETWORK_SOCKET client_socket;
 	struct sockaddr_in client_address;
