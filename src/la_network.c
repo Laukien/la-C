@@ -253,7 +253,7 @@ void network_setTimeout(NETWORK *self, int timeout) {
 	self->timeout = timeout;
 }
 
-void network_setQueue(this->obj, queue) {
+void network_setQueue(NETWORK *self, int queue) {
 	assert(self);
 	assert(queue > 0);
 
