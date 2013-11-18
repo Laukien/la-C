@@ -4,7 +4,6 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <signal.h>
 #include "la_boolean.h"
 #include "la_message.h"
 #include "la_number.h"
@@ -81,14 +80,6 @@ void _network_error(NETWORK *self, int id, const char *message, const char *caus
 		free(num);
 		message_error(str);
 	}
-}
-
-void _network_signal_quit(int sig) {
-	_network_error(NULL, NETWORK_ERROR_QUIT, "process has been quit", NULL, NULL);
-}
-
-void _network_signal_lost(int sig) {
-	message_info("lost connection");
 }
 
 void _network_open_client(NETWORK *self) {
@@ -281,13 +272,6 @@ void network_open(NETWORK *self) {
 
 	/* debug */
 	message_debug("network_open");
-
-	/* catch signals */
-    signal(SIGINT, _network_signal_quit);       /* CTRL-C */
-#ifdef SYSTEM_OS_TYPE_UNIX
-    signal(SIGPIPE, _network_signal_lost);      /* lost connection */
-//	signal(SIGPIPE, SIG_IGN);                   /* ignore SIGPIPE */
-#endif
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	WSADATA wsaData;
