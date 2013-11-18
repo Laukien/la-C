@@ -5,10 +5,12 @@
 extern "C" {
 #endif
 
+#ifndef __WIN32
 #ifndef BOOL
 	#define BOOL int
 	#define TRUE 1
 	#define FALSE 0 
+#endif
 #endif
 
 BOOL boolean_isBoolean(const char *value);
