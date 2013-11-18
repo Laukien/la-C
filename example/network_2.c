@@ -5,6 +5,12 @@
 #include <la_exception.h>
 #include <la_network.h>
 
+#ifdef __WIN32
+#undef BOOL
+#include <windows.h>
+#define sleep Sleep
+#endif
+
 int main(int argc, char *argv[]) {
 	EXCEPTION *e = exception_new();
 

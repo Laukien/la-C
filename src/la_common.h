@@ -28,11 +28,6 @@ extern "C" {
 #define LA_VERSION "1.7.2"
 #define LA_AUTHOR "Stephan Laukien"
 
-#ifdef __WIN32
-#include <windows.h>
-#define sleep Sleep
-#endif
-
 #ifdef __cplusplus
 }
 #endif
