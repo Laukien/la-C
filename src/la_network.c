@@ -57,8 +57,19 @@ void network_closeAccept(NETWORK *self);
 void network_freeAccept(NETWORK *self);
 
 void _network_error(NETWORK *self, int id, const char *message, const char *cause, const char *action) {
+	char *internal;
 	if (self && self->exception) {
-		exception_setLong(self->exception, id, message, cause, action);
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+		int errCode = WSAGetLastError();
+		LPSTR errString = NULL;
+		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errCode, 0, (LPSTR)&errString, 0, 0);
+		internal = strdup(errString);
+		LocalFree(errString);
+#else
+		internal = strdup(cause);
+#endif
+		exception_setLong(self->exception, id, message, internal, action);
+		free(internal);
 		exception_throw(self->exception);
 	} else {
 		char *num = number_integerToString(id);
@@ -281,11 +292,7 @@ void network_open(NETWORK *self) {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2 ,0), &wsaData)) {
-		int errCode = WSAGetLastError();
-		LPSTR errString = NULL;
-		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 0, errCode, 0, (LPSTR)&errString, 0, 0);
-		_network_error(self, NETWORK_ERROR_INIT, "unable to init winsock", errString, "check up Windows network stack");
-		LocalFree(errString);
+		_network_error(self, NETWORK_ERROR_INIT, "unable to init winsock", "winsock-error", "check up Windows network stack");
 		return;
 	}
 #endif
@@ -728,7 +735,6 @@ void network_closeAccept(NETWORK *self) {
 	assert(self->accept);
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
-		WSACleanup();
 		closesocket(self->accept->socket);
 #else
 		close(self->accept->socket);

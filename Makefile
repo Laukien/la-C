@@ -10,8 +10,11 @@ CFLAGS += -O3 -Wall
 
 #WINDOWS
 ifdef WIN32
+EXT := .exe
 AR := i686-pc-mingw32-ar
 ARFLAGS := -rcs
+LDFLAGS += -lws2_32 -lwsock32
+CFLAGS += -D__USE_MINGW_ANSI_STDIO=1
 ifdef WITH_CPP
 CC := i686-pc-mingw32-g++
 CFLAGS += -static-libgcc
@@ -23,6 +26,7 @@ endif
 
 #LINUX
 else
+EXT :=
 CFLAGS += -ggdb3
 AR := ar
 ARFLAGS := -rcs
@@ -118,41 +122,41 @@ test:
 	@echo
 	@echo === TEST ===
 ifdef WITH_CPP
-	$(CC) $(CXXFLAGS) -I src -o example/directory_1 example/directory_1.cc $(LIBDIR)/$(ARNAME)
+	$(CC) $(CXXFLAGS) -I src -o example/directory_1$(EXT) example/directory_1.cc $(LIBDIR)/$(ARNAME)
 else
 ifndef WIN32
 ifdef WITH_POSTGRESQL
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_1 example/database_postgresql_1.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_2 example/database_postgresql_2.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_3 example/database_postgresql_3.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_1$(EXT) example/database_postgresql_1.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_2$(EXT) example/database_postgresql_2.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_3$(EXT) example/database_postgresql_3.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 endif
 endif
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1 example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_2 example/directory_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/exception_1 example/exception_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_1 example/file_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_2 example/file_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_3 example/file_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_1 example/list_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_2 example/list_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_3 example/list_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_1 example/network_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_2 example/network_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/number_1 example/number_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_1 example/parameter_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_2 example/parameter_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_1 example/string_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_2 example/string_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_3 example/string_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_4 example/string_4.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/stringbuffer_1 example/stringbuffer_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_1 example/system_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
-	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_2 example/system_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_2$(EXT) example/directory_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/exception_1$(EXT) example/exception_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_1$(EXT) example/file_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_2$(EXT) example/file_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/file_3$(EXT) example/file_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_1$(EXT) example/list_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_2$(EXT) example/list_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_3$(EXT) example/list_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_1$(EXT) example/network_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_2$(EXT) example/network_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/number_1$(EXT) example/number_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_1$(EXT) example/parameter_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_2$(EXT) example/parameter_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_1$(EXT) example/string_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_2$(EXT) example/string_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_3$(EXT) example/string_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_4$(EXT) example/string_4.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/stringbuffer_1$(EXT) example/stringbuffer_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_1$(EXT) example/system_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_2$(EXT) example/system_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 endif
 
 init:
 	@echo
-	@echo ===  INIT ===
+	@echo ===  INIT ==$(EXT)=
 	mkdir -p $(BINDIR)
 	mkdir -p $(LIBDIR)
 	mkdir -p $(OBJDIR)

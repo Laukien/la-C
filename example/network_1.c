@@ -38,8 +38,14 @@ void client(NETWORK *self, void *object) {
 	network_freeData(self);
 }
 
+void throwError(EXCEPTION *e, void *obj) {
+	exception_show(e);
+	exit(1);
+}
+
 int main(void) {
 	EXCEPTION *e = exception_new();
+	exception_addCallback(e, throwError, NULL);
 
 	NETWORK *net = network_new();
 	network_setException(net, e);

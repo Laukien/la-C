@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <la_common.h>
 #include <la_exception.h>
 #include <la_network.h>
 
