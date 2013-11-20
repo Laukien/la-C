@@ -87,7 +87,7 @@ char *string_trim(const char *string) {
 	}
 
 	memcpy(trim, string + idx_start, idx_stop - idx_start);
-	trim[idx_stop] = '\0';
+	trim[idx_stop - 1] = '\0';
 
 	return trim;
 }
