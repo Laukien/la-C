@@ -75,18 +75,18 @@ char *string_trim(const char *string) {
 	int idx_start = 0;
 	int idx_stop = strlen(string);
 		
-	while (string[idx_start] != '\0' && iscntrl(string[idx_start])) idx_start++;
-	while (idx_stop>idx_start && iscntrl(string[idx_stop - 1])) idx_stop--;
+	while (string[idx_start] != '\0' && (iscntrl(string[idx_start]) || string[idx_start] == ' ')) idx_start++;
+	while (idx_stop > idx_start && (iscntrl(string[idx_stop - 1]) || string[idx_stop -1] == ' ')) idx_stop--;
 	if (idx_start == idx_stop) return NULL;
 
 
-	char *trim = (char *)malloc (idx_stop-idx_start + 1 );
+	char *trim = (char *)malloc (idx_stop - idx_start + 1 );
 	if (trim == NULL) {
 		fprintf ( stderr, "\ndynamic memory allocation failed (string_trim)\n" );
 		exit (EXIT_FAILURE);
 	}
 
-	memcpy(trim, string+idx_start, idx_stop-idx_start);
+	memcpy(trim, string + idx_start, idx_stop - idx_start);
 	trim[idx_stop] = '\0';
 
 	return trim;
