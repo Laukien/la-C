@@ -12,19 +12,6 @@ PG_MODULE_MAGIC;
 
 extern void database_throwError(DATABASE *self, int id, const char *message, const char *cause, const char *action);
 
-BOOL _database_checkParameter(DATABASE *self) {
-	if (
-		self->host == NULL
-		||
-		self->port <= 0
-	) {
-		database_throwError(self, DATABASE_ERROR_PARAMETER, "wrong or un-set parameter", "invalid parameter", "check parameters");
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
 void _database_new(DATABASE *self) {
 	self->host = NULL;
 	self->port = DATABASE_PORT;
@@ -105,3 +92,21 @@ void _database_execute(DATABASE *self, const char *query) {
 	}	
 }
 
+BOOL _database_checkParameter(DATABASE *self) {
+	if (
+		self->host == NULL
+		||
+		self->port <= 0
+	) {
+		database_throwError(self, DATABASE_ERROR_PARAMETER, "wrong or un-set parameter", "invalid parameter", "check parameters");
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+char *_database_escapeString(DATABASE *self, const char *query) {
+	char *result = (char *)malloc(strlen(query) * 2 + 1);
+	PQescapeString(result, query, strlen(query));
+	return result;
+}

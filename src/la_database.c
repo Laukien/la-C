@@ -9,7 +9,6 @@
 
 extern void _database_new(DATABASE *self);
 extern void _database_free(DATABASE *self);
-extern BOOL _database_checkParameter(DATABASE *self);
 extern void _database_open(DATABASE *self);
 extern void _database_close(DATABASE *self);
 extern BOOL _database_isOpen(DATABASE *self);
@@ -17,16 +16,8 @@ extern void _database_closeResult(DATABASE *self);
 extern BOOL _database_isResult(DATABASE *self);
 extern char *_database_getString(DATABASE *self, int col);
 extern void _database_execute(DATABASE *self, const char *query);
-
-char *database_escapeString(const char *query) {
-#ifdef DATABASE_POSTGRESQL
-	char *result = (char *)malloc(strlen(query) * 2 + 1);
-	PQescapeString(result, query, strlen(query));
-	return result;
-#else
-	return strdup(query);
-#endif
-}
+extern BOOL _database_checkParameter(DATABASE *self);
+extern char *_database_escapeString(DATABASE *self, const char *query);
 
 DATABASE *database_new() {
 	DATABASE *self = (DATABASE *)malloc(sizeof(DATABASE));
@@ -273,7 +264,7 @@ void database_execute(DATABASE *self, const char *query, ...) {
 		fmt = text[i];
 		if (isString) {
 			char *val = va_arg(args, char *);
-			char *esc = database_escapeString(val);
+			char *esc = _database_escapeString(self, val);
 			stringbuffer_append(sb, esc);
 			free(esc);
 		} else {

@@ -13,19 +13,22 @@
 #define DATABASE_QUERY_SIZE 4096
 #define DATABASE_NUMBER_SIZE 64
 
-#if defined DATABASE_POSTGRESQL
-#include <libpq-fe.h>
-#define DATABASE_PORT 5432
-#define DATABASE_SQL_NEXTID "SELECT nextval('system.session_id_seq'::regclass)"
-#define DATABASE_SQL_RANDOM "SELECT (random()*65535)::int"
-#define DATABASE_SQL_VERSION "SELECT version()"
-#elif defined DATABASE_MYSQL
+#if defined DATABASE_MYSQL
 #include <mysql.h>
+#define DATABASE_PORT 3306
+#define DATABASE_SQL_NEXTID "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = '%s' AND table_schema=DATABASE();"
+#define DATABASE_SQL_RANDOM "SELECT (rand()*65535)::int"
+#define DATABASE_SQL_VERSION "SELECT version()"
 #elif defined DATABASE_ORACLE
 #define SQL_VERSION "SELECT * FROM v$version;"
+#elif defined DATABASE_POSTGRESQL
+#include <libpq-fe.h>
+#define DATABASE_PORT 5432
+#define DATABASE_SQL_NEXTID "SELECT nextval('%s_id_seq'::regclass)"
+#define DATABASE_SQL_RANDOM "SELECT (random()*65535)::int"
+#define DATABASE_SQL_VERSION "SELECT version()"
 #else
 #define DATABASE_PORT -1
-#define DATABASE_SQL_NEXTID ""
 #define DATABASE_SQL_RANDOM ""
 #define DATABASE_SQL_VERSION ""
 #endif

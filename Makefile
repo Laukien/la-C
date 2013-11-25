@@ -1,5 +1,5 @@
 NAME := la
-VERSION := 1.7.3
+VERSION := 1.7.4
 
 BINDIR := bin
 OBJDIR := obj
@@ -85,6 +85,11 @@ else
 	ln -fs $(ARNAME) $(LIBDIR)/libla.a
 endif
 ifndef WIN32
+ifdef WITH_MYSQL
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_MYSQL
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_mysql.o src/la_database_mysql.c -D DATABASE_MYSQL
+	$(AR) $(ARFLAGS) $(LIBDIR)/lib$(NAME)-mysql.$(VERSION).a $(OBJDIR)/la_database.o $(OBJDIR)/la_database_mysql.o
+endif
 ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_postgresql.o src/la_database_postgresql.c -D DATABASE_POSTGRESQL
@@ -125,6 +130,9 @@ ifdef WITH_CPP
 	$(CC) $(CXXFLAGS) -I src -o example/directory_1$(EXT) example/directory_1.cc $(LIBDIR)/$(ARNAME)
 else
 ifndef WIN32
+ifdef WITH_MYSQL
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_mysql_1$(EXT) example/database_mysql_1.c -L. $(LIBDIR)/lib$(NAME)-mysql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+endif
 ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_1$(EXT) example/database_postgresql_1.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_2$(EXT) example/database_postgresql_2.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS)
