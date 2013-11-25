@@ -16,8 +16,11 @@ void _database_new(DATABASE *self) {
 }
 
 void _database_free(DATABASE *self) {
-	if (self->host != NULL) free (self->host);
-	self->port = -1;
+	if (self->host) {
+		free(self->host);
+		self->host = NULL;
+	}
+	self->port = 0;
 }
 
 void _database_open(DATABASE *self) {

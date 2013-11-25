@@ -24,9 +24,13 @@ int main(void) {
 	printf ( "VERSION" );
 	char *ver = database_getVersion(db);
 	exception_throw(e);
-
 	printf ( " (%s)\n", ver );
 	free(ver);
+
+	printf ( "RANDOM" );
+	int rnd = database_getRandom(db);
+	exception_throw(e);
+	printf ( " (%d)\n", rnd );
 
 	printf ( "CLOSE\n" );
 	database_close(db);

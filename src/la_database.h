@@ -13,20 +13,25 @@
 #define DATABASE_QUERY_SIZE 4096
 #define DATABASE_NUMBER_SIZE 64
 
-#if defined DATABASE_MYSQL
+#if defined DATABASE_MYSQL                      /* MySQL */
 #include <mysql.h>
 #define DATABASE_PORT 3306
 #define DATABASE_SQL_NEXTID "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = '%s' AND table_schema=DATABASE();"
-#define DATABASE_SQL_RANDOM "SELECT (rand()*65535)::int"
+#define DATABASE_SQL_RANDOM "SELECT cast(rand() * 65335 AS UNSIGNED)"
 #define DATABASE_SQL_VERSION "SELECT version()"
-#elif defined DATABASE_ORACLE
+#elif defined DATABASE_ORACLE                   /* Oracle */
 #define SQL_VERSION "SELECT * FROM v$version;"
-#elif defined DATABASE_POSTGRESQL
+#elif defined DATABASE_POSTGRESQL               /* PostgreSQL */
 #include <libpq-fe.h>
 #define DATABASE_PORT 5432
 #define DATABASE_SQL_NEXTID "SELECT nextval('%s_id_seq'::regclass)"
-#define DATABASE_SQL_RANDOM "SELECT (random()*65535)::int"
+#define DATABASE_SQL_RANDOM "SELECT (random() * 65535)::int"
 #define DATABASE_SQL_VERSION "SELECT version()"
+#elif defined DATABASE_SQLIE                    /* Sqlite */
+#include <sqlite3.h>
+#define DATABASE_SQL_NEXTID "SELECT (max(id) + 1) FROM %s;"
+#define DATABASE_SQL_RANDOM "SELECT (random() % 65535)"
+#define DATABASE_SQL_VERSION "SELECT sqlite_version()"
 #else
 #define DATABASE_PORT -1
 #define DATABASE_SQL_RANDOM ""
@@ -51,17 +56,17 @@ struct la_database {
 	int resultCol;
 	int resultRow;
 	int resultCur;
-#if defined DATABASE_POSTGRESQL
-	char *schema;
-	PGconn *connection;
-	PGresult *result;
-#elif defined DATABASE_MYSQL
+#if defined DATABASE_MYSQL
 	MYSQL *connection;
 	MYSQL_RES *result;
 	MYSQL_ROW row;
 #elif defined DATABASE_ORACLE
 	char *schema;
 	char *sid;
+#elif defined DATABASE_POSTGRESQL
+	PGconn *connection;
+	PGresult *result;
+	char *schema;
 #endif
 };
 typedef struct la_database DATABASE;
@@ -82,18 +87,21 @@ BOOL database_previousResult(DATABASE *self);
 BOOL database_firstResult(DATABASE *self);
 BOOL database_lastResult(DATABASE *self);
 char *database_getString(DATABASE *self, int col);
+int database_getNumber(DATABASE *self, int col);
 void database_execute(DATABASE *self, const char *query, ...);
 char *database_getVersion(DATABASE *self);
+int database_getRandom(DATABASE *self);
 BOOL database_checkSelf(DATABASE *self);
-void database_setSchema(DATABASE *self, const char *schema);
 BOOL isError(DATABASE *self);
 char *getError(DATABASE *self);
+void database_setName(DATABASE *self, const char *name);
+#if defined(DATABASE_MYSQL) || defined(DATABASE_ORACLE) || defined(DATABASE_POSTGRESQL)
 void database_setHost(DATABASE *self, const char *host);
 void database_setPort(DATABASE *self, int port);
-void database_setName(DATABASE *self, const char *name);
 void database_setUser(DATABASE *self, const char *user);
 void database_setPassword(DATABASE *self, const char *password);
-#if defined DATABASE_POSTGRESQL
+#endif
+#if defined(DATABASE_ORACLE) || defined(DATABASE_POSTGRESQL)
 void database_setSchema(DATABASE *self, const char *schema);
 #endif
 

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include "la_message.h"
+#include "la_number.h"
 #include "la_stringbuffer.h"
 #include "la_database.h"
 
@@ -58,17 +59,8 @@ void database_free(DATABASE *self) {
 		free(self->password);
 		self->password = NULL;
 	}
-#ifdef DATABASE_POSTGRESQL
-	if (self->host) {
-		free(self->host);
-		self->host = NULL;
-	}
-	self->port = 0;
-	if (self->schema) {
-		free(self->schema);
-		self->schema = NULL;
-	}
-#endif
+	
+	_database_free(self);
 
 	/* free database */
 	free(self);
@@ -231,6 +223,25 @@ char *database_getString(DATABASE *self, int col) {
 	return _database_getString(self, col);
 }
 
+int database_getNumber(DATABASE *self, int col) {
+	assert(self);
+
+	char *str = database_getString(self, col);
+	if (!str) {
+		return -1;
+	}
+
+	int num;
+	if (number_isNumber(str)) {
+		num = number_toInteger(str);
+	} else {
+		num = -1;
+	}
+	free(str);
+
+	return num;
+}
+
 void database_execute(DATABASE *self, const char *query, ...) {
 	assert(self != NULL);
 		
@@ -293,6 +304,22 @@ char *database_getVersion(DATABASE *self) {
 	return database_getString(self, 0);
 }
 
+int database_getRandom(DATABASE *self) {
+	database_execute(self, DATABASE_SQL_RANDOM);
+
+	if (!database_isResult(self)) return -1;
+	if (!database_nextResult(self)) return -1;
+	return database_getNumber(self, 0);
+}
+
+void database_setName(DATABASE *self, const char *name) {
+	assert(self != NULL);
+	assert(name != NULL);
+
+	self->name = strdup(name);
+}
+
+#if defined(DATABASE_MYSQL) || defined(DATABASE_ORACLE) || defined(DATABASE_POSTGRESQL)
 void database_setHost(DATABASE *self, const char *host) {
 	assert(self != NULL);
 	assert(host != NULL);
@@ -305,13 +332,6 @@ void database_setPort(DATABASE *self, int port) {
 	assert(port > 0);
 
 	self->port = port;
-}
-
-void database_setName(DATABASE *self, const char *name) {
-	assert(self != NULL);
-	assert(name != NULL);
-
-	self->name = strdup(name);
 }
 
 void database_setUser(DATABASE *self, const char *user) {
@@ -327,8 +347,9 @@ void database_setPassword(DATABASE *self, const char *password) {
 
 	self->password = strdup(password);
 }
+#endif
 
-#if defined DATABASE_POSTGRESQL
+#if defined(DATABASE_ORACLE) || defined(DATABASE_POSTGRESQL)
 void database_setSchema(DATABASE *self, const char *schema) {
 	assert(self != NULL);
 	assert(schema != NULL);
