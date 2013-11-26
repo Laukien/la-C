@@ -53,6 +53,9 @@ ifdef WITH_POSTGRESQL
 CFLAGS += -I$(shell pg_config --includedir-server) -I$(shell pg_config --includedir)
 LDFLAGS += -L$(shell pg_config --libdir) -lpq
 endif
+ifdef WITH_SQLITE
+LDFLAGS += -lsqlite3
+endif
 endif
 
 
@@ -94,6 +97,11 @@ ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_postgresql.o src/la_database_postgresql.c -D DATABASE_POSTGRESQL
 	$(AR) $(ARFLAGS) $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(OBJDIR)/la_database.o $(OBJDIR)/la_database_postgresql.o
+endif
+ifdef WITH_SQLITE
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_SQLITE
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_sqlite.o src/la_database_sqlite.c -D DATABASE_SQLITE
+	$(AR) $(ARFLAGS) $(LIBDIR)/lib$(NAME)-sqlite.$(VERSION).a $(OBJDIR)/la_database.o $(OBJDIR)/la_database_sqlite.o
 endif
 endif
 
@@ -137,6 +145,9 @@ ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_1$(EXT) example/database_postgresql_1.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS) -D DATABASE_POSTGRESQL
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_2$(EXT) example/database_postgresql_2.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS) -D DATABASE_POSTGRESQL
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_postgresql_3$(EXT) example/database_postgresql_3.c -L. $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS) -D DATABASE_POSTGRESQL
+endif
+ifdef WITH_SQLITE
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_sqlite_1$(EXT) example/database_sqlite_1.c -L. $(LIBDIR)/lib$(NAME)-sqlite.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS) -D DATABASE_SQLITE
 endif
 endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)

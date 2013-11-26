@@ -28,8 +28,6 @@ DATABASE *database_new() {
 
 	self->exception = NULL;
 	self->name = NULL;
-	self->user = NULL;
-	self->password = NULL;
 	self->resultCol = 0;
 	self->resultRow = 0;
 	self->resultCur = -1;
@@ -50,14 +48,6 @@ void database_free(DATABASE *self) {
 	if (self->name)  {
 		free(self->name);
 		self->name = NULL;
-	}
-	if (self->user) {
-		free(self->user);
-		self->user = NULL;
-	}
-	if (self->password) {
-		free(self->password);
-		self->password = NULL;
 	}
 	
 	_database_free(self);
@@ -86,10 +76,6 @@ void database_setException(DATABASE *self, EXCEPTION *e) {
 
 BOOL database_checkParameter(DATABASE *self) {
 	if (
-		self->user == NULL
-		||
-		self->password == NULL
-		||
 		self->name == NULL
 		||
 		!_database_checkParameter(self)

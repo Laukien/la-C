@@ -11,8 +11,10 @@ extern void database_throwError(DATABASE *self, int id, const char *message, con
 void _database_new(DATABASE *self) {
 	self->host = NULL;
 	self->port = DATABASE_PORT;
-	self->result = NULL;
+	self->user = NULL;
+	self->password = NULL;
 	self->connection = NULL;
+	self->result = NULL;
 }
 
 void _database_free(DATABASE *self) {
@@ -21,6 +23,14 @@ void _database_free(DATABASE *self) {
 		self->host = NULL;
 	}
 	self->port = 0;
+	if (self->user) {
+		free(self->user);
+		self->user = NULL;
+	}
+	if (self->password) {
+		free(self->password);
+		self->password = NULL;
+	}
 }
 
 void _database_open(DATABASE *self) {
@@ -92,6 +102,10 @@ BOOL _database_checkParameter(DATABASE *self) {
 		self->host == NULL
 		||
 		self->port <= 0
+		||
+		self->user == NULL
+		||
+		self->password == NULL
 	) {
 		database_throwError(self, DATABASE_ERROR_PARAMETER, "wrong or un-set parameter", "invalid parameter", "check parameters");
 		return FALSE;

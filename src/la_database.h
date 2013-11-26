@@ -27,7 +27,7 @@
 #define DATABASE_SQL_NEXTID "SELECT nextval('%s_id_seq'::regclass)"
 #define DATABASE_SQL_RANDOM "SELECT (random() * 65535)::int"
 #define DATABASE_SQL_VERSION "SELECT version()"
-#elif defined DATABASE_SQLIE                    /* Sqlite */
+#elif defined DATABASE_SQLITE                   /* Sqlite */
 #include <sqlite3.h>
 #define DATABASE_SQL_NEXTID "SELECT (max(id) + 1) FROM %s;"
 #define DATABASE_SQL_RANDOM "SELECT (random() % 65535)"
@@ -48,26 +48,37 @@ extern "C" {
 
 struct la_database {
 	EXCEPTION *exception;
+	char *name;
+#if defined DATABASE_MYSQL
 	char *host;
 	int port;
-	char *name;
 	char *user;
 	char *password;
-	int resultCol;
-	int resultRow;
-	int resultCur;
-#if defined DATABASE_MYSQL
 	MYSQL *connection;
 	MYSQL_RES *result;
 	MYSQL_ROW row;
 #elif defined DATABASE_ORACLE
+	char *host;
+	int port;
+	char *user;
+	char *password;
 	char *schema;
 	char *sid;
 #elif defined DATABASE_POSTGRESQL
+	char *host;
+	int port;
+	char *user;
+	char *password;
+	char *schema;
 	PGconn *connection;
 	PGresult *result;
-	char *schema;
+#elif defined DATABASE_SQLITE
+	sqlite3 *connection;
+	char ***result;
 #endif
+	int resultCol;
+	int resultRow;
+	int resultCur;
 };
 typedef struct la_database DATABASE;
 
