@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "la_error.h"
 #include "la_file.h"
 #include "la_message.h"
@@ -36,7 +36,15 @@ BOOL _database_isOpen(DATABASE *self) {
 }
 
 void _database_closeResult(DATABASE *self) {
-	/* free */
+	/* free each pointer */
+	int i;
+	for (i = 0; i < self->resultRow * self->resultCol; ++i) {
+		if (self->result[i * sizeof(char *)]) {
+			free(self->result[i * sizeof(char *)]);
+			self->result[i * sizeof(char *)] = NULL;
+		}
+	}
+	free(self->result);
 	self->result = NULL;
 }
 
@@ -45,7 +53,7 @@ BOOL _database_isResult(DATABASE *self) {
 }
 
 char *_database_getString(DATABASE *self, int col) {
-	char *res = (self->result)[self->resultCur][col];
+	char *res = (self->result)[(self->resultRow * self->resultCur + col) * sizeof(char *)];
 	if (res) {
 		return strdup(res);
 	}
@@ -54,6 +62,7 @@ char *_database_getString(DATABASE *self, int col) {
 }
 
 void _database_execute(DATABASE *self, const char *query) {
+	self->result = (char **)malloc(1);           /* init result */
 	self->resultRow = 0;
 	self->resultCol = 0;
 	sqlite3_stmt *stmt;
@@ -78,10 +87,15 @@ void _database_execute(DATABASE *self, const char *query) {
 				if (!self->resultCol) {
 					self->resultCol = sqlite3_column_count(stmt);
 				}
-				
+			
+				/* resize result */
+				self->result = (char **)realloc(self->result, self->resultRow * self->resultCol * sizeof(char *));
+
 				int i;
+				char *text;
 				for (i = 0; i < self->resultCol; ++i) {
-					printf ( "%s", sqlite3_column_text(stmt, i) );
+					text = strdup((char *)sqlite3_column_text(stmt, i));
+					self->result[(self->resultRow * (self->resultCol - 1) + i) * sizeof(char *)] = text;
 				}
 				break;
 			default:

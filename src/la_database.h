@@ -74,7 +74,7 @@ struct la_database {
 	PGresult *result;
 #elif defined DATABASE_SQLITE
 	sqlite3 *connection;
-	char ***result;
+	char **result;
 #endif
 	int resultCol;
 	int resultRow;
