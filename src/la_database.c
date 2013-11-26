@@ -295,7 +295,12 @@ int database_getRandom(DATABASE *self) {
 
 	if (!database_isResult(self)) return -1;
 	if (!database_nextResult(self)) return -1;
-	return database_getNumber(self, 0);
+	int num = database_getNumber(self, 0);
+	if (num < 0) {
+		num *= -1;
+	}
+
+	return num;
 }
 
 void database_setName(DATABASE *self, const char *name) {
