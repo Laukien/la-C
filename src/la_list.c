@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "la_boolean.h"
 #include "la_list.h"
 #include "la_string.h"
 
@@ -30,6 +31,8 @@ struct la_list {
 };
 
 LIST *list_getNode(LIST *self, unsigned int index) {
+	assert(self);
+
 	LIST *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
@@ -59,6 +62,8 @@ LIST *list_new () {
 }
 
 void list_add(LIST *self, const char *value) {
+	assert(self);
+
 	LIST *node = (LIST*) malloc (sizeof(LIST) );
 	if ( node==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
@@ -88,11 +93,15 @@ void list_add(LIST *self, const char *value) {
 }
 
 void list_addUnique(LIST *self, const char *value) {
+	assert(self);
+
 	if (!list_exists(self, value))
 		list_add(self, value);
 }
 
 BOOL list_exists(LIST *self, const char *value) {
+	assert(self);
+
 	LIST *node = self;
 	if (self->next == NULL)
 		return FALSE;
@@ -108,6 +117,8 @@ BOOL list_exists(LIST *self, const char *value) {
 }
 
 void list_remove(LIST *self, unsigned int index) {
+	assert(self);
+
 	LIST *nodeSelf, *nodePrev, *nodeNext;
 
 	nodeSelf = list_getNode(self, index);
@@ -137,6 +148,8 @@ void list_remove(LIST *self, unsigned int index) {
 }
 
 void list_swap(LIST *self, unsigned int index1, unsigned int index2) {
+	assert(self);
+
 	unsigned int len = list_size(self);
 	assert(index1 >= 0 && index1 < len && index2 >= 0 && index2 < len);
 
@@ -167,7 +180,32 @@ void list_swap(LIST *self, unsigned int index1, unsigned int index2) {
 	node2->value = tmp;
 }
 
+void list_sort(LIST *self) {
+	assert(self);
+
+	BOOL swap;
+	unsigned int len = list_size(self);
+	unsigned int i;
+
+	/* only two or more items */
+	if (len <= 1) {
+		return;
+	}
+
+	do {
+		swap = FALSE;
+		for (i = 0; i < len - 1; ++i) {
+			if (strcmp(list_getNode(self, i)->value, list_getNode(self, i + 1)->value) > 0) {
+				swap = TRUE;
+				list_swap(self, i, i + 1);
+			}
+		}
+	} while (swap);
+}
+
 char *list_get(LIST *self, unsigned int index) {
+	assert(self);
+
 	LIST *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
@@ -188,6 +226,8 @@ char *list_get(LIST *self, unsigned int index) {
 }
 
 unsigned int list_size(LIST *self) {
+	assert(self);
+
 	if ( self->next == NULL) return 0;
 
 	LIST *node = self;
@@ -204,6 +244,8 @@ unsigned int list_size(LIST *self) {
 
 
 void list_free(LIST *self) {
+	assert(self);
+
 	LIST *node;
 	LIST *next;
 
@@ -222,6 +264,8 @@ void list_free(LIST *self) {
 }
 
 void list_reset(LIST *self) {
+	assert(self);
+
 	LIST *node;
 	LIST *next;
 
@@ -244,6 +288,8 @@ void list_reset(LIST *self) {
 }
 
 void list_show(LIST *self) {
+	assert(self);
+
 	unsigned int i;
 	char *str;
 	for (i = 0; i < list_size(self); ++i) {
@@ -254,6 +300,8 @@ void list_show(LIST *self) {
 }
 
 int list_loadFromFile(LIST *self, const char *filename) {
+	assert(self);
+
 	list_reset(self);
 
 	FILE *file;
@@ -288,6 +336,8 @@ int list_loadFromFile(LIST *self, const char *filename) {
 }
 
 int list_saveToFile(LIST *self, const char *filename) {
+	assert(self);
+
 	if (self->next == NULL) return 0;          /* no lists to save */
 
 	LIST *node;
@@ -343,6 +393,10 @@ namespace la {
 
 	void list::swap(unsigned int index1, unsigned int index2) {
 		list_swap(this->obj, index1, index2);
+	}
+
+	void list::sort() {
+		list_sort(this->obj);
 	}
 
 	void list::reset() {
