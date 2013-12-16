@@ -1,5 +1,5 @@
 NAME := la
-VERSION := 1.7.5
+VERSION := 1.7.6
 
 BINDIR := bin
 OBJDIR := obj
@@ -33,11 +33,23 @@ ARFLAGS := -rcs
 ifdef WITH_CPP
 CC := g++
 ARNAME := lib$(NAME)++.$(VERSION).a
+ARNAME_MYSQL := lib$(NAME)++-mysql.$(VERSION).a
+ARNAME_POSTGRESQL := lib$(NAME)++-postgresql.$(VERSION).a
+ARNAME_SQLITE := lib$(NAME)++-sqlite.$(VERSION).a
 SONAME := lib$(NAME)++.$(VERSION).so
+SONAME_MYSQL := lib$(NAME)++-mysql.$(VERSION).so
+SONAME_POSTGRESQL := lib$(NAME)++-postgresql.$(VERSION).so
+SONAME_SQLITE := lib$(NAME)++-sqlite.$(VERSION).so
 else
 CC := gcc
 ARNAME := lib$(NAME).$(VERSION).a
+ARNAME_MYSQL := lib$(NAME)-mysql.$(VERSION).a
+ARNAME_POSTGRESQL := lib$(NAME)-postgresql.$(VERSION).a
+ARNAME_SQLITE := lib$(NAME)-sqlite.$(VERSION).a
 SONAME := lib$(NAME).$(VERSION).so
+SONAME_MYSQL := lib$(NAME)-mysql.$(VERSION).so
+SONAME_POSTGRESQL := lib$(NAME)-postgresql.$(VERSION).so
+SONAME_SQLITE := lib$(NAME)-sqlite.$(VERSION).so
 endif
 
 #DATABASE
@@ -91,17 +103,17 @@ ifndef WIN32
 ifdef WITH_MYSQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_MYSQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_mysql.o src/la_database_mysql.c -D DATABASE_MYSQL
-	$(AR) $(ARFLAGS) $(LIBDIR)/lib$(NAME)-mysql.$(VERSION).a $(OBJDIR)/la_database.o $(OBJDIR)/la_database_mysql.o
+	$(AR) $(ARFLAGS) $(LIBDIR)/$(ARNAME_MYSQL) $(OBJDIR)/la_database.o $(OBJDIR)/la_database_mysql.o
 endif
 ifdef WITH_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_POSTGRESQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_postgresql.o src/la_database_postgresql.c -D DATABASE_POSTGRESQL
-	$(AR) $(ARFLAGS) $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).a $(OBJDIR)/la_database.o $(OBJDIR)/la_database_postgresql.o
+	$(AR) $(ARFLAGS) $(LIBDIR)/$(ARNAME_POSTGRESQL) $(OBJDIR)/la_database.o $(OBJDIR)/la_database_postgresql.o
 endif
 ifdef WITH_SQLITE
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_SQLITE
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_sqlite.o src/la_database_sqlite.c -D DATABASE_SQLITE
-	$(AR) $(ARFLAGS) $(LIBDIR)/lib$(NAME)-sqlite.$(VERSION).a $(OBJDIR)/la_database.o $(OBJDIR)/la_database_sqlite.o
+	$(AR) $(ARFLAGS) $(LIBDIR)/$(ARNAME_SQLITE) $(OBJDIR)/la_database.o $(OBJDIR)/la_database_sqlite.o
 endif
 endif
 
@@ -126,8 +138,14 @@ ifndef WIN32
 		src/la_string.c\
 		src/la_stringbuffer.c\
 		src/la_system.c
+ifdef WITH_MYSQL
+	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname,$(SONAME_MYSQL) -o $(LIBDIR)/$(SONAME_MYSQL) src/la_database.c src/la_database_mysql.c -D DATABASE_MYSQL
+endif
 ifdef WITH_POSTGRESQL
-	$(CC) -shared -fPIC -Wl,-soname,lib$(NAME)-postgresql.$(VERSION).so -o $(LIBDIR)/lib$(NAME)-postgresql.$(VERSION).so src/la_database.c src/la_database_postgresql.c -D DATABASE_POSTGRESQL
+	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname,$(SONAME_POSTGRESQL) -o $(LIBDIR)/$(SONAME_POSTGRESQL) src/la_database.c src/la_database_postgresql.c -D DATABASE_POSTGRESQL
+endif
+ifdef WITH_SQLITE
+	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname,$(SONAME_SQLITE) -o $(LIBDIR)/$(SONAME_SQLITE) src/la_database.c src/la_database_sqlite.c -D DATABASE_SQLITE
 endif
 endif
 
@@ -135,7 +153,8 @@ test:
 	@echo
 	@echo === TEST ===
 ifdef WITH_CPP
-	$(CC) $(CXXFLAGS) -I src -o example/directory_1$(EXT) example/directory_1.cc $(LIBDIR)/$(ARNAME)
+	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.cc $(LIBDIR)/$(ARNAME)
+	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/file_1$(EXT) example/file_1.cc $(LIBDIR)/$(ARNAME)
 else
 ifndef WIN32
 ifdef WITH_MYSQL
@@ -159,6 +178,7 @@ endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_1$(EXT) example/list_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_2$(EXT) example/list_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_3$(EXT) example/list_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_4$(EXT) example/list_4.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_1$(EXT) example/network_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_2$(EXT) example/network_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/number_1$(EXT) example/number_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)

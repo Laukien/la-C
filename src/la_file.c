@@ -98,6 +98,9 @@ char *file_temp() {
 	strcat(dir, "_");
 	strcat(dir, rnd_s);
 
+	free(rnd_s);
+	free(pid_s);
+
 	return dir;
 }
 

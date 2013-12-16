@@ -35,6 +35,7 @@ void list_addUnique(LIST *self, const char *value);
 BOOL list_exists(LIST *self, const char *value);
 void list_remove(LIST *self, unsigned int index);
 void list_swap(LIST *self, unsigned int index1, unsigned int index2);
+void list_sort(LIST *self);
 void list_free(LIST *self);
 void list_reset(LIST *self);
 char *list_get(LIST *self, unsigned int index);
@@ -60,6 +61,7 @@ namespace la {
 			bool exists(const std::string &value);
 			void remove(unsigned int index);
 			void swap(unsigned int index1, unsigned int index2);
+			void sort();
 			void reset();
 			std::string get(unsigned int index);
 			unsigned int size();

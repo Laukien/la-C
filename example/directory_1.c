@@ -14,5 +14,7 @@ int main(void) {
 
 	list_show(list);
 
+	list_free(list);
+
 	return 0;
 }
