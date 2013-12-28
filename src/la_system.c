@@ -152,13 +152,14 @@ SYSTEM_UPTIME system_getUptime() {
 	SYSTEM_UPTIME ut;
     memset(&ut, 0, sizeof(ut));                 /* set all fields to '0' */
 
-	char line[64];
+	char line[64 + 1];
 
 	FILE *file;
 	file = fopen ("/proc/uptime", "r");
 	if (file == NULL) return ut;
-	fgets(line, (sizeof(char) * sizeof(line)) - 1, file);
+	char *rc = fgets(line, 64, file);
 	fclose(file);
+	if (rc == NULL) return ut;
 
 	char *idx = strchr(line, ' ');
 	if (idx == NULL) return ut;

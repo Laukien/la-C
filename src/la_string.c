@@ -362,23 +362,43 @@ char *string_toHex(const char *str) {
 namespace la {
 	namespace string {
 		std::string toLower(const std::string &string) {
-			return std::string(string_toLower(string.c_str()));
+			char *tmp = string_toLower(string.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 		std::string toUpper(const std::string &string) {
-			return std::string(string_toUpper(string.c_str()));
+			char *tmp = string_toUpper(string.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 		std::string trim(const std::string &string) {
-			return std::string(string_trim(string.c_str()));
+			char *tmp = string_trim(string.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 		std::string replaceFirst(const std::string &string, const std::string &from, const std::string &to) {
-			return std::string(string_replaceFirst(string.c_str(), from.c_str(), to.c_str()));
+			char *tmp = string_replaceFirst(string.c_str(), from.c_str(), to.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 		std::string replace(const std::string &string, const std::string &from, const std::string &to) {
-			return std::string(string_replace(string.c_str(), from.c_str(), to.c_str()));
+			char *tmp = string_replace(string.c_str(), from.c_str(), to.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 		list split(const std::string &string, const std::string &delimiters) {
@@ -393,7 +413,11 @@ namespace la {
 		}
 
 		std::string loadFromFile(const std::string &filename) {
-			return std::string(string_loadFromFile(filename.c_str()));
+			char *tmp = string_loadFromFile(filename.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 		bool saveToFile(const std::string &filename, const std::string &string) {
@@ -402,16 +426,28 @@ namespace la {
 
 	#ifdef SYSTEM_OS_TYPE_LINUX
 		std::string regexp(const std::string &string, const std::string &pattern, int &begin, int &end) {
-			return std::string(string_regexp(string.c_str(), pattern.c_str(), &begin, &end));
+			char *tmp = string_regexp(string.c_str(), pattern.c_str(), &begin, &end);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 	#endif
 
 		std::string fromHex(const std::string &string) {
-			return std::string(string_fromHex(string.c_str()));
+			char *tmp = string_fromHex(string.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 		std::string toHex(const std::string &string) {
-			return std::string(string_toHex(string.c_str()));
+			char *tmp = string_toHex(string.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 
 	}

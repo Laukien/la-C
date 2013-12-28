@@ -1,12 +1,14 @@
 NAME := la
-VERSION := 1.7.6
+VERSION := 1.7.7
 
 BINDIR := bin
 OBJDIR := obj
 LIBDIR := lib
 PREFIX := /usr/local
 
-CFLAGS += -O3 -Wall
+#CFLAGS += -O3
+CFLAGS += -Wall
+CFLAGS += -Werror
 
 #WINDOWS
 ifdef WIN32
@@ -155,6 +157,7 @@ test:
 ifdef WITH_CPP
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/file_1$(EXT) example/file_1.cc $(LIBDIR)/$(ARNAME)
+	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/string_1$(EXT) example/string_1.cc $(LIBDIR)/$(ARNAME)
 else
 ifndef WIN32
 ifdef WITH_MYSQL

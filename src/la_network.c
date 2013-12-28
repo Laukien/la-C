@@ -520,6 +520,7 @@ void network_readFile(NETWORK *self, const char *filename) {
 	size_t len = 0;
 	char buf[NETWORK_BUFFER_SIZE];
 	int rc;
+	int wc;
 	while ((rc = recv(socket, buf, NETWORK_BUFFER_SIZE, 0))) {
 		if (rc < 0) {
 			_network_error(self, NETWORK_ERROR_READ, "error while reading", strerror(errno), "check the server-client-communication");
@@ -527,8 +528,12 @@ void network_readFile(NETWORK *self, const char *filename) {
 		}
 
 		len += rc;
-		write(fd, buf, rc);
-
+		wc = write(fd, buf, rc);
+		if (rc != wc) {
+			_network_error(self, NETWORK_ERROR_WRITE, "error while writing", "count of read is not eaqual to count of write", "check the server-client-communication");
+			return;
+		}
+		
 		if (rc < NETWORK_BUFFER_SIZE) {
 			break;
 		}

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "la_error.h"
 #include "la_message.h"
 #include "la_database.h"
 
