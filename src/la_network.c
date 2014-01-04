@@ -4,6 +4,7 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <signal.h>
 #include "la_boolean.h"
 #include "la_message.h"
 #include "la_number.h"
@@ -133,6 +134,9 @@ void _network_open_client(NETWORK *self) {
 }
 
 void _network_open_server(NETWORK *self) {
+	/* ignore SIGPIPE */
+	signal(SIGPIPE, SIG_IGN);
+
 	/* create socket */
 	self->socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (self->socket == NETWORK_SOCKET_ERROR) {
