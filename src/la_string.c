@@ -381,6 +381,9 @@ namespace la {
 
 		std::string trim(const std::string &string) {
 			char *tmp = string_trim(string.c_str());
+			if (!tmp) {
+				return string();
+			}
 			std::string res = tmp;
 			free(tmp);
 
