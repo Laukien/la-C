@@ -2,16 +2,11 @@
  * =====================================================================================
  *
  *       Filename:  la_file.c
- *
- *    Description:  Input-/Output...file-operations
- *
- *        Version:  1.0
- *        Created:  11/11/2011 02:25:56 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *    Description:  I/O file operations
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */
@@ -19,6 +14,7 @@
 #include "la_file.h"
 #include "la_directory.h"
 #include "la_number.h"
+#include "la_string.h"
 #include "la_system.h"
 #ifdef SYSTEM_ARCH_64
 	#ifndef __USE_LARGEFILE64
@@ -31,6 +27,8 @@
 		#define _LARGEFILE64_SOURCE
 	#endif
 #endif
+#include <assert.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,6 +37,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+
+#define FILE_BUFFER_SIZE 1024
 
 BOOL file_exists(const char *filename) {
 /* 
@@ -161,6 +161,116 @@ LIST *file_list(const char *directoryname, BOOL recursive) {
 	return list;
 }
 
+char *file_extension(const char *filename) {
+	assert(filename);
+
+	char *sep = strrchr((char *)filename, '.');
+	if (!sep || sep == filename + strlen(filename) - 1) {
+		return NULL;
+	}
+
+	char *ext = string_trim(sep + 1);
+	
+	BOOL ok = string_isAlnum(ext);
+	if (!ok) {
+		free(ext);
+		return NULL;
+	}
+
+	return ext;
+}
+
+BOOL file_copy(const char *from, const char *to, FILE_PROCESS proc, EXCEPTION *e) {
+	assert(from);
+	assert(to);
+
+	/* open file to read */
+	int fd_r;
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	fd_r = open(from, O_RDONLY|O_BINARY);
+#else
+	fd_r = open(from, O_RDONLY);
+#endif
+	if (fd_r == -1) {
+		return FALSE;
+	}
+
+	/* open file to write */
+	int fd_w;
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	fd_w = open(to, O_WRONLY|O_CREAT|O_BINARY, 0644);
+#else
+	fd_w = open(to, O_WRONLY|O_CREAT, 0644);
+#endif
+	if (fd_w == -1) {
+		close(fd_r);
+		return FALSE;
+	}
+
+	/* get size */
+	size_t size = lseek(fd_r, 0L, SEEK_END);
+	lseek(fd_r, 0L, SEEK_SET);
+	size_t done = 0;
+
+	/* call process */
+	if (proc) {
+		proc(from, to, size, done);
+	}
+
+	/* copy */
+	char *buf[FILE_BUFFER_SIZE];
+	int rc;
+	while ((rc = read(fd_r, buf, FILE_BUFFER_SIZE))) {
+		if (rc < 0) {
+			close(fd_w);
+			close(fd_r);
+			return FALSE;
+		}
+		write(fd_w, buf, rc);
+
+		done += rc;
+
+		/* call process */
+		if (proc) {
+			proc(from, to, size, size);
+		}
+
+	}
+
+	/* close file descriptors */
+	close(fd_w);
+	close(fd_r);
+
+	return TRUE;
+}
+
+void FILE_PROCESS_SIMPLE(const char *from, const char *to, size_t size, size_t done) {
+	if (done == 0) {
+		printf ( "%s -> %s\n", from, to );
+	}
+}
+
+void FILE_PROCESS_DOT(const char *from, const char *to, size_t size, size_t done) {
+	if (done == 0) {
+		printf ( "%s -> %s ", from, to );
+	}
+
+	printf ( "." );
+	fflush(stdout);
+
+	if (done == size) {
+		printf ( "\n" );
+	}
+}
+
+void FILE_PROCESS_PERCENT(const char *from, const char *to, size_t size, size_t done) {
+	printf ( "\r%s -> %s: %3d%%", from, to, (int)(done * 100 / size) );
+	fflush(stdout);
+	if (done == size) {
+		printf ( "\n" );
+	}
+}
+
 #ifdef __cplusplus
 namespace la {
 	namespace file {
@@ -196,6 +306,22 @@ namespace la {
 			LIST *l = file_list(directoryname.c_str(), recursive);
 
 			return la::list(l);
+		}
+
+		std::string extension(const std::string &filename) {
+			char *tmp = file_extension(filename.c_str());
+			if (!tmp) {
+				return std::string();
+			}
+
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
+		bool copy(const std::string &from, const std::string &to, FILE_PROCESS proc) {
+			return file_copy(from.c_str(), to.c_str(), proc, NULL);
 		}
 	}
 }
