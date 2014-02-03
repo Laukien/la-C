@@ -2,19 +2,15 @@
  * =====================================================================================
  *
  *       Filename:  la_string.h
- *
- *    Description:  Header for la_string.c
- *
- *        Version:  1.0
- *        Created:  11/07/2011 01:20:09 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
+ *    Description:  common string operations
  *         Author:  Stephan Laukien
- *        Company:  
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */
+
 #ifndef LA_STRING_H
 #define LA_STRING_H
 
@@ -35,6 +31,17 @@ char *string_replaceFirst(const char *string, const char *from, const char *to);
 char *string_replace(const char *string, const char *from, const char *to);
 LIST *string_split(const char *string, const char *delimiters);
 BOOL string_isEmpty(const char *string);
+BOOL string_isAlnum(const char *str);
+BOOL string_isAlpha(const char *str);
+BOOL string_isCntrl(const char *str);
+BOOL string_isDigit(const char *str);
+BOOL string_isGraph(const char *str);
+BOOL string_isLower(const char *str);
+BOOL string_isPrint(const char *str);
+BOOL string_isPunct(const char *str);
+BOOL string_isSpace(const char *str);
+BOOL string_isUpper(const char *str);
+BOOL string_isXdigit(const char *str);
 char *string_loadFromFile(const char *filename);
 BOOL string_saveToFile(const char *filename, const char *str);
 #ifdef SYSTEM_OS_TYPE_LINUX
@@ -56,6 +63,17 @@ namespace la {
 		std::string replace(const std::string &string, const std::string &from, const std::string &to);
 		list split(const std::string &string, const std::string &delimiters);
 		bool isEmpty(const std::string &string);
+		bool isAlnum(const std::string &str);
+		bool isAlpha(const std::string &str);
+		bool isCntrl(const std::string &str);
+		bool isDigit(const std::string &str);
+		bool isGraph(const std::string &str);
+		bool isLower(const std::string &str);
+		bool isPrint(const std::string &str);
+		bool isPunct(const std::string &str);
+		bool isSpace(const std::string &str);
+		bool isUpper(const std::string &str);
+		bool isXDigit(const std::string &str);
 		std::string loadFromFile(const std::string &filename);
 		bool saveToFile(const std::string &filename, const std::string &string);
 	#ifdef SYSTEM_OS_TYPE_LINUX

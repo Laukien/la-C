@@ -1,17 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  la_string.h
- *
- *    Description:  common string-functions
- *
- *        Version:  1.0
- *        Created:  11/07/2011 01:10:06 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
+ *       Filename:  la_string.c
+ *    Description:  common string operations
  *         Author:  Stephan Laukien
- *        Company:  
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */
@@ -258,6 +253,105 @@ BOOL string_isEmpty(const char *string) {
 	return len == 0 ? TRUE : FALSE;
 }
 
+BOOL string_isAlnum(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isalnum(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isAlpha(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isalpha(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isCntrl(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!iscntrl(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isDigit(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isdigit(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isGraph(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isgraph(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isLower(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!islower(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isPrint(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isprint(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isPunct(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!ispunct(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isSpace(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isspace(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isUpper(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isupper(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
+BOOL string_isXdigit(const char *str) {
+	size_t i;
+	for (i = 0; i < strlen(str); ++i) {
+		if (!isxdigit(str[i])) return FALSE;
+	}
+
+	return TRUE;
+}
+
 char *string_loadFromFile(const char *filename) {
 	FILE *file;
 	file = fopen(filename, "r");
@@ -415,6 +509,40 @@ namespace la {
 
 		bool isEmpty(const std::string &string) {
 			return string_isEmpty(string.c_str());
+		}
+
+		bool isAlnum(const std::string &str) {
+			return string_isAlnum(str.c_str());
+		}
+		bool isAlpha(const std::string &str) {
+			return string_isAlpha(str.c_str());
+		}
+		bool isCntrl(const std::string &str) {
+			return string_isCntrl(str.c_str());
+		}
+		bool isDigit(const std::string &str) {
+			return string_isDigit(str.c_str());
+		}
+		bool isGraph(const std::string &str) {
+			return string_isGraph(str.c_str());
+		}
+		bool isLower(const std::string &str) {
+			return string_isLower(str.c_str());
+		}
+		bool isPrint(const std::string &str) {
+			return string_isPrint(str.c_str());
+		}
+		bool isPunct(const std::string &str) {
+			return string_isPunct(str.c_str());
+		}
+		bool isSpace(const std::string &str) {
+			return string_isSpace(str.c_str());
+		}
+		bool isUpper(const std::string &str) {
+			return string_isUpper(str.c_str());
+		}
+		bool isXDigit(const std::string &str) {
+			return string_isXdigit(str.c_str());
 		}
 
 		std::string loadFromFile(const std::string &filename) {
