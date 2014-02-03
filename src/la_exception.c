@@ -302,72 +302,88 @@ void exception_throw(EXCEPTION *self) {
 
 #ifdef __cplusplus
 namespace la {
-	exception::exception() {
-		this->obj = exception_new();
-	}
+	namespace exception {
+		Exception::Exception() {
+			this->obj = exception_new();
+		}
 
-	exception::~exception() {
-		exception_free(this->obj);
-	}
+		Exception::Exception(EXCEPTION *e) {
+			this->obj = e;
+		}
 
-	void exception::setShort(int id, const std::string &message) {
-		exception_setShort(this->obj, id, message.c_str());
-	}
+		Exception::Exception(int id, const std::string &message) {
+			this->obj = exception_new();
+			this->setShort(id, message);
+		}
 
-	void exception::setLong(int id, const std::string &message, const std::string &cause, const std::string &action) {
-		exception_setLong(this->obj, id, message.c_str(), (cause.empty() ? NULL : cause.c_str()), (action.empty() ? NULL : action.c_str()));
-	}
+		Exception::Exception(int id, const std::string &message, const std::string &cause, const std::string &action) {
+			this->obj = exception_new();
+			this->setLong(id, message, cause, action);
+		}
 
-	void exception::setId(int id) {
-		exception_setId(this->obj, id);
-	}
+		Exception::~Exception() {
+			exception_free(this->obj);
+		}
 
-	int exception::getId() {
-		return exception_getId(this->obj);
-	}
+		void Exception::setShort(int id, const std::string &message) {
+			exception_setShort(this->obj, id, message.c_str());
+		}
 
-	void exception::setMessage(std::string &txt) {
-		exception_setMessage(this->obj, txt.c_str());
-	}
+		void Exception::setLong(int id, const std::string &message, const std::string &cause, const std::string &action) {
+			exception_setLong(this->obj, id, message.c_str(), (cause.empty() ? NULL : cause.c_str()), (action.empty() ? NULL : action.c_str()));
+		}
 
-	std::string exception::getMessage() {
-		return std::string(exception_getMessage(this->obj));
-	}
+		void Exception::setId(int id) {
+			exception_setId(this->obj, id);
+		}
 
-	void exception::setCause(std::string &txt) {
-		exception_setCause(this->obj, txt.c_str());
-	}
+		int Exception::getId() {
+			return exception_getId(this->obj);
+		}
 
-	std::string exception::getCause() {
-		return std::string(exception_getCause(this->obj));
-	}
+		void Exception::setMessage(std::string &txt) {
+			exception_setMessage(this->obj, txt.c_str());
+		}
 
-	void exception::setAction(std::string &txt) {
-		exception_setAction(this->obj, txt.c_str());
-	}
+		std::string Exception::getMessage() {
+			return std::string(exception_getMessage(this->obj));
+		}
 
-	std::string exception::getAction() {
-		return std::string(exception_getAction(this->obj));
-	}
+		void Exception::setCause(std::string &txt) {
+			exception_setCause(this->obj, txt.c_str());
+		}
 
-	void exception::setComment(std::string &txt) {
-		exception_setComment(this->obj, txt.c_str());
-	}
+		std::string Exception::getCause() {
+			return std::string(exception_getCause(this->obj));
+		}
 
-	std::string exception::getComment() {
-		return std::string(exception_getComment(this->obj));
-	}
+		void Exception::setAction(std::string &txt) {
+			exception_setAction(this->obj, txt.c_str());
+		}
 
-	void exception::show() {
-		exception_show(this->obj);
-	}
+		std::string Exception::getAction() {
+			return std::string(exception_getAction(this->obj));
+		}
 
-	bool exception::exists() {
-		return exception_exists(this->obj);
-	}
+		void Exception::setComment(std::string &txt) {
+			exception_setComment(this->obj, txt.c_str());
+		}
 
-	void exception::reset() {
-		exception_reset(this->obj);
+		std::string Exception::getComment() {
+			return std::string(exception_getComment(this->obj));
+		}
+
+		void Exception::show() {
+			exception_show(this->obj);
+		}
+
+		bool Exception::exists() {
+			return exception_exists(this->obj);
+		}
+
+		void Exception::reset() {
+			exception_reset(this->obj);
+		}
 	}
 }
 #endif

@@ -100,47 +100,59 @@ char *network_getDataString(NETWORK *self);
 #include <string>
 
 namespace la {
-	class network {
-		private:
-			NETWORK *obj;
-		public:
-			network();
-			~network();
-			void setException(EXCEPTION *e);
-			void setAddress(const std::string &adr);
-			void setPort(NETWORK_PORT port);
-			void setTimeout(int timeout);
-			void setQueue(int queue);
-			void open();
-			bool isOpen();
-			void close();
-			void writeString(const std::string &str);
-			std::string readString();
-			void writeNumber(int num);
-			int readNumber();
-			void writeStatus(bool status);
-			bool readStatus();
-			void writeFile(const std::string &filename);
-			void readFile(const std::string &filename);
-			void writeData();
-			void readData();
+	namespace exception {
+		class NetworkException : public Exception {
+			public:
+				NetworkException() : Exception() {};
+				NetworkException(EXCEPTION *e) : Exception(e) {};
+				NetworkException(int id, const std::string &message) : Exception(id, message) {};
+				NetworkException(int id, const std::string &message, const std::string &cause, const std::string &action) : Exception(id, message, cause, action) {};
+		};
+	}
 
-			void callAccept(NETWORK_ACCEPT_CALLBACK callback, void *object);
-			NETWORK_SOCKET getAcceptSocket();
-			std::string getAcceptAddress();
-			NETWORK_PORT getAcceptPort();
-			bool isAccept();
+	namespace network {
+		class Network {
+			private:
+				NETWORK *obj;
+				EXCEPTION *err;
+			public:
+				Network();
+				~Network();
+				void setAddress(const std::string &adr);
+				void setPort(NETWORK_PORT port);
+				void setTimeout(int timeout);
+				void setQueue(int queue);
+				void open() throw(la::exception::NetworkException);
+				bool isOpen();
+				void close() throw(la::exception::NetworkException);
+				void writeString(const std::string &str) throw(la::exception::NetworkException);
+				std::string readString() throw(la::exception::NetworkException);
+				void writeNumber(int num) throw(la::exception::NetworkException);
+				int readNumber() throw(la::exception::NetworkException);
+				void writeStatus(bool status) throw(la::exception::NetworkException);
+				bool readStatus() throw(la::exception::NetworkException);
+				void writeFile(const std::string &filename) throw(la::exception::NetworkException);
+				void readFile(const std::string &filename) throw(la::exception::NetworkException);
+				void writeData() throw(la::exception::NetworkException);
+				void readData() throw(la::exception::NetworkException);
 
-			void initData();
-			void freeData();
-			void setDataLimit(size_t limit);
-			size_t getDataLimit();
-			size_t getDataSize();
-			void setDataBinary(const char *content, size_t size);
-			char *getDataBinary();
-			void setDataString(const std::string &content);
-			std::string getDataString();
-	};
+				void callAccept(NETWORK_ACCEPT_CALLBACK callback, void *object) throw(la::exception::NetworkException);
+				NETWORK_SOCKET getAcceptSocket();
+				std::string getAcceptAddress();
+				NETWORK_PORT getAcceptPort();
+				bool isAccept();
+
+				void initData();
+				void freeData();
+				void setDataLimit(size_t limit);
+				size_t getDataLimit();
+				size_t getDataSize();
+				void setDataBinary(const char *content, size_t size);
+				char *getDataBinary();
+				void setDataString(const std::string &content);
+				std::string getDataString();
+		};
+	}
 }
 #endif
 #endif

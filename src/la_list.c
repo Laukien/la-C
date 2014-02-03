@@ -358,68 +358,70 @@ int list_saveToFile(LIST *self, const char *filename) {
 
 #ifdef __cplusplus
 namespace la {
-	list::list() {
-		this->obj = list_new();
-	}
+	namespace list {
+		List::List() {
+			this->obj = list_new();
+		}
 
-	list::list(LIST *obj) {
-		this->obj = obj;
-	}
+		List::List(LIST *obj) {
+			this->obj = obj;
+		}
 
-	list::~list() {
-		list_free(this->obj);
-	}
+		List::~List() {
+			list_free(this->obj);
+		}
 
-	void list::add(const std::string &value) {
-		list_add(this->obj, value.c_str());
-	}
+		void List::add(const std::string &value) {
+			list_add(this->obj, value.c_str());
+		}
 
-	void list::addUnique(const std::string &value) {
-		list_addUnique(this->obj, value.c_str());
-	}
+		void List::addUnique(const std::string &value) {
+			list_addUnique(this->obj, value.c_str());
+		}
 
-	bool list::exists(const std::string &value) {
-		return list_exists(this->obj, value.c_str());
-	}
+		bool List::exists(const std::string &value) {
+			return list_exists(this->obj, value.c_str());
+		}
 
-	void list::remove(unsigned int index) {
-		list_remove(this->obj, index);
-	}
+		void List::remove(unsigned int index) {
+			list_remove(this->obj, index);
+		}
 
-	void list::swap(unsigned int index1, unsigned int index2) {
-		list_swap(this->obj, index1, index2);
-	}
+		void List::swap(unsigned int index1, unsigned int index2) {
+			list_swap(this->obj, index1, index2);
+		}
 
-	void list::sort() {
-		list_sort(this->obj);
-	}
+		void List::sort() {
+			list_sort(this->obj);
+		}
 
-	void list::reset() {
-		list_reset(this->obj);
-	}
+		void List::reset() {
+			list_reset(this->obj);
+		}
 
-	std::string list::get(unsigned int index) {
-		char *value = list_get(this->obj, index);
-		std::string res = std::string(value);
-		free(value);
+		std::string List::get(unsigned int index) {
+			char *value = list_get(this->obj, index);
+			std::string res = std::string(value);
+			free(value);
 
-		return res;
-	}
+			return res;
+		}
 
-	unsigned int list::size() {
-		return list_size(this->obj);
-	}
+		unsigned int List::size() {
+			return list_size(this->obj);
+		}
 
-	void list::show() {
-		list_show(this->obj);
-	}
+		void List::show() {
+			list_show(this->obj);
+		}
 
-	void list::loadFromFile(const std::string &filename) {
-		list_loadFromFile(this->obj, filename.c_str());
-	}
+		void List::loadFromFile(const std::string &filename) {
+			list_loadFromFile(this->obj, filename.c_str());
+		}
 
-	void list::saveToFile(const std::string &filename) {
-		list_saveToFile(this->obj, filename.c_str());
+		void List::saveToFile(const std::string &filename) {
+			list_saveToFile(this->obj, filename.c_str());
+		}
 	}
 }
 #endif

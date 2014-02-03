@@ -7,8 +7,11 @@ LIBDIR := lib
 PREFIX := /usr/local
 
 #CFLAGS += -O3
+#CFLAGS += -W
 CFLAGS += -Wall
 CFLAGS += -Werror
+#CFLAGS += -pedantic
+CFLAGS += -march=nocona -mtune=generic
 
 #WINDOWS
 ifdef WIN32
@@ -20,6 +23,7 @@ CFLAGS += -D__USE_MINGW_ANSI_STDIO=1
 ifdef WITH_CPP
 CC := i686-pc-mingw32-g++
 CFLAGS += -static-libgcc
+CFLAGS += -fexceptions
 ARNAME := $(NAME)++.$(VERSION).lib
 else
 CC := i686-pc-mingw32-gcc
@@ -34,6 +38,7 @@ AR := ar
 ARFLAGS := -rcs
 ifdef WITH_CPP
 CC := g++
+CFLAGS += -fexceptions
 ARNAME := lib$(NAME)++.$(VERSION).a
 ARNAME_MYSQL := lib$(NAME)++-mysql.$(VERSION).a
 ARNAME_POSTGRESQL := lib$(NAME)++-postgresql.$(VERSION).a
@@ -155,6 +160,7 @@ test:
 ifdef WITH_CPP
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/file_1$(EXT) example/file_1.cc $(LIBDIR)/$(ARNAME)
+	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/network_1$(EXT) example/network_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/string_1$(EXT) example/string_1.cc $(LIBDIR)/$(ARNAME)
 else
 ifndef WIN32

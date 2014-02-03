@@ -61,7 +61,7 @@ namespace la {
 		std::string trim(const std::string &string);
 		std::string replaceFirst(const std::string &string, const std::string &from, const std::string &to);
 		std::string replace(const std::string &string, const std::string &from, const std::string &to);
-		list split(const std::string &string, const std::string &delimiters);
+		list::List split(const std::string &string, const std::string &delimiters);
 		bool isEmpty(const std::string &string);
 		bool isAlnum(const std::string &str);
 		bool isAlpha(const std::string &str);

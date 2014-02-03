@@ -181,10 +181,10 @@ namespace la {
 			return tmp;
 		}
 
-		la::list list(const std::string &directoryname, bool recursive) {
+		list::List list(const std::string &directoryname, bool recursive) {
 			LIST *l = directory_list(directoryname.c_str(), recursive);
 
-			return la::list(l);
+			return la::list::List(l);
 		}
 	}
 }

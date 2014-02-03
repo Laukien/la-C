@@ -45,7 +45,7 @@ namespace la {
 		bool exists(const std::string &name);
 		std::string name(const std::string &filename);
 		std::string temp();
-		la::list list(const std::string &directoryname, bool recursive = true);
+		list::List list(const std::string &directoryname, bool recursive = true);
 	}
 }
 #endif

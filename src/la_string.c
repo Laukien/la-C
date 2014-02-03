@@ -500,9 +500,9 @@ namespace la {
 			return res;
 		}
 
-		list split(const std::string &string, const std::string &delimiters) {
+		list::List split(const std::string &string, const std::string &delimiters) {
 			LIST *l = string_split(string.c_str(), delimiters.c_str());
-			list res(l);
+			list::List res(l);
 
 			return res;
 		}

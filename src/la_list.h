@@ -19,6 +19,7 @@
 #include "la_boolean.h"
 
 #ifdef __cplusplus
+#include "la_exception.h"
 extern "C" {
 #endif
 
@@ -44,26 +45,38 @@ int list_saveToFile(LIST *self, const char *filename);
 #include <string>
 
 namespace la {
-	class list {
-		private:
-			LIST *obj;
-		public:
-			list();
-			list(LIST *obj);
-			~list();
-			void add(const std::string &value);
-			void addUnique(const std::string &value);
-			bool exists(const std::string &value);
-			void remove(unsigned int index);
-			void swap(unsigned int index1, unsigned int index2);
-			void sort();
-			void reset();
-			std::string get(unsigned int index);
-			unsigned int size();
-			void show();
-			void loadFromFile(const std::string &filename);
-			void saveToFile(const std::string &filename);
-	};
+	namespace exception {
+		class ListException : public Exception {
+			public:
+				ListException() : Exception() {};
+				ListException(EXCEPTION *e) : Exception(e) {};
+				ListException(int id, const std::string &message) : Exception(id, message) {};
+				ListException(int id, const std::string &message, const std::string &cause, const std::string &action) : Exception(id, message, cause, action) {};
+		};
+	}
+
+	namespace list {
+		class List {
+			private:
+				LIST *obj;
+			public:
+				List();
+				List(LIST *obj);
+				~List();
+				void add(const std::string &value);
+				void addUnique(const std::string &value);
+				bool exists(const std::string &value);
+				void remove(unsigned int index);
+				void swap(unsigned int index1, unsigned int index2);
+				void sort();
+				void reset();
+				std::string get(unsigned int index);
+				unsigned int size();
+				void show();
+				void loadFromFile(const std::string &filename);
+				void saveToFile(const std::string &filename);
+		};
+	}
 }
 #endif
 

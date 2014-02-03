@@ -883,152 +883,225 @@ char *network_getDataString(NETWORK *self) {
 
 #ifdef __cplusplus
 namespace la {
-	network::network() {
-		this->obj = network_new();
-	}
+	namespace network {
+		Network::Network() {
+			this->obj = network_new();
+			this->err = exception_new();
+			network_setException(this->obj, this->err);
+		}
 
-	network::~network() {
-		network_free(this->obj);
-	}
+		Network::~Network() {
+			network_free(this->obj);
+			exception_free(this->err);
+		}
 
-	void network::setException(EXCEPTION *e) {
-		network_setException(this->obj, e);
-	}
+		void Network::setAddress(const std::string &adr) {
+			network_setAddress(this->obj, adr.c_str());
+		}
 
-	void network::setAddress(const std::string &adr) {
-		network_setAddress(this->obj, adr.c_str());
-	}
+		void Network::setPort(NETWORK_PORT port) {
+			network_setPort(this->obj, port);
+		}
 
-	void network::setPort(NETWORK_PORT port) {
-		network_setPort(this->obj, port);
-	}
+		void Network::setTimeout(int timeout) {
+			network_setTimeout(this->obj, timeout);
+		}
 
-	void network::setTimeout(int timeout) {
-		network_setTimeout(this->obj, timeout);
-	}
+		void Network::setQueue(int queue) {
+			network_setQueue(this->obj, queue);
+		}
 
-	void network::setQueue(int queue) {
-		network_setQueue(this->obj, queue);
-	}
+		void Network::open() throw(la::exception::NetworkException) {
+			network_open(this->obj);
 
-	void network::open() {
-		network_open(this->obj);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	bool network::isOpen() {
-		return network_isOpen(this->obj);
-	}
+		bool Network::isOpen() {
+			return network_isOpen(this->obj);
+		}
 
-	void network::close() {
-		network_close(this->obj);
-	}
+		void Network::close() throw(la::exception::NetworkException) {
+			network_close(this->obj);
 
-	void network::writeString(const std::string &str) {
-		network_writeString(this->obj, str.c_str());
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	std::string network::readString() {
-		char *tmp = network_readString(this->obj);
-		std::string res = std::string(tmp);
-		free(tmp);
+		void Network::writeString(const std::string &str) throw(la::exception::NetworkException) {
+			network_writeString(this->obj, str.c_str());
 
-		return res;
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	void network::writeNumber(int num) {
-		return network_writeNumber(this->obj, num);
-	}
+		std::string Network::readString() throw(la::exception::NetworkException) {
+			char *tmp = network_readString(this->obj);
+			std::string res;
+			if (tmp) {
+				res = std::string(tmp);
+				free(tmp);
+			}
 
-	int network::readNumber() {
-		return network_readNumber(this->obj);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
 
-	void network::writeStatus(bool status) {
-		network_writeStatus(this->obj, status);
-	}
+			return res;
+		}
 
-	bool network::readStatus() {
-		return network_readStatus(this->obj);
-	}
+		void Network::writeNumber(int num) throw(la::exception::NetworkException) {
+			network_writeNumber(this->obj, num);
 
-	void network::writeFile(const std::string &filename) {
-		network_writeFile(this->obj, filename.c_str());
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	void network::readFile(const std::string &filename) {
-		network_readFile(this->obj, filename.c_str());
-	}
+		int Network::readNumber() throw(la::exception::NetworkException) {
+			int res =  network_readNumber(this->obj);
 
-	void network::writeData() {
-		network_writeData(this->obj);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
 
-	void network::readData() {
-		network_readData(this->obj);
-	}
+			return res;
+		}
 
-	void network::callAccept(NETWORK_ACCEPT_CALLBACK callback, void *object) {
-		network_callAccept(this->obj, callback, object);
-	}
+		void Network::writeStatus(bool status) throw(la::exception::NetworkException) {
+			network_writeStatus(this->obj, status);
 
-	NETWORK_SOCKET network::getAcceptSocket() {
-		return network_getAcceptSocket(this->obj);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	std::string network::getAcceptAddress() {
-		char *tmp = network_getAcceptAddress(this->obj);
-		std::string res = std::string(tmp);
-		free(tmp);
+		bool Network::readStatus() throw(la::exception::NetworkException) {
+			bool res = network_readStatus(this->obj);
 
-		return res;
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
 
-	NETWORK_PORT network::getAcceptPort() {
-		return network_getAcceptPort(this->obj);
-	}
+			return res;
+		}
 
-	bool network::isAccept() {
-		return network_isAccept(this->obj);
-	}
+		void Network::writeFile(const std::string &filename) throw(la::exception::NetworkException) {
+			network_writeFile(this->obj, filename.c_str());
 
-	void network::initData() {
-		return network_initData(this->obj);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	void network::freeData() {
-		return network_freeData(this->obj);
-	}
+		void Network::readFile(const std::string &filename) throw(la::exception::NetworkException) {
+			network_readFile(this->obj, filename.c_str());
 
-	void network::setDataLimit(size_t limit) {
-		return network_setDataLimit(this->obj, limit);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	size_t network::getDataLimit() {
-		return network_getDataLimit(this->obj);
-	}
+		void Network::writeData() throw(la::exception::NetworkException) {
+			network_writeData(this->obj);
 
-	size_t network::getDataSize() {
-		return network_getDataSize(this->obj);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	void network::setDataBinary(const char *content, size_t size) {
-		network_setDataBinary(this->obj, content, size);
-	}
+		void Network::readData() throw(la::exception::NetworkException) {
+			network_readData(this->obj);
 
-	char *network::getDataBinary() {
-		return network_getDataBinary(this->obj);
-	}
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-	void network::setDataString(const std::string &content) {
-		network_setDataString(this->obj, content.c_str());
-	}
+		void Network::callAccept(NETWORK_ACCEPT_CALLBACK callback, void *object) throw(la::exception::NetworkException) {
+			network_callAccept(this->obj, callback, object);
 
-	std::string network::getDataString() {
-		char *tmp = network_getDataString(this->obj);
-		std::string res = std::string(tmp);
-		free(tmp);
+			/* throw exception if there exists an exception */
+			if (exception_exists(this->err)) {
+				throw la::exception::NetworkException(this->err);
+			}
+		}
 
-		return res;
+		NETWORK_SOCKET Network::getAcceptSocket() {
+			return network_getAcceptSocket(this->obj);
+		}
+
+		std::string Network::getAcceptAddress() {
+			char *tmp = network_getAcceptAddress(this->obj);
+			std::string res = std::string(tmp);
+			free(tmp);
+
+			return res;
+		}
+
+		NETWORK_PORT Network::getAcceptPort() {
+			return network_getAcceptPort(this->obj);
+		}
+
+		bool Network::isAccept() {
+			return network_isAccept(this->obj);
+		}
+
+		void Network::initData() {
+			return network_initData(this->obj);
+		}
+
+		void Network::freeData() {
+			return network_freeData(this->obj);
+		}
+
+		void Network::setDataLimit(size_t limit) {
+			return network_setDataLimit(this->obj, limit);
+		}
+
+		size_t Network::getDataLimit() {
+			return network_getDataLimit(this->obj);
+		}
+
+		size_t Network::getDataSize() {
+			return network_getDataSize(this->obj);
+		}
+
+		void Network::setDataBinary(const char *content, size_t size) {
+			network_setDataBinary(this->obj, content, size);
+		}
+
+		char *Network::getDataBinary() {
+			return network_getDataBinary(this->obj);
+		}
+
+		void Network::setDataString(const std::string &content) {
+			network_setDataString(this->obj, content.c_str());
+		}
+
+		std::string Network::getDataString() {
+			char *tmp = network_getDataString(this->obj);
+			std::string res = std::string(tmp);
+			free(tmp);
+
+			return res;
+		}
 	}
 }
 #endif

@@ -382,97 +382,99 @@ int parameter_saveToFile(PARAMETER *param, const char *filename) {
 
 #ifdef __cplusplus
 namespace la {
-	parameter::parameter() {
-		this->obj = parameter_new();
-	}
+	namespace parameter {
+		Parameter::Parameter() {
+			this->obj = parameter_new();
+		}
 
-	parameter::parameter(PARAMETER *obj) {
-		this->obj = obj;
-	}
+		Parameter::Parameter(PARAMETER *obj) {
+			this->obj = obj;
+		}
 
-	parameter::~parameter() {
-		parameter_free(this->obj);
-	}
+		Parameter::~Parameter() {
+			parameter_free(this->obj);
+		}
 
-	void parameter::add(const std::string &key, const std::string &value) {
-		parameter_add(this->obj, key.c_str(), value.c_str());
-	}
+		void Parameter::add(const std::string &key, const std::string &value) {
+			parameter_add(this->obj, key.c_str(), value.c_str());
+		}
 
-	void parameter::remove(const std::string &key) {
-		parameter_remove(this->obj, key.c_str());
-	}
+		void Parameter::remove(const std::string &key) {
+			parameter_remove(this->obj, key.c_str());
+		}
 
-	void parameter::reset() {
-		parameter_reset(this->obj);
-	}
+		void Parameter::reset() {
+			parameter_reset(this->obj);
+		}
 
-	parameter parameter::getByIndex(unsigned int index) {
-		PARAMETER *p;
-		p = parameter_getByIndex(this->obj, index);
-		if (p == NULL)
-			return NULL;
+		Parameter Parameter::getByIndex(unsigned int index) {
+			PARAMETER *p;
+			p = parameter_getByIndex(this->obj, index);
+			if (p == NULL)
+				return NULL;
 
-		return parameter(p);
-	}
+			return Parameter(p);
+		}
 
-	std::string parameter::getKeyByIndex(unsigned int index) {
-		char *tmp = parameter_getKeyByIndex(this->obj, index);
-		if (tmp == NULL)
-			return std::string();
-		std::string res = std::string(tmp);
-		free(tmp);
+		std::string Parameter::getKeyByIndex(unsigned int index) {
+			char *tmp = parameter_getKeyByIndex(this->obj, index);
+			if (tmp == NULL)
+				return std::string();
+			std::string res = std::string(tmp);
+			free(tmp);
 
-		return res;
-	}
+			return res;
+		}
 
-	std::string parameter::getValueByIndex(unsigned int index) {
-		char *tmp = parameter_getValueByIndex(this->obj, index);
-		if (tmp == NULL)
-			return std::string();
-		std::string res = std::string(tmp);
-		free(tmp);
+		std::string Parameter::getValueByIndex(unsigned int index) {
+			char *tmp = parameter_getValueByIndex(this->obj, index);
+			if (tmp == NULL)
+				return std::string();
+			std::string res = std::string(tmp);
+			free(tmp);
 
-		return res;
-	}
+			return res;
+		}
 
-	unsigned int parameter::getIndexByKey(const std::string &key) {
-		return parameter_getIndexByKey(this->obj, key.c_str());
-	}
+		unsigned int Parameter::getIndexByKey(const std::string &key) {
+			return parameter_getIndexByKey(this->obj, key.c_str());
+		}
 
-	std::string parameter::getValueByKey(const std::string &key) {
-		char *tmp = parameter_getValueByKey(this->obj, key.c_str());
-		if (tmp == NULL)
-			return std::string();
-		std::string res = std::string(tmp);
-		free(tmp);
+		std::string Parameter::getValueByKey(const std::string &key) {
+			char *tmp = parameter_getValueByKey(this->obj, key.c_str());
+			if (tmp == NULL)
+				return std::string();
+			std::string res = std::string(tmp);
+			free(tmp);
 
-		return res;
-	}
+			return res;
+		}
 
-	std::string parameter::get(const std::string &key) {
-		char *tmp = parameter_get(this->obj, key.c_str());
-		if (tmp == NULL)
-			return std::string();
-		std::string res = std::string(tmp);
-		free(tmp);
+		std::string Parameter::get(const std::string &key) {
+			char *tmp = parameter_get(this->obj, key.c_str());
+			if (tmp == NULL)
+				return std::string();
+			std::string res = std::string(tmp);
+			free(tmp);
 
-		return res;
-	}
+			return res;
+		}
 
-	unsigned int parameter::size() {
-		return parameter_size(this->obj);
-	}
+		unsigned int Parameter::size() {
+			return parameter_size(this->obj);
+		}
 
-	void parameter::show() {
-		parameter_show(this->obj);
-	}
+		void Parameter::show() {
+			parameter_show(this->obj);
+		}
 
-	void parameter::loadFromFile(const std::string &filename) {
-		parameter_loadFromFile(this->obj, filename.c_str());
-	}
+		void Parameter::loadFromFile(const std::string &filename) {
+			parameter_loadFromFile(this->obj, filename.c_str());
+		}
 
-	void parameter::saveToFile(const std::string &filename) {
-		parameter_saveToFile(this->obj, filename.c_str());
+		void Parameter::saveToFile(const std::string &filename) {
+			parameter_saveToFile(this->obj, filename.c_str());
+		}
 	}
 }
 #endif

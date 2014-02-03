@@ -52,7 +52,7 @@ namespace la {
 		std::string name(const std::string &filename);
 		std::string temp();
 		size_t size(const std::string &filename);
-		la::list list(const std::string &directoryname, bool recursive = true);
+		list::List list(const std::string &directoryname, bool recursive = true);
 		std::string extension(const std::string &filename);
 		bool copy(const std::string &from, const std::string &to, FILE_PROCESS proc = NULL);
 	}

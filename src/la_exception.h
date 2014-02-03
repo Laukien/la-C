@@ -58,28 +58,33 @@ void exception_throw(EXCEPTION *e);
 #include <string>
 
 namespace la {
-	class exception {
-		private:
-			EXCEPTION *obj;
-		public:
-			exception();
-			~exception();
-			void setShort(int id, const std::string &message);
-			void setLong(int id, const std::string &message, const std::string &cause = "", const std::string &action = "");
-			void setId(int id);
-			int getId();
-			void setMessage(std::string &txt);
-			std::string getMessage();
-			void setCause(std::string &txt);
-			std::string getCause();
-			void setAction(std::string &txt);
-			std::string getAction();
-			void setComment(std::string &txt);
-			std::string getComment();
-			void show();
-			bool exists();
-			void reset();
-	};
+	namespace exception {
+		class Exception {
+			private:
+				EXCEPTION *obj;
+			public:
+				Exception();
+				Exception(EXCEPTION *e);
+				Exception(int id, const std::string &message);
+				Exception(int id, const std::string &message, const std::string &cause, const std::string &action);
+				~Exception();
+				void setShort(int id, const std::string &message);
+				void setLong(int id, const std::string &message, const std::string &cause = "", const std::string &action = "");
+				void setId(int id);
+				int getId();
+				void setMessage(std::string &txt);
+				std::string getMessage();
+				void setCause(std::string &txt);
+				std::string getCause();
+				void setAction(std::string &txt);
+				std::string getAction();
+				void setComment(std::string &txt);
+				std::string getComment();
+				void show();
+				bool exists();
+				void reset();
+		};
+	}
 }
 #endif
 

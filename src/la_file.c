@@ -302,10 +302,10 @@ namespace la {
 			return file_size(filename.c_str());
 		}
 
-		la::list list(const std::string &directoryname, bool recursive) {
+		list::List list(const std::string &directoryname, bool recursive) {
 			LIST *l = file_list(directoryname.c_str(), recursive);
 
-			return la::list(l);
+			return list::List(l);
 		}
 
 		std::string extension(const std::string &filename) {
