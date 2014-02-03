@@ -1,5 +1,5 @@
 NAME := la
-VERSION := 1.7.7
+VERSION := `cat VERSION`
 
 BINDIR := bin
 OBJDIR := obj
@@ -87,7 +87,6 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_exception.o src/la_exception.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_file.o src/la_file.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_list.o src/la_list.c
-	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_memory.o src/la_memory.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_message.o src/la_message.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_network.o src/la_network.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_number.o src/la_number.c
@@ -132,7 +131,6 @@ ifndef WIN32
 		src/la_exception.c\
 		src/la_file.c\
 		src/la_list.c\
-		src/la_memory.c\
 		src/la_message.c\
 		src/la_network.c\
 		src/la_number.c\
@@ -234,7 +232,6 @@ uninstall:
 	@echo === UNINSTALL ===
 	rm -f $(DESTDIR)$(PREFIX)/lib/libla.*
 	rm -f $(DESTDIR)$(PREFIX)/include/la_character.h
-	rm -f $(DESTDIR)$(PREFIX)/include/la_common.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_console.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_database.h
 ifdef WITH_POSTGRESQL
@@ -245,7 +242,6 @@ endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_exception.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_file.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_list.h
-	rm -f $(DESTDIR)$(PREFIX)/include/la_memory.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_network.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_number.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_parameter.h

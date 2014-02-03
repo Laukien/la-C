@@ -1,3 +1,16 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_database.c
+ *    Description:  common database interface
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
+ *
+ * =====================================================================================
+ */
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>

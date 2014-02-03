@@ -1,17 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  la_console.h
- *
- *    Description:  basic functions to control the console
- *
- *        Version:  1.0
- *        Created:  03/09/2012 07:29:24 AM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *       Filename:  la_console.c
+ *    Description:  basic console commands
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

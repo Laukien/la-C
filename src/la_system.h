@@ -2,16 +2,11 @@
  * =====================================================================================
  *
  *       Filename:  la_system.h
- *
- *    Description:  header with definitions the help to detect the system
- *
- *        Version:  1.0
- *        Created:  03/09/2012 09:36:10 AM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *    Description:  system specific functions
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

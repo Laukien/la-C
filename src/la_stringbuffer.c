@@ -1,17 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  la_stringbuffer.h
- *
- *    Description:  enhanced string-concat-functions
- *
- *        Version:  1.0
- *        Created:  04/09/2011 01:30:16 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
+ *       Filename:  la_stringbuffer.c
+ *    Description:  variable-length sequence of characters (strings)
  *         Author:  Stephan Laukien
- *        Company:  
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

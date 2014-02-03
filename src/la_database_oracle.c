@@ -1,3 +1,16 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_database_oracle.c
+ *    Description:  Oracle wrapper
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
+ *
+ * =====================================================================================
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>

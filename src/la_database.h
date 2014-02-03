@@ -1,3 +1,16 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_database.h
+ *    Description:  common database interface
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
+ *
+ * =====================================================================================
+ */
+
 #ifndef LA_DATABASE_H
 #define LA_DATABASE_H
 

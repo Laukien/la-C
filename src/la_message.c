@@ -1,3 +1,16 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_message.c
+ *    Description:  central messaging functions
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
+ *
+ * =====================================================================================
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

@@ -1,24 +1,18 @@
 /*
  * =====================================================================================
  *
- *       Filename:  la_string.h
- *
- *    Description:  Header for la_stringbuffer.c
- *
- *        Version:  1.0
- *        Created:  04/09/2011 01:30:29 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
+ *       Filename:  la_stringbuffer.h
+ *    Description:  variable-length sequence of characters (strings)
  *         Author:  Stephan Laukien
- *        Company:  
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */
+
 #ifndef LA_STRINGBUFFER_H
 #define LA_STRINGBUFFER_H
-
-#include "la_common.h"
 
 #ifdef __cplusplus
 extern "C" {

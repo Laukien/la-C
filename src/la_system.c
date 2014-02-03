@@ -2,16 +2,11 @@
  * =====================================================================================
  *
  *       Filename:  la_system.c
- *
- *    Description:  system-check
- *
- *        Version:  1.0
- *        Created:  03/09/2012 10:01:41 AM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *    Description:  system specific functions
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

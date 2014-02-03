@@ -2,16 +2,11 @@
  * =====================================================================================
  *
  *       Filename:  la_datetime.h
- *
- *    Description:  header for la_datetime.c
- *
- *        Version:  1.0
- *        Created:  10/11/2011 01:20:09 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
+ *    Description:  date & time functions
  *         Author:  Stephan Laukien
- *        Company:  
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

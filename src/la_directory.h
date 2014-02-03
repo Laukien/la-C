@@ -2,16 +2,11 @@
  * =====================================================================================
  *
  *       Filename:  la_directory.h
- *
- *    Description:  header for la_directory.c
- *
- *        Version:  1.0
- *        Created:  11/11/2011 02:26:29 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *    Description:  I/O directory operations
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

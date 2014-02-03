@@ -1,3 +1,16 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_database_mysql.c
+ *    Description:  MySQL wrapper
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
+ *
+ * =====================================================================================
+ */
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>

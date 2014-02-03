@@ -2,16 +2,11 @@
  * =====================================================================================
  *
  *       Filename:  la_parameter.c
- *
- *    Description:  store for all parameters
- *
- *        Version:  1.0
- *        Created:  11/14/2011 10:25:55 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *    Description:  handle (string) objects in a linked map
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

@@ -2,16 +2,11 @@
  * =====================================================================================
  *
  *       Filename:  la_character.h
- *
- *    Description:  Header for la_character.c
- *
- *        Version:  1.0
- *        Created:  11/06/2012 12:35:34 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *    Description:  character functions
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

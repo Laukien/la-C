@@ -1,3 +1,15 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_boolean.c
+ *    Description:  boolean values
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
+ *
+ * =====================================================================================
+ */
 #ifndef __cplusplus
 #include <stdlib.h>
 #include <string.h>

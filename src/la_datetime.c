@@ -1,17 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  la_datetime.h
- *
- *    Description:  common date-/time-functions
- *
- *        Version:  1.0
- *        Created:  10/11/2011 01:10:06 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
+ *       Filename:  la_datetime.c
+ *    Description:  date & time functions
  *         Author:  Stephan Laukien
- *        Company:  
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */

@@ -1,3 +1,16 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  la_network.c
+ *    Description:  basic network communication functions
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
+ *
+ * =====================================================================================
+ */
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,6 +22,7 @@
 #include "la_message.h"
 #include "la_number.h"
 #include "la_string.h"
+#include "la_system.h"
 #include "la_network.h"
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 	#undef BOOL
@@ -135,7 +149,9 @@ void _network_open_client(NETWORK *self) {
 
 void _network_open_server(NETWORK *self) {
 	/* ignore SIGPIPE */
+#ifdef SYSTEM_OS_TYPE_UNIX
 	signal(SIGPIPE, SIG_IGN);
+#endif
 
 	/* create socket */
 	self->socket = socket(AF_INET, SOCK_STREAM, 0);

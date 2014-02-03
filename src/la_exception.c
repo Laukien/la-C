@@ -1,17 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  exception.c
- *
- *    Description:  Exception handeling
- *
- *        Version:  1.0
- *        Created:  07/01/2012 06:39:39 PM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  Stephan Laukien (slaukien), software@laukien.com
- *        Company:  
+ *       Filename:  la_exception.c
+ *    Description:  exception handling
+ *         Author:  Stephan Laukien
+ *          Email:  software@laukien.com
+ *        License:  Simplified BSD License
+ *      Copyright:  (c) 2011-2014
  *
  * =====================================================================================
  */
