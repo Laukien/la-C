@@ -388,6 +388,7 @@ namespace la {
 		}
 
 		Parameter::Parameter(PARAMETER *obj) {
+			parameter_free(this->obj);
 			this->obj = obj;
 		}
 
