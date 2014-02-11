@@ -300,7 +300,7 @@ void parameter_show(PARAMETER *self) {
 	for (i = 0; i < parameter_size(self); ++i) {
 		param = parameter_getByIndex(self, i);
 		printf ( "%s = %s\n", param->key, param->value );
-		free(param);
+		parameter_free(param);
 	}
 }
 

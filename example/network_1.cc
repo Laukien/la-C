@@ -16,18 +16,21 @@ int main() {
 	net.setAddress(host);
 	net.setPort(80);
 	net.setTimeout(5);
-	net.open();
-	net.writeString("GET /wiki/" + word + " HTTP/1.1");
-	net.writeString("Host: " + host);
-	net.writeString("User-Agent: ELinks/0.12pre5 (textmode; Linux; 167x55-2)");
-	net.writeString("Accept: */*");
-	net.writeString("Connection: Keep-Alive");
-	net.writeString("Accept-Language: en");
-	net.writeString("");
+	try {
+		net.open();
+		net.writeString("GET /wiki/" + word + " HTTP/1.1");
+		net.writeString("Host: " + host);
+		net.writeString("User-Agent: ELinks/0.12pre5 (textmode; Linux; 167x55-2)");
+		net.writeString("Accept: */*");
+		net.writeString("Connection: Keep-Alive");
+		net.writeString("Accept-Language: en");
+		net.writeString("");
 
-	string page = net.readString();
+		string page = net.readString();
+        cout << page << endl;                   /* show result */
 
-	cout << page << endl;                       /* show result */
-
-	net.close();
+		net.close();
+	} catch(la::exception::NetworkException &e) {
+		cerr << "ERROR: " << e.getMessage() <<  endl;
+	}
 }

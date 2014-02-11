@@ -161,6 +161,7 @@ ifdef WITH_CPP
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/file_1$(EXT) example/file_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/network_1$(EXT) example/network_1.cc $(LIBDIR)/$(ARNAME)
+	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/parameter_1$(EXT) example/parameter_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/string_1$(EXT) example/string_1.cc $(LIBDIR)/$(ARNAME)
 else
 ifndef WIN32

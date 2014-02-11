@@ -84,7 +84,9 @@ void _network_error(NETWORK *self, int id, const char *message, const char *caus
 #endif
 		exception_setLong(self->exception, id, message, internal, action);
 		free(internal);
+#ifndef __cplusplus
 		exception_throw(self->exception);
+#endif
 	} else {
 		char *num = number_integerToString(id);
 		char *str = (char *) malloc(strlen(message) + 2 + strlen(num) + 1 + 1);
@@ -891,8 +893,8 @@ namespace la {
 		}
 
 		Network::~Network() {
-			network_free(this->obj);
 			exception_free(this->err);
+			network_free(this->obj);
 		}
 
 		void Network::setAddress(const std::string &adr) {
