@@ -11,6 +11,7 @@
  * =====================================================================================
  */
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,6 +26,8 @@ struct la_parameter {
 };
 
 PARAMETER *parameter_getNode (PARAMETER *self, unsigned int index) {
+	assert(self);
+
 	PARAMETER *node = self;
 	if (self->next == NULL) return NULL;       /* check if parameter-set is empty */
 
@@ -54,7 +57,9 @@ PARAMETER *parameter_new () {
 	return param;
 }
 
-void parameter_add (PARAMETER *param, const char *key, const char *value) {
+void parameter_add (PARAMETER *self, const char *key, const char *value) {
+	assert(self);
+
 	PARAMETER *node = (PARAMETER*) malloc (sizeof(PARAMETER) );
 	if ( node==NULL ) {
 		fprintf ( stderr, "\ndynamic memory allocation failed\n" );
@@ -81,17 +86,43 @@ void parameter_add (PARAMETER *param, const char *key, const char *value) {
 	strcpy(node->value, value);
 
 	/* set pointer */
-	unsigned int size = parameter_size(param);
+	unsigned int size = parameter_size(self);
 	if ( size == 0) {
-		node->next = param->next;
-		param->next = node;
+		node->next = self->next;
+		self->next = node;
 	} else {
-		PARAMETER *last = parameter_getNode(param, size - 1);
+		PARAMETER *last = parameter_getNode(self, size - 1);
 		last->next = node;
 	}
 }
 
+void parameter_addUnique(PARAMETER *self, const char *key, const char *value) {
+	assert(self);
+
+	if (!parameter_exists(self, key))
+		parameter_add(self, key, value);
+}
+
+BOOL parameter_exists(PARAMETER *self, const char *key) {
+	assert(self);
+
+	PARAMETER *node = self;
+	if (self->next == NULL)
+		return FALSE;
+
+	do {
+		node = node->next;
+
+		if (strcmp(key, node->key) == 0)
+			return TRUE;
+	} while (node->next != NULL);
+
+	return FALSE;
+}
+
 void parameter_remove (PARAMETER *self, const char *key) {
+	assert(self);
+
 	PARAMETER *nodeSelf, *nodePrev, *nodeNext;
 	unsigned int index = parameter_getIndexByKey(self, key);
 
@@ -127,6 +158,8 @@ void parameter_remove (PARAMETER *self, const char *key) {
 }
 
 PARAMETER *parameter_getByIndex (PARAMETER *self, unsigned int index) {
+	assert(self);
+
 	PARAMETER *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
@@ -156,6 +189,8 @@ PARAMETER *parameter_getByIndex (PARAMETER *self, unsigned int index) {
 }
 
 char *parameter_getKeyByIndex (PARAMETER *self, unsigned int index) {
+	assert(self);
+
 	PARAMETER *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
@@ -176,6 +211,8 @@ char *parameter_getKeyByIndex (PARAMETER *self, unsigned int index) {
 }
 
 char *parameter_getValueByIndex (PARAMETER *self, unsigned int index) {
+	assert(self);
+
 	PARAMETER *node = self;
 	if (self->next == NULL) return NULL;       /* check if list-set is empty */
 
@@ -196,6 +233,8 @@ char *parameter_getValueByIndex (PARAMETER *self, unsigned int index) {
 }
 
 unsigned int parameter_getIndexByKey (PARAMETER *self, const char *key) {
+	assert(self);
+
 	PARAMETER *node = self;
     if (self->next == NULL) return 0;           /* check if list-set is empty */
 
@@ -211,9 +250,11 @@ unsigned int parameter_getIndexByKey (PARAMETER *self, const char *key) {
 	return 0;
 }
 
-char *parameter_getValueByKey (PARAMETER *param, const char *key) {
-	PARAMETER *node = param;
-	if (param->next == NULL) return NULL;       /* check if parameter-set is empty */
+char *parameter_getValueByKey (PARAMETER *self, const char *key) {
+	assert(self);
+
+	PARAMETER *node = self;
+	if (self->next == NULL) return NULL;       /* check if parameter-set is empty */
 
 	do {
 		node = node->next;
@@ -230,14 +271,18 @@ char *parameter_getValueByKey (PARAMETER *param, const char *key) {
 	return NULL;
 }
 
-char *parameter_get (PARAMETER *param, const char *key) {
-	return parameter_getValueByKey(param, key);
+char *parameter_get (PARAMETER *self, const char *key) {
+	assert(self);
+
+	return parameter_getValueByKey(self, key);
 }
 
-unsigned int parameter_size (PARAMETER *param) {
-	if ( param->next == NULL) return 0;
+unsigned int parameter_size (PARAMETER *self) {
+	assert(self);
 
-	PARAMETER *node = param;
+	if ( self->next == NULL) return 0;
+
+	PARAMETER *node = self;
 	unsigned int count = 0;
 
 	do {
@@ -250,11 +295,13 @@ unsigned int parameter_size (PARAMETER *param) {
 }
 
 
-void parameter_free (PARAMETER *param) {
+void parameter_free (PARAMETER *self) {
+	assert(self);
+
 	PARAMETER *node;
 	PARAMETER *next;
 
-	node = param;                               /* get the first parameter */
+	node = self;                               /* get the first parameter */
 	while (node->next != NULL) {
 		next = node->next;
 //		node->next=NULL;
@@ -270,11 +317,13 @@ void parameter_free (PARAMETER *param) {
 	node = NULL;
 }
 
-void parameter_reset (PARAMETER *param) {
+void parameter_reset (PARAMETER *self) {
+	assert(self);
+
 	PARAMETER *node;
 	PARAMETER *next;
 
-	node = param->next;                         /* get the next parameter */
+	node = self->next;                         /* get the next parameter */
 	if (node == NULL) return;
 
 	while (node->next != NULL) {
@@ -291,10 +340,12 @@ void parameter_reset (PARAMETER *param) {
 	free(node);
 	node = NULL;
 
-	param->next = NULL;
+	self->next = NULL;
 }
 
 void parameter_show(PARAMETER *self) {
+	assert(self);
+
 	unsigned int i;
 	PARAMETER *param;
 	for (i = 0; i < parameter_size(self); ++i) {
@@ -304,8 +355,10 @@ void parameter_show(PARAMETER *self) {
 	}
 }
 
-int parameter_loadFromFile(PARAMETER *param, const char *filename) {
-	parameter_reset(param);
+int parameter_loadFromFile(PARAMETER *self, const char *filename) {
+	assert(self);
+
+	parameter_reset(self);
 
 	FILE *file;
 	file = fopen(filename, "r");
@@ -344,7 +397,7 @@ int parameter_loadFromFile(PARAMETER *param, const char *filename) {
 			continue;
 		}
 
-		parameter_add(param, key, value);
+		parameter_add(self, key, value);
 		++count;
 
 		free(value);
@@ -356,11 +409,13 @@ int parameter_loadFromFile(PARAMETER *param, const char *filename) {
 	return count;
 }
 
-int parameter_saveToFile(PARAMETER *param, const char *filename) {
-	if (param->next == NULL) return 0;          /* no parameters to save */
+int parameter_saveToFile(PARAMETER *self, const char *filename) {
+	assert(self);
+
+	if (self->next == NULL) return 0;          /* no parameters to save */
 
 	PARAMETER *node;
-	node = param;
+	node = self;
 
 	unsigned int count = 0;
 	FILE *file;
@@ -398,6 +453,14 @@ namespace la {
 
 		void Parameter::add(const std::string &key, const std::string &value) {
 			parameter_add(this->obj, key.c_str(), value.c_str());
+		}
+
+		void Parameter::addUnique(const std::string &key, const std::string &value) {
+			parameter_addUnique(this->obj, key.c_str(), value.c_str());
+		}
+
+		void Parameter::exists(const std::string &key) {
+			parameter_exists(this->obj, key.c_str());
 		}
 
 		void Parameter::remove(const std::string &key) {

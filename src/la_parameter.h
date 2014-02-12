@@ -17,21 +17,25 @@
 #define PARAMETER_KEY_SIZE 128
 #define PARAMETER_VALUE_SIZE 2048
 
-#ifdef __cplusplus
+#include "la_boolean.h"
 #include "la_exception.h"
+
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct la_parameter PARAMETER;
 
 PARAMETER *parameter_new();
-void parameter_add (PARAMETER *param, const char *key, const char *value);
-void parameter_remove (PARAMETER *param, const char *key);
-void parameter_free (PARAMETER *param);
-void parameter_reset (PARAMETER *param);
-PARAMETER *parameter_getByIndex (PARAMETER *param, unsigned int index);
-char *parameter_getKeyByIndex (PARAMETER *param, unsigned int index);
-char *parameter_getValueByIndex (PARAMETER *param, unsigned int index);
+void parameter_add(PARAMETER *self, const char *key, const char *value);
+void parameter_addUnique(PARAMETER *self, const char *key, const char *value);
+BOOL parameter_exists(PARAMETER *self, const char *key);
+void parameter_remove(PARAMETER *self, const char *key);
+void parameter_free(PARAMETER *self);
+void parameter_reset(PARAMETER *self);
+PARAMETER *parameter_getByIndex(PARAMETER *self, unsigned int index);
+char *parameter_getKeyByIndex(PARAMETER *self, unsigned int index);
+char *parameter_getValueByIndex(PARAMETER *self, unsigned int index);
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -41,8 +45,8 @@ char *parameter_getValueByIndex (PARAMETER *param, unsigned int index);
  */
 unsigned int parameter_getIndexByKey (PARAMETER *self, const char *key);
 char *parameter_getValueByKey(PARAMETER *param, const char *key);
-char *parameter_get (PARAMETER *param, const char *key);
-unsigned int parameter_size (PARAMETER *param);
+char *parameter_get(PARAMETER *self, const char *key);
+unsigned int parameter_size(PARAMETER *self);
 void parameter_show(PARAMETER *self);
 int parameter_loadFromFile(PARAMETER *param, const char *filename);
 int parameter_saveToFile(PARAMETER *param, const char *filename);
@@ -71,6 +75,8 @@ namespace la {
 				Parameter(PARAMETER *obj);
 				~Parameter();
 				void add(const std::string &key, const std::string &value);
+				void addUnique(const std::string &key, const std::string &value);
+				void exists(const std::string &key);
 				void remove(const std::string &key);
 				void reset();
 				Parameter getByIndex(unsigned int index);
