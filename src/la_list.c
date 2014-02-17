@@ -364,7 +364,7 @@ namespace la {
 		}
 
 		List::List(LIST *obj) {
-			list_free(this->obj);
+//			list_free(this->obj);
 			this->obj = obj;
 		}
 
