@@ -30,7 +30,7 @@ PARAMETER *parameter_new();
 void parameter_add(PARAMETER *self, const char *key, const char *value);
 void parameter_addUnique(PARAMETER *self, const char *key, const char *value);
 void parameter_addReplace(PARAMETER *self, const char *key, const char *value);
-void parameter_addArgument(PARAMETER *self, int argc, char *argv[]);
+BOOL parameter_addArgument(PARAMETER *self, int argc, char *argv[]);
 BOOL parameter_exists(PARAMETER *self, const char *key);
 void parameter_remove(PARAMETER *self, const char *key);
 void parameter_free(PARAMETER *self);
@@ -38,13 +38,6 @@ void parameter_reset(PARAMETER *self);
 PARAMETER *parameter_getByIndex(PARAMETER *self, unsigned int index);
 char *parameter_getKeyByIndex(PARAMETER *self, unsigned int index);
 char *parameter_getValueByIndex(PARAMETER *self, unsigned int index);
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  parameter_getIndexByKey
- *  Description:  return index of the element; otherwise '0' if the exlement doesn't exists
- * =====================================================================================
- */
 unsigned int parameter_getIndexByKey (PARAMETER *self, const char *key);
 char *parameter_getValueByKey(PARAMETER *param, const char *key);
 char *parameter_get(PARAMETER *self, const char *key);
@@ -79,7 +72,7 @@ namespace la {
 				void add(const std::string &key, const std::string &value);
 				void addUnique(const std::string &key, const std::string &value);
 				void addReplace(const std::string &key, const std::string &value);
-				void addArgument(int argc, char *argv[]);
+				BOOL addArgument(int argc, char *argv[]);
 				void exists(const std::string &key);
 				void remove(const std::string &key);
 				void reset();

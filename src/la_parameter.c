@@ -15,9 +15,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "la_parameter.h"
+#include "la_file.h"
 #include "la_string.h"
+#include "la_parameter.h"
 
 struct la_parameter {
 	char *key;
@@ -113,9 +113,9 @@ void parameter_addReplace(PARAMETER *self, const char *key, const char *value) {
 	parameter_add(self, key, value);
 }
 
-void parameter_addArgument(PARAMETER *self, int argc, char *argv[]) {
+BOOL parameter_addArgument(PARAMETER *self, int argc, char *argv[]) {
 	if (argc <= 1) {
-		return;
+		return TRUE;
 	}
 
 	unsigned int i;
@@ -131,9 +131,14 @@ void parameter_addArgument(PARAMETER *self, int argc, char *argv[]) {
 			free(value);
 			free(key);
 		} else {
+			if (!file_exists(argv[i])) {
+				return FALSE;
+			}
 			parameter_loadFromFile(self, argv[i]);
 		}
 	}
+
+	return TRUE;
 }
 
 BOOL parameter_exists(PARAMETER *self, const char *key) {
