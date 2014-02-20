@@ -72,7 +72,7 @@ namespace la {
 				void add(const std::string &key, const std::string &value);
 				void addUnique(const std::string &key, const std::string &value);
 				void addReplace(const std::string &key, const std::string &value);
-				BOOL addArgument(int argc, char *argv[]);
+				bool addArgument(int argc, char *argv[]);
 				void exists(const std::string &key);
 				void remove(const std::string &key);
 				void reset();

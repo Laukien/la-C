@@ -24,7 +24,7 @@ char *string_toLower(const char *string) {
 	size_t len = strlen(string);	
 
 	char *result = (char *)malloc (len + 1);
-	int i;
+	size_t i;
 	for (i = 0; i < len; ++i) {
 		result[i] = tolower(string[i]);
 	}
@@ -37,7 +37,7 @@ char *string_toUpper(const char *string) {
 	size_t len = strlen(string);	
 
 	char *result = (char *)malloc (len + 1);
-	int i;
+	size_t i;
 	for (i = 0; i <= len; ++i) {
 		result[i] = toupper(string[i]);
 	}
