@@ -48,6 +48,7 @@ struct la_network {
 	int port;
 	int timeout;
 	int queue;
+	BOOL cancel;
 };
 
 struct la_network_accept {
@@ -215,6 +216,7 @@ NETWORK *network_new() {
 	self->accept = NULL;
 	self->timeout = 10;
 	self->queue = 3;
+	self->cancel = FALSE;
 
 	return self;
 }
@@ -311,6 +313,12 @@ void network_open(NETWORK *self) {
 
 }
 
+BOOL network_isOpen(NETWORK *self) {
+	assert(self);
+
+	return self->connect;
+}
+
 void network_close(NETWORK *self) {
 	assert(self);
 	assert(self->socket);
@@ -331,10 +339,8 @@ void network_close(NETWORK *self) {
 	self->connect = FALSE;
 }
 
-BOOL network_isOpen(NETWORK *self) {
-	assert(self);
-
-	return self->connect;
+void network_cancel(NETWORK *self) {
+	self->cancel = TRUE;
 }
 
 void network_writeString(NETWORK *self, const char *str) {
@@ -645,7 +651,7 @@ void network_callAccept(NETWORK *self, NETWORK_ACCEPT_CALLBACK callback, void *o
 	struct sockaddr_in client_address;
 	socklen_t client_length;
 
-	while (1) {
+	while (!self->cancel) {
 		client_length = sizeof(client_address);
 		client_socket = accept(self->socket, (struct sockaddr *)&client_address, &client_length);
 		if (client_socket == NETWORK_SOCKET_ERROR) {
@@ -933,6 +939,10 @@ namespace la {
 			if (exception_exists(this->err)) {
 				throw la::exception::NetworkException(this->err);
 			}
+		}
+
+		void Network::cancel() {
+			network_cancel(this->obj);
 		}
 
 		void Network::writeString(const std::string &str) throw(la::exception::NetworkException) {

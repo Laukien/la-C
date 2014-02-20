@@ -67,6 +67,7 @@ void network_setQueue(NETWORK *self, int queue);
 void network_open(NETWORK *self);
 BOOL network_isOpen(NETWORK *self);
 void network_close(NETWORK *self);
+void network_cancel(NETWORK *self);
 void network_writeString(NETWORK *self, const char *str);
 char *network_readString(NETWORK *self);
 void network_writeNumber(NETWORK *self, int num);
@@ -125,6 +126,7 @@ namespace la {
 				void open() throw(la::exception::NetworkException);
 				bool isOpen();
 				void close() throw(la::exception::NetworkException);
+				void cancel();
 				void writeString(const std::string &str) throw(la::exception::NetworkException);
 				std::string readString() throw(la::exception::NetworkException);
 				void writeNumber(int num) throw(la::exception::NetworkException);
