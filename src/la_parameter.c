@@ -113,6 +113,29 @@ void parameter_addReplace(PARAMETER *self, const char *key, const char *value) {
 	parameter_add(self, key, value);
 }
 
+void parameter_addArgument(PARAMETER *self, int argc, char *argv[]) {
+	if (argc <= 1) {
+		return;
+	}
+
+	unsigned int i;
+	const char *sep;
+	for (i = 1; i < argc; ++i) {
+		sep = strchr(argv[i], '=');
+		if (sep) {
+			char *key = (char *)malloc (sep - argv[i] + 1);
+			memcpy(key, argv[i], sep-argv[i]);
+			key[sep - argv[i]] = '\0';
+			char *value = strdup(sep + 1);
+			parameter_addReplace(self, key, value);
+			free(value);
+			free(key);
+		} else {
+			parameter_loadFromFile(self, argv[i]);
+		}
+	}
+}
+
 BOOL parameter_exists(PARAMETER *self, const char *key) {
 	assert(self);
 
@@ -471,6 +494,10 @@ namespace la {
 
 		void Parameter::addReplace(const std::string &key, const std::string &value) {
 			parameter_addReplace(this->obj, key.c_str(), value.c_str());
+		}
+
+		void Parameter::addArgument(int argc, char *argv[]) {
+			parameter_addArgument(this->obj, argc, argv);
 		}
 
 		void Parameter::exists(const std::string &key) {
