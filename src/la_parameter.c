@@ -118,7 +118,7 @@ BOOL parameter_addArgument(PARAMETER *self, int argc, char *argv[]) {
 		return TRUE;
 	}
 
-	unsigned int i;
+	int i;
 	const char *sep;
 	for (i = 1; i < argc; ++i) {
 		sep = strchr(argv[i], '=');
@@ -501,8 +501,8 @@ namespace la {
 			parameter_addReplace(this->obj, key.c_str(), value.c_str());
 		}
 
-		void Parameter::addArgument(int argc, char *argv[]) {
-			parameter_addArgument(this->obj, argc, argv);
+		bool Parameter::addArgument(int argc, char *argv[]) {
+			return parameter_addArgument(this->obj, argc, argv);
 		}
 
 		void Parameter::exists(const std::string &key) {
