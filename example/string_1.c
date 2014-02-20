@@ -1,6 +1,6 @@
-#include "la_string.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "la_string.h"
 
 int main(void) {
 	char *hex = string_toHex("abcABCxyzXYZ");

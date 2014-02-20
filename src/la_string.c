@@ -21,20 +21,11 @@
 #include <assert.h>
 
 char *string_toLower(const char *string) {
-	int len = strlen(string);	
+	size_t len = strlen(string);	
 
 	char *result = (char *)malloc (len + 1);
-	if ( result==NULL ) {
-#ifdef SYSTEM_OS_TYPE_UNIX
-		fprintf ( stderr, "\ndynamic memory allocation failed (string_toLower)\n" );
-#else
-		fprintf ( stdout, "\ndynamic memory allocation failed (string_toLower)\n" );
-#endif
-		exit (EXIT_FAILURE);
-	}
-
 	int i;
-	for ( i = 0; i < len; ++i ) {
+	for (i = 0; i < len; ++i) {
 		result[i] = tolower(string[i]);
 	}
 	result[len] = '\0';
@@ -43,23 +34,41 @@ char *string_toLower(const char *string) {
 }
 
 char *string_toUpper(const char *string) {
-	int len = strlen(string);	
+	size_t len = strlen(string);	
 
 	char *result = (char *)malloc (len + 1);
-	if ( result==NULL ) {
-#ifdef SYSTEM_OS_TYPE_UNIX
-		fprintf ( stderr, "\ndynamic memory allocation failed (string_toUpper)\n" );
-#else
-		fprintf ( stdout, "\ndynamic memory allocation failed (string_toUpper)\n" );
-#endif
-		exit (EXIT_FAILURE);
-	}
-
 	int i;
-	for ( i = 0; i <= len; ++i ) {
+	for (i = 0; i <= len; ++i) {
 		result[i] = toupper(string[i]);
 	}
 	result[len] = '\0';
+
+	return result;
+}
+
+char *string_toCamel(const char *string) {
+	size_t len = strlen(string);	
+
+	char *tmp = (char *)malloc (len + 1);
+	size_t i, j = 0;
+	BOOL up = TRUE;
+	for (i = 0; i <= len; ++i) {
+		if (!isalnum(string[i])) {
+			up = TRUE;
+			continue;
+		}
+		if (up) {
+			tmp[j] = toupper(string[i]);
+			up = FALSE;
+		} else {
+			tmp[j] = string[i];
+		}
+		++j;
+	}
+	tmp[j] = '\0';
+
+	char *result = strdup(tmp);
+	free(tmp);
 
 	return result;
 }

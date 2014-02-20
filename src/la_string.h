@@ -26,6 +26,7 @@ extern "C" {
 
 char *string_toLower(const char *str);
 char *string_toUpper(const char *str);
+char *string_toCamel(const char *str);
 char *string_trim(const char *str);
 char *string_replaceFirst(const char *string, const char *from, const char *to);
 char *string_replace(const char *string, const char *from, const char *to);
@@ -58,6 +59,7 @@ namespace la {
 	namespace string {
 		std::string toLower(const std::string &string);
 		std::string toUpper(const std::string &string);
+		std::string toCamel(const std::string &string);
 		std::string trim(const std::string &string);
 		std::string replaceFirst(const std::string &string, const std::string &from, const std::string &to);
 		std::string replace(const std::string &string, const std::string &from, const std::string &to);
