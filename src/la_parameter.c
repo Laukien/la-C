@@ -99,8 +99,18 @@ void parameter_add (PARAMETER *self, const char *key, const char *value) {
 void parameter_addUnique(PARAMETER *self, const char *key, const char *value) {
 	assert(self);
 
-	if (!parameter_exists(self, key))
+	if (!parameter_exists(self, key)) {
 		parameter_add(self, key, value);
+	}
+}
+
+void parameter_addReplace(PARAMETER *self, const char *key, const char *value) {
+	assert(self);
+
+	if (parameter_exists(self, key)) {
+		parameter_remove(self, key);
+	}
+	parameter_add(self, key, value);
 }
 
 BOOL parameter_exists(PARAMETER *self, const char *key) {
@@ -397,7 +407,7 @@ int parameter_loadFromFile(PARAMETER *self, const char *filename) {
 			continue;
 		}
 
-		parameter_add(self, key, value);
+		parameter_addReplace(self, key, value);
 		++count;
 
 		free(value);
@@ -457,6 +467,10 @@ namespace la {
 
 		void Parameter::addUnique(const std::string &key, const std::string &value) {
 			parameter_addUnique(this->obj, key.c_str(), value.c_str());
+		}
+
+		void Parameter::addReplace(const std::string &key, const std::string &value) {
+			parameter_addReplace(this->obj, key.c_str(), value.c_str());
 		}
 
 		void Parameter::exists(const std::string &key) {

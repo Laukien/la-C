@@ -29,6 +29,7 @@ typedef struct la_parameter PARAMETER;
 PARAMETER *parameter_new();
 void parameter_add(PARAMETER *self, const char *key, const char *value);
 void parameter_addUnique(PARAMETER *self, const char *key, const char *value);
+void parameter_addReplace(PARAMETER *self, const char *key, const char *value);
 BOOL parameter_exists(PARAMETER *self, const char *key);
 void parameter_remove(PARAMETER *self, const char *key);
 void parameter_free(PARAMETER *self);
@@ -76,6 +77,7 @@ namespace la {
 				~Parameter();
 				void add(const std::string &key, const std::string &value);
 				void addUnique(const std::string &key, const std::string &value);
+				void addReplace(const std::string &key, const std::string &value);
 				void exists(const std::string &key);
 				void remove(const std::string &key);
 				void reset();
