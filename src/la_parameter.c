@@ -501,8 +501,8 @@ namespace la {
 			parameter_addReplace(this->obj, key.c_str(), value.c_str());
 		}
 
-		void Parameter::exists(const std::string &key) {
-			parameter_exists(this->obj, key.c_str());
+		bool Parameter::exists(const std::string &key) {
+			return parameter_exists(this->obj, key.c_str());
 		}
 
 		void Parameter::remove(const std::string &key) {

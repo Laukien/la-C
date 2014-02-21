@@ -72,7 +72,7 @@ namespace la {
 				void add(const std::string &key, const std::string &value);
 				void addUnique(const std::string &key, const std::string &value);
 				void addReplace(const std::string &key, const std::string &value);
-				void exists(const std::string &key);
+				bool exists(const std::string &key);
 				void remove(const std::string &key);
 				void reset();
 				Parameter getByIndex(unsigned int index);
