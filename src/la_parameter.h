@@ -30,7 +30,6 @@ PARAMETER *parameter_new();
 void parameter_add(PARAMETER *self, const char *key, const char *value);
 void parameter_addUnique(PARAMETER *self, const char *key, const char *value);
 void parameter_addReplace(PARAMETER *self, const char *key, const char *value);
-BOOL parameter_addArgument(PARAMETER *self, int argc, char *argv[]);
 BOOL parameter_exists(PARAMETER *self, const char *key);
 void parameter_remove(PARAMETER *self, const char *key);
 void parameter_free(PARAMETER *self);
@@ -45,6 +44,7 @@ unsigned int parameter_size(PARAMETER *self);
 void parameter_show(PARAMETER *self);
 int parameter_loadFromFile(PARAMETER *param, const char *filename);
 int parameter_saveToFile(PARAMETER *param, const char *filename);
+BOOL parameter_loadFromArguments(PARAMETER *self, int argc, char *argv[]);
 
 #ifdef __cplusplus
 }
@@ -72,7 +72,6 @@ namespace la {
 				void add(const std::string &key, const std::string &value);
 				void addUnique(const std::string &key, const std::string &value);
 				void addReplace(const std::string &key, const std::string &value);
-				bool addArgument(int argc, char *argv[]);
 				void exists(const std::string &key);
 				void remove(const std::string &key);
 				void reset();
@@ -86,6 +85,7 @@ namespace la {
 				void show();
 				void loadFromFile(const std::string &filename);
 				void saveToFile(const std::string &filename);
+				bool loadFromArguments(int argc, char *argv[]);
 		};
 	}
 }
