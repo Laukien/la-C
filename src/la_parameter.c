@@ -445,7 +445,7 @@ int parameter_saveToFile(PARAMETER *self, const char *filename) {
 	return count;
 }
 
-BOOL loadFromArguments(PARAMETER *self, int argc, char *argv[]) {
+BOOL parameter_loadFromArguments(PARAMETER *self, int argc, char *argv[]) {
 	if (argc <= 1) {
 		return TRUE;
 	}
