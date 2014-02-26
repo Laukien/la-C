@@ -482,6 +482,14 @@ namespace la {
 			return res;
 		}
 
+		std::string toCamel(const std::string &string) {
+			char *tmp = string_toCamel(string.c_str());
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
 		std::string trim(const std::string &string) {
 			char *tmp = string_trim(string.c_str());
 			if (!tmp) {
