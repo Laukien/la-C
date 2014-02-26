@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]) {
 	PARAMETER *param = parameter_new();
 
-	if (!parameter_addArgument(param, argc, argv)) {
+	if (!parameter_loadFromArguments(param, argc, argv)) {
 		message_error("unable to load parameter-file");
 		return 1;
 	}
