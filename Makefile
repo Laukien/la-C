@@ -11,7 +11,7 @@ PREFIX := /usr/local
 CFLAGS += -Wall
 CFLAGS += -Werror
 #CFLAGS += -pedantic
-CFLAGS += -march=nocona -mtune=generic
+#CFLAGS += -march=nocona -mtune=generic
 
 #WINDOWS
 ifdef WIN32
