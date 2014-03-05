@@ -79,7 +79,9 @@ BOOL system_isArch32();
 BOOL system_isArch64();
 #ifdef SYSTEM_OS_TYPE_LINUX
 int system_getOSArch();
+#endif
 int system_getCPUArch();
+#ifdef SYSTEM_OS_TYPE_LINUX
 int system_getBinaryArch();
 int system_getCompilerArch();
 #endif

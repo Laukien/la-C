@@ -20,6 +20,9 @@
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 #undef BOOL
 #include <windows.h>
+//#pragma comment(lib, "user32.lib")
+#else
+#include <unistd.h>
 #endif
 
 BOOL system_isOSTypeWindows() {
@@ -163,11 +166,11 @@ SYSTEM_UPTIME system_getUptime() {
 	double value = atof(line);
 //	printf ( "UPTIME: %f\n", value );
 
-	ut.day = value / 86400;
+	ut.day = (int)(value / 86400);
 	ut.hour = ((int)value % 86400) / 3600;
 	ut.minute = ((int)value % 3600) / 60;
 	ut.second = ((int)value % 60);
-	ut.millisecond = (value * 1000) - ((int)value * 1000);
+	ut.millisecond = (int)(value * 1000) - ((int)value * 1000);
 
 	return ut;
 }
@@ -215,6 +218,19 @@ int system_getOSArch() {
 }
 
 int system_getCPUArch() {
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	SYSTEM_INFO siSysInfo;
+	GetSystemInfo(&siSysInfo);
+	switch (siSysInfo.wProcessorArchitecture) {
+		case PROCESSOR_ARCHITECTURE_AMD64:
+		case PROCESSOR_ARCHITECTURE_IA64:
+			return 64;
+		case PROCESSOR_ARCHITECTURE_INTEL:
+			return 32;
+		default:
+			return -1;
+	}
+#else
 	FILE *fp = NULL;
 	char line[2048];
 	char *flags = NULL;
@@ -233,16 +249,13 @@ int system_getCPUArch() {
 	fclose(fp);
 
 	if (strstr(flags, " lm ")) {
-		return(64);
-	}
-	if (strstr(flags, " tm ")) {
-		return(32);
-	}
-	if (strstr(flags, " rm ")) {
-		return(16);
-	}
-
-	return -1;
+		return 64;
+	} else if (strstr(flags, " tm ")) {
+		return 32;
+	} else if (strstr(flags, " rm ")) {
+		return 16;
+	} else return -1;
+#endif
 }
 
 int system_getBinaryArch() {
