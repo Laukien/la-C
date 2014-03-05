@@ -29,6 +29,36 @@ char character_toHex(const char chr) {
 	return hex[chr & 15];
 }
 
+char character_fromBase64(const char chr) {
+	if(chr >= 'A' && chr <= 'Z') return(chr - 'A');
+	if(chr >= 'a' && chr <= 'z') return(chr - 'a' + 26);
+	if(chr >= '0' && chr <= '9') return(chr - '0' + 52);
+	if(chr == '+') return 62;
+
+	return 63;
+}
+
+char character_toBase64(const char chr) {
+	if(chr < 26)  return 'A'+ chr;
+	if(chr < 52)  return 'a'+ (chr - 26);
+	if(chr < 62)  return '0'+ (chr - 52);
+	if(chr == 62) return '+';
+
+	return '/';
+}
+
+BOOL character_isBase64(const char chr) {
+	if (
+		(chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z') ||
+		(chr >= '0' && chr <= '9') || (chr == '+') ||
+		(chr == '/') || (chr == '=')
+		) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 char *character_replace(const char *str, const char from, const char to) {
 	assert(str != NULL);
 
@@ -70,6 +100,18 @@ namespace la {
 
 		char toHex(const char chr) {
 			return character_toHex(chr);
+		}
+
+		char fromBase64(const char chr) {
+			return character_fromBase64(chr);
+		}
+
+		char toBase64(const char chr) {
+			return character_toBase64(chr);
+		}
+
+		bool isBase64(const char chr) {
+			return character_isBase64(chr);
 		}
 
 		std::string replace(const std::string &str, const char from, const char to) {
