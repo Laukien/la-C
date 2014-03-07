@@ -84,6 +84,7 @@ static:
 	@echo
 	@echo === STATIC ===
 	rm -f $(OBJDIR)/*
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_array.o src/la_array.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_boolean.o src/la_boolean.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_character.o src/la_character.c
 	$(CC) $(CFLAGS) -O0 -c -o $(OBJDIR)/la_console.o src/la_console.c
@@ -96,6 +97,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_network.o src/la_network.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_number.o src/la_number.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_parameter.o src/la_parameter.c
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_process.o src/la_process.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_string.o src/la_string.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_stringbuffer.o src/la_stringbuffer.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_system.o src/la_system.c
@@ -128,6 +130,7 @@ ifndef WIN32
 	@echo
 	@echo === DYNAMIC ===
 	$(CC) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBDIR)/$(SONAME)\
+		src/la_array.c\
 		src/la_boolean.c\
 		src/la_character.c\
 		src/la_console.c\
@@ -140,6 +143,7 @@ ifndef WIN32
 		src/la_network.c\
 		src/la_number.c\
 		src/la_parameter.c\
+		src/la_process.c\
 		src/la_string.c\
 		src/la_stringbuffer.c\
 		src/la_system.c
@@ -177,6 +181,8 @@ ifdef WITH_SQLITE
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_sqlite_1$(EXT) example/database_sqlite_1.c -L. $(LIBDIR)/lib$(NAME)-sqlite.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS) -D DATABASE_SQLITE
 endif
 endif
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/array_1$(EXT) example/array_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/array_2$(EXT) example/array_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_2$(EXT) example/directory_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/exception_1$(EXT) example/exception_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
@@ -193,6 +199,7 @@ endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_1$(EXT) example/parameter_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_2$(EXT) example/parameter_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_3$(EXT) example/parameter_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/process_1$(EXT) example/process_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_1$(EXT) example/string_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_2$(EXT) example/string_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/string_3$(EXT) example/string_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
@@ -246,6 +253,7 @@ uninstall:
 ifdef WITH_POSTGRESQL
 	rm -f $(DESTDIR)$(PREFIX)/include/la_database_postgresql.h
 endif
+	rm -f $(DESTDIR)$(PREFIX)/include/la_array.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_datetime.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_directory.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_exception.h
@@ -254,6 +262,7 @@ endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_network.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_number.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_parameter.h
+	rm -f $(DESTDIR)$(PREFIX)/include/la_process.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_string.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_stringbuffer.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_system.h
