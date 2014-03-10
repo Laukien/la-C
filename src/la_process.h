@@ -15,8 +15,10 @@
 #define LA_PROCESS_H
 
 #ifdef __WIN32
-//#undef BOOL;
+#ifdef BOOL
+#undef BOOL
 #include <windows.h>
+#endif
 #else
 #include <unistd.h>
 #endif
