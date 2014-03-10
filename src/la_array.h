@@ -46,6 +46,16 @@ namespace la {
 			public:
 			Array();
 			~Array();
+			void reset();
+			void setSize(size_t size);
+			size_t getSize();
+			void show();
+			void setString(unsigned int idx, const std::string &str);
+			std::string getString(unsigned int idx);
+			char **getArray();
+			void showArray(char **array);
+			void freeArray(char **array);
+			void loadFromString(const std::string &str, const char sep);
 		};
 	}
 }

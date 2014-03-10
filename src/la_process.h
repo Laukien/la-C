@@ -49,7 +49,7 @@ extern "C" {
 	void process_free(PROCESS *self);
 	void process_setWait(PROCESS *self, BOOL wait);
 	BOOL process_isWait(PROCESS *self);
-	void process_setDirectory(PROCESS *self, const char *dir);
+	void process_setTempDirectory(PROCESS *self, const char *dir);
 	void process_setInputFromString(PROCESS *self, const char *str);
 	void process_setInputFromFile(PROCESS *self, const char *file);
 	void process_execute(PROCESS *self, const char *command);
@@ -75,6 +75,21 @@ namespace la {
 			public:
 				Process();
 				~Process();
+				void setWait(bool wait);
+				bool isWait();
+				void setTempDirectory(const std::string &dir);
+				void setInputFromString(const std::string &str);
+				void setInputFromFile(const std::string &file);
+				void execute(const std::string &command);
+				PROCESS_ID getId();
+				PROCESS_EXIT getExit();
+				PROCESS_STATUS getStatus();
+				std::string getInputAsString();
+				std::string getInputAsFilename();
+				std::string getOutputAsString();
+				std::string getOutputAsFilename();
+				std::string getErrorAsString();
+				std::string getErrorAsFilename();
 		};
 	}
 }

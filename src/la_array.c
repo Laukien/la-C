@@ -214,6 +214,50 @@ namespace la {
 		Array::~Array() {
 			array_free(this->obj);
 		}
+
+		void Array::reset() {
+			array_reset(this->obj);
+		}
+
+		void Array::setSize(size_t size) {
+			array_setSize(this->obj, size);
+		}
+
+		size_t Array::getSize() {
+			return array_getSize(this->obj);
+		}
+
+		void Array::show() {
+			array_show(this->obj);
+		}
+
+		void Array::setString(unsigned int idx, const std::string &str) {
+			array_setString(this->obj, idx, str.c_str());
+		}
+
+		std::string Array::getString(unsigned int idx) {
+			char *tmp = array_getString(this->obj, idx);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
+		char **Array::getArray() {
+			return array_getArray(this->obj);
+		}
+
+		void Array::showArray(char **array) {
+			array_showArray(array);
+		}
+
+		void Array::freeArray(char **array) {
+			array_freeArray(array);
+		}
+
+		void Array::loadFromString(const std::string &str, const char sep) {
+			array_loadFromString(this->obj, str.c_str(), sep);
+		}
 	}
 }
 #endif

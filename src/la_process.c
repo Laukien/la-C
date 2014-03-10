@@ -36,7 +36,7 @@ struct la_process {
 	PROCESS_ID id;
 	BOOL wait;
 	char *name;
-	char *directory;
+	char *dir_temp;
 	PROCESS_STATUS status;
 	PROCESS_EXIT exit;
 	char *file_input;
@@ -107,24 +107,24 @@ PROCESS *process_new() {
 	
 	self->id = 0;
 	self->wait = TRUE;
-	self->directory = directory_temp();
+	self->dir_temp = directory_temp();
 	self->name = process_createName();
 	self->status = PROCESS_STATUS_NONE;
 	self->exit = -1;
 
-	size_t dir_len = strlen(self->directory);
+	size_t dir_len = strlen(self->dir_temp);
 	size_t name_len = strlen(self->name);
 
 	self->file_input = (char *)malloc(dir_len + 1 + name_len + 1 + 2 + 1);
-	sprintf(self->file_input, "%s%c%s.in", self->directory, DIRECTORY_SEPARATOR_CHAR, self->name);
+	sprintf(self->file_input, "%s%c%s.in", self->dir_temp, DIRECTORY_SEPARATOR_CHAR, self->name);
 	unlink(self->file_input);
 
 	self->file_output = (char *)malloc(dir_len + 1 + name_len + 1 + 3 + 1);
-	sprintf(self->file_output, "%s%c%s.out", self->directory, DIRECTORY_SEPARATOR_CHAR, self->name);
+	sprintf(self->file_output, "%s%c%s.out", self->dir_temp, DIRECTORY_SEPARATOR_CHAR, self->name);
 	unlink(self->file_output);
 
 	self->file_error = (char *)malloc(dir_len + 1 + name_len + 1 + 3 + 1);
-	sprintf(self->file_error, "%s%c%s.err", self->directory, DIRECTORY_SEPARATOR_CHAR, self->name);
+	sprintf(self->file_error, "%s%c%s.err", self->dir_temp, DIRECTORY_SEPARATOR_CHAR, self->name);
 	unlink(self->file_error);
 
 	return self;
@@ -153,7 +153,7 @@ void process_free(PROCESS *self) {
 	unlink(self->file_error);
 
 	free(self->name);
-	free(self->directory);
+	free(self->dir_temp);
 	free(self->file_input);
 	free(self->file_output);
 	free(self->file_error);
@@ -174,14 +174,14 @@ BOOL process_isWait(PROCESS *self) {
 	return self->wait;
 }
 
-void process_setDirectory(PROCESS *self, const char *dir) {
+void process_setTempDirectory(PROCESS *self, const char *dir) {
 	assert(self);
 	assert(dir);
 
-	if (self->directory) {
-		free(self->directory);
+	if (self->dir_temp) {
+		free(self->dir_temp);
 	}
-	self->directory = strdup(dir);
+	self->dir_temp = strdup(dir);
 }
 
 void process_setInputFromString(PROCESS *self, const char *str) {
@@ -472,6 +472,90 @@ namespace la {
 
 		Process::~Process() {
 			process_free(this->obj);
+		}
+
+		void Process::setWait(bool wait) {
+			process_setWait(this->obj, wait);
+		}
+
+		bool Process::isWait() {
+			return process_isWait(this->obj);
+		}
+
+		void Process::setTempDirectory(const std::string &dir) {
+			process_setTempDirectory(this->obj, dir.c_str());
+		}
+
+		void Process::setInputFromString(const std::string &str) {
+			process_setInputFromString(this->obj, str.c_str());
+		}
+
+		void Process::setInputFromFile(const std::string &file) {
+			process_setInputFromFile(this->obj, file.c_str());
+		}
+
+		void Process::execute(const std::string &command) {
+			process_execute(this->obj, command.c_str());
+		}
+
+		PROCESS_ID Process::getId() {
+			return process_getId(this->obj);
+		}
+
+		PROCESS_EXIT Process::getExit() {
+			return process_getExit(this->obj);
+		}
+
+		PROCESS_STATUS Process::getStatus() {
+			return process_getStatus(this->obj);
+		}
+
+		std::string Process::getInputAsString() {
+			char *tmp = process_getInputAsString(this->obj);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
+		std::string Process::getInputAsFilename() {
+			char *tmp = process_getInputAsFilename(this->obj);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
+		std::string Process::getOutputAsString() {
+			char *tmp = process_getOutputAsString(this->obj);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
+		std::string Process::getOutputAsFilename() {
+			char *tmp = process_getOutputAsFilename(this->obj);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
+		std::string Process::getErrorAsString() {
+			char *tmp = process_getErrorAsString(this->obj);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
+
+		std::string Process::getErrorAsFilename() {
+			char *tmp = process_getErrorAsFilename(this->obj);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
 		}
 	}
 }
