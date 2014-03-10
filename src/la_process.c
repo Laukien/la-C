@@ -267,8 +267,9 @@ void process_execute(PROCESS *self, const char *command) {
 
 	/* call process */
 	BOOL ok;
-	TCHAR cmd[]= TEXT(command);
-	ok = CreateProcess(NULL, cmd, NULL, NULL, TRUE, flags, NULL, NULL, &self->si, &self->pi);
+	char *cmdstr = strdup(command);
+	ok = CreateProcess(NULL, cmdstr, NULL, NULL, TRUE, flags, NULL, NULL, &self->si, &self->pi);
+	free(cmdstr);
 	if (ok) {
 		self->status = PROCESS_STATUS_RUNNING;
 		self->id = self->pi.dwProcessId;
@@ -322,7 +323,7 @@ void process_execute(PROCESS *self, const char *command) {
 		size_t cmdlen;
 		char *cmdarg;
 		char *cmdstr;
-		char *sep = strchr(command, ' ');
+		const char *sep = strchr(command, ' ');
 		if (sep) {
 			int seplen = (sep - command) + 1;
 			cmdlen = seplen + strlen(command);

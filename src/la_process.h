@@ -20,8 +20,8 @@
 #else
 #include <unistd.h>
 #endif
-#include <la_boolean.h>
-#include <la_system.h>
+#include "la_boolean.h"
+#include "la_system.h"
 
 typedef struct la_process PROCESS;
 
@@ -69,10 +69,12 @@ extern "C" {
 
 namespace la {
 	namespace process {
-		class process {
+		class Process {
 			private:
 				PROCESS *obj;
 			public:
+				Process();
+				~Process();
 		};
 	}
 }

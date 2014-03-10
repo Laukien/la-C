@@ -39,11 +39,13 @@ extern "C" {
 #include <string>
 
 namespace la {
-	namespace vector {
-		class vector {
+	namespace array {
+		class Array {
 			private:
 				ARRAY *obj;
 			public:
+			Array();
+			~Array();
 		};
 	}
 }

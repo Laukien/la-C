@@ -14,7 +14,7 @@ int main() {
 	process_setInputFromString(p, "stdin");
 
 #ifdef __WIN32
-	process_execute(p, "notepad.exe");
+	process_execute(p, "notepad.exe C:\\windows\\win.ini");
 #else
 	process_execute(p, "/bin/ls -l /usr");
 #endif

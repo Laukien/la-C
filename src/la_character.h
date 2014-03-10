@@ -14,7 +14,7 @@
 #ifndef LA_CHARACTER
 #define LA_CHARACTER
 
-#include <la_boolean.h>
+#include "la_boolean.h"
 
 #ifdef __cplusplus
 extern "C" {

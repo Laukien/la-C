@@ -172,8 +172,8 @@ void array_loadFromString(ARRAY *self, const char *str, const char sep) {
 
 	array_reset(self);
 
-	int i;
-	int count;
+	size_t i;
+	size_t count;
 
 	/* count tokens */
 	count = 0;
@@ -206,12 +206,12 @@ void array_loadFromString(ARRAY *self, const char *str, const char sep) {
 
 #ifdef __cplusplus
 namespace la {
-	namespace vector {
-		Vector::Vector() {
+	namespace array {
+		Array::Array() {
 			this->obj = array_new();
 		}
 
-		Vector::~Vector() {
+		Array::~Array() {
 			array_free(this->obj);
 		}
 	}
