@@ -133,8 +133,8 @@ PROCESS *process_new() {
 void process_free(PROCESS *self) {
 	assert(self);
 
-	/* wait if the process is running */
-	if (!self->wait && self->status == PROCESS_STATUS_RUNNING) {
+	/* wait if the process is running and the process should wait*/
+	if (self->wait && self->status == PROCESS_STATUS_RUNNING) {
 #ifdef SYSTEM_OS_TYPE_WINDOWS
 		WaitForSingleObject(self->pi.hProcess, INFINITE);
 		CloseHandle(self->pi.hProcess);
