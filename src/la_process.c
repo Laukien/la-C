@@ -320,29 +320,20 @@ void process_execute(PROCESS *self, const char *command) {
 
 		/* format command */
 //		execl("./test", "process","arg1", "arg2",  NULL);
-		size_t cmdlen;
 		char *cmdarg;
 		char *cmdstr;
 		const char *sep = strchr(command, ' ');
 		if (sep) {
 			int seplen = (sep - command) + 1;
-			cmdlen = seplen + strlen(command);
-
 			cmdstr = (char *)malloc(seplen - 1 + 1);
 			memcpy(cmdstr, command, seplen - 1);
 			cmdstr[seplen - 1] = '\0';
 
-			cmdarg = (char *)malloc(cmdlen + 1);
-			memcpy(cmdarg, command, seplen);
-			memcpy(cmdarg + seplen, command , strlen(command));
-			cmdarg[cmdlen] = '\0';
+			cmdarg = strdup(command);
 		} else {
-			cmdlen = (strlen(command) * 2) + 1;
-
 			cmdstr = strdup(command);
 
-			cmdarg = (char *)malloc(cmdlen + 1);
-			sprintf(cmdarg, "%s %s", command, command);
+			cmdarg = strdup(command);
 		}
 	
 		ARRAY *cmdary = array_new();
