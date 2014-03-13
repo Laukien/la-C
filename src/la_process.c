@@ -148,6 +148,14 @@ void process_free(PROCESS *self) {
 #endif
 	}
 
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+		CloseHandle(self->pi.hProcess);
+		CloseHandle(self->pi.hThread);
+		CloseHandle(self->he);
+		CloseHandle(self->ho);
+		CloseHandle(self->hi);
+#endif
+
 	unlink(self->file_input);
 	unlink(self->file_output);
 	unlink(self->file_error);
@@ -172,6 +180,19 @@ BOOL process_isWait(PROCESS *self) {
 	assert(self);
 
 	return self->wait;
+}
+
+void process_wait(PROCESS *self) {
+	assert(self);
+
+	if (self->status == PROCESS_STATUS_RUNNING) {
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+		WaitForSingleObject(self->pi.hProcess, INFINITE);
+#else
+		int status;                             /* dummy */
+		waitpid(self->id, &status, 0);
+#endif
+	}
 }
 
 void process_setTempDirectory(PROCESS *self, const char *dir) {
@@ -296,7 +317,7 @@ void process_execute(PROCESS *self, const char *command) {
 		return;
 	}
 
-    if (self->id) {                             /* parent */
+    if (self->id > 0) {                         /* parent */
 		self->status = PROCESS_STATUS_RUNNING;
 		if (self->wait) {
 			waitpid(self->id, &status, 0);
@@ -471,6 +492,10 @@ namespace la {
 
 		bool Process::isWait() {
 			return process_isWait(this->obj);
+		}
+
+		void Process::wait() {
+			return process_wait(this->obj);
 		}
 
 		void Process::setTempDirectory(const std::string &dir) {

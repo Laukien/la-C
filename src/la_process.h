@@ -51,6 +51,7 @@ extern "C" {
 	void process_free(PROCESS *self);
 	void process_setWait(PROCESS *self, BOOL wait);
 	BOOL process_isWait(PROCESS *self);
+	void process_wait(PROCESS *self);
 	void process_setTempDirectory(PROCESS *self, const char *dir);
 	void process_setInputFromString(PROCESS *self, const char *str);
 	void process_setInputFromFile(PROCESS *self, const char *file);
@@ -79,6 +80,7 @@ namespace la {
 				~Process();
 				void setWait(bool wait);
 				bool isWait();
+				void wait();
 				void setTempDirectory(const std::string &dir);
 				void setInputFromString(const std::string &str);
 				void setInputFromFile(const std::string &file);
