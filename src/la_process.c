@@ -323,6 +323,9 @@ void process_execute(PROCESS *self, const char *command) {
 			waitpid(self->id, &status, 0);
 			self->exit = status;
 			self->status = PROCESS_STATUS_FINISHED;
+		} else {                                /* wait for child */
+			int dummy;
+			waitpid(self->id, &dummy, WNOHANG);
 		}
 	} else {                                    /* child */
 		if (file_exists(self->file_input)) {
