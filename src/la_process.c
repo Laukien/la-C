@@ -416,13 +416,9 @@ PROCESS_STATUS process_getStatus(PROCESS *self) {
 				self->status = PROCESS_STATUS_FINISHED;
 			}
 		} else if (WIFSIGNALED(stat) || WIFSTOPPED(stat)) {
-			if (WTERMSIG(stat) == 57) {
-				self->status = PROCESS_STATUS_RUNNING;
-			} else {
+			if (WTERMSIG(stat) != 57) {
 				self->status = PROCESS_STATUS_TERMINATED;
 			}
-		} else {
-			self->status = PROCESS_STATUS_ERROR;
 		}
 #endif
 		
