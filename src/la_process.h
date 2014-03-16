@@ -57,6 +57,7 @@ extern "C" {
 	void process_setInputFromString(PROCESS *self, const char *str);
 	void process_setInputFromFile(PROCESS *self, const char *file);
 	void process_execute(PROCESS *self, const char *command);
+	void process_kill(PROCESS *self);
 	PROCESS_ID process_getId(PROCESS *self);
 	PROCESS_EXIT process_getExit(PROCESS *self);
 	PROCESS_STATUS process_getStatus(PROCESS *self);

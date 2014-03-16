@@ -410,6 +410,36 @@ void process_execute(PROCESS *self, const char *command) {
 #endif
 }
 
+void process_kill(PROCESS *self) {
+	assert(self);
+	
+	unsigned int count = 0;
+
+#ifdef __WIN32
+	PostThreadMessage(self->pi.dwThreadId, WM_CLOSE, 1, 0); /* terminate process */
+
+	do {
+		Sleep(100);
+	} while(process_getStatus(self) == PROCESS_STATUS_RUNNING && ++count < 100);
+
+	if (process_getStatus(self) == PROCESS_STATUS_RUNNING) {
+		TerminateProcess(self->pi.hProcess, 0); /* kill process */
+	}
+#else
+    kill(self->id, SIGTERM);                    /* terminate process */
+
+	do {
+		usleep(100);
+	} while(process_getStatus(self) == PROCESS_STATUS_RUNNING && ++count < 100);
+
+	if (process_getStatus(self) == PROCESS_STATUS_RUNNING) {
+        kill(self->id, SIGKILL);                /* kill process */
+	}
+#endif
+
+	self->status = PROCESS_STATUS_TERMINATED;
+}
+
 PROCESS_ID process_getId(PROCESS *self) {
 	assert(self);
 
@@ -537,6 +567,10 @@ namespace la {
 
 		void Process::execute(const std::string &command) {
 			process_execute(this->obj, command.c_str());
+		}
+
+		void Process::kill() {
+			process_kill(this->obj);
 		}
 
 		PROCESS_ID Process::getId() {
