@@ -37,6 +37,7 @@ struct la_process {
 	BOOL wait;
 	char *name;
 	char *dir_temp;
+	char *dir_work;
 	PROCESS_STATUS status;
 	PROCESS_EXIT exit;
 	char *file_input;
@@ -107,6 +108,7 @@ PROCESS *process_new() {
 	
 	self->id = 0;
 	self->wait = TRUE;
+	self->dir_work = NULL;
 	self->dir_temp = directory_temp();
 	self->name = process_createName();
 	self->status = PROCESS_STATUS_NONE;
@@ -193,6 +195,16 @@ void process_wait(PROCESS *self) {
 		waitpid(self->id, &status, 0);
 #endif
 	}
+}
+
+void process_setWorkDirectory(PROCESS *self, const char *dir) {
+	assert(self);
+	assert(dir);
+
+	if (self->dir_work) {
+		free(self->dir_work);
+	}
+	self->dir_work = strdup(dir);
 }
 
 void process_setTempDirectory(PROCESS *self, const char *dir) {
@@ -289,7 +301,18 @@ void process_execute(PROCESS *self, const char *command) {
 	/* call process */
 	BOOL ok;
 	char *cmdstr = strdup(command);
-	ok = CreateProcess(NULL, cmdstr, NULL, NULL, TRUE, flags, NULL, NULL, &self->si, &self->pi);
+	ok = CreateProcess(
+		NULL,
+		cmdstr,
+		NULL,
+		NULL,
+		TRUE,
+		flags,
+		NULL,
+		self->dir_work,
+		&self->si,
+		&self->pi
+	);
 	free(cmdstr);
 	if (ok) {
 		self->status = PROCESS_STATUS_RUNNING;
@@ -341,6 +364,11 @@ void process_execute(PROCESS *self, const char *command) {
 		int fd_e = open(self->file_error, O_WRONLY | O_CREAT | S_IRUSR | S_IWUSR, 0666);
 		dup2(fd_e, 2);
 		close(fd_e);
+
+		/* change working directory */
+		if (self->dir_work) {
+			chdir(self->dir_work);
+		}
 
 		/* format command */
 //		execl("./test", "process","arg1", "arg2",  NULL);
@@ -415,10 +443,8 @@ PROCESS_STATUS process_getStatus(PROCESS *self) {
 				self->exit = WEXITSTATUS(stat);
 				self->status = PROCESS_STATUS_FINISHED;
 			}
-		} else if (WIFSIGNALED(stat) || WIFSTOPPED(stat)) {
-			if (WTERMSIG(stat) != 57) {
-				self->status = PROCESS_STATUS_TERMINATED;
-			}
+		} else if (WIFSTOPPED(stat)) {
+			self->status = PROCESS_STATUS_TERMINATED;
 		}
 #endif
 		

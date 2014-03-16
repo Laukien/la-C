@@ -53,6 +53,7 @@ extern "C" {
 	BOOL process_isWait(PROCESS *self);
 	void process_wait(PROCESS *self);
 	void process_setTempDirectory(PROCESS *self, const char *dir);
+	void process_setWorkDirectory(PROCESS *self, const char *dir);
 	void process_setInputFromString(PROCESS *self, const char *str);
 	void process_setInputFromFile(PROCESS *self, const char *file);
 	void process_execute(PROCESS *self, const char *command);

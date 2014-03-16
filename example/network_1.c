@@ -36,6 +36,8 @@ void client(NETWORK *self, void *object) {
 	printf ( " (%ld bytes)\n", network_getDataSize(self) );
 	free(data);
 	network_freeData(self);
+
+	network_cancel(self);
 }
 
 void throwError(EXCEPTION *e, void *obj) {

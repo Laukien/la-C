@@ -4,6 +4,9 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef __WIN32
+#include <windows.h>
+#endif
 #include <la_process.h>
 
 int main() {
@@ -14,9 +17,11 @@ int main() {
 	process_setInputFromString(p, "stdin");
 
 #ifdef __WIN32
-	process_execute(p, "notepad.exe C:\\windows\\win.ini");
+	process_setWorkDirectory(p, "C:\\windows");
+	process_execute(p, "notepad.exe win.ini");
 #else
-	process_execute(p, "/bin/ls -l /usr");
+	process_setWorkDirectory(p, "/var");
+	process_execute(p, "/bin/ls -l");
 #endif
 
 	/* wait */
