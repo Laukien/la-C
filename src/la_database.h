@@ -52,7 +52,6 @@
 #endif
 
 #include "la_boolean.h"
-#include "la_error.h"
 #include "la_exception.h"
 
 #ifdef __cplusplus

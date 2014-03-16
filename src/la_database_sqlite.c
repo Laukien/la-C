@@ -13,7 +13,11 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef __WIN32
+#include <windows.h>
+#else
 #include <unistd.h>
+#endif
 #include "la_file.h"
 #include "la_message.h"
 #include "la_database.h"
@@ -91,7 +95,11 @@ void _database_execute(DATABASE *self, const char *query) {
 				sqlite3_finalize(stmt);
 				return;
 			case SQLITE_BUSY:
+#ifdef __WIN32
+				Sleep(1000);                    /* wait */
+#else
 				sleep(1);                       /* wait */
+#endif
 				break;
 			case SQLITE_ROW:
 				self->resultRow++;

@@ -25,9 +25,17 @@ CC := i686-pc-mingw32-g++
 CFLAGS += -static-libgcc
 CFLAGS += -fexceptions
 ARNAME := $(NAME)++.$(VERSION).lib
+ARNAME_SQLITE := $(NAME)++-sqlite.$(VERSION).lib
 else
 CC := i686-pc-mingw32-gcc
 ARNAME := $(NAME).$(VERSION).lib
+ARNAME_SQLITE := $(NAME)-sqlite.$(VERSION).lib
+endif
+
+#DATABASE
+ifdef WITH_SQLITE
+CFLAGS += -I ext/sqlite
+LDFLAGS += ext/sqlite/sqlite3.lib
 endif
 
 #LINUX
@@ -73,12 +81,28 @@ CFLAGS += -I$(shell pg_config --includedir-server) -I$(shell pg_config --include
 LDFLAGS += -L$(shell pg_config --libdir) -lpq
 endif
 ifdef WITH_SQLITE
-LDFLAGS += -lsqlite3
+CFLAGS += -I ext/sqlite
+LDFLAGS += ext/sqlite/libsqlite3.a -lpthread -ldl
+#LDFLAGS += -lsqlite3
 endif
 endif
 
 
 all: init static dynamic
+
+init:
+	@echo
+	@echo ===  INIT ===
+	mkdir -p $(BINDIR)
+	mkdir -p $(LIBDIR)
+	mkdir -p $(OBJDIR)
+ifdef WITH_SQLITE
+ifdef WIN32
+	$(MAKE) -C ext/sqlite WIN32=y
+else
+	$(MAKE) -C ext/sqlite
+endif
+endif
 
 static:
 	@echo
@@ -107,7 +131,13 @@ ifdef WITH_CPP
 else
 	ln -fs $(ARNAME) $(LIBDIR)/libla.a
 endif
-ifndef WIN32
+ifdef WIN32
+ifdef WITH_SQLITE
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_SQLITE
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_sqlite.o src/la_database_sqlite.c -D DATABASE_SQLITE
+	$(AR) $(ARFLAGS) $(LIBDIR)/$(ARNAME_SQLITE) $(OBJDIR)/la_database.o $(OBJDIR)/la_database_sqlite.o
+endif
+else
 ifdef WITH_MYSQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database.o src/la_database.c -D DATABASE_MYSQL
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_database_mysql.o src/la_database_mysql.c -D DATABASE_MYSQL
@@ -168,7 +198,11 @@ ifdef WITH_CPP
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/parameter_1$(EXT) example/parameter_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/string_1$(EXT) example/string_1.cc $(LIBDIR)/$(ARNAME)
 else
-ifndef WIN32
+ifdef WIN32
+ifdef WITH_SQLITE
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_sqlite_1$(EXT) example/database_sqlite_1.c -L. $(LIBDIR)/$(NAME)-sqlite.$(VERSION).lib $(LIBDIR)/$(ARNAME) $(LDFLAGS) -D DATABASE_SQLITE
+endif
+else
 ifdef WITH_MYSQL
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/database_mysql_1$(EXT) example/database_mysql_1.c -L. $(LIBDIR)/lib$(NAME)-mysql.$(VERSION).a $(LIBDIR)/$(ARNAME) $(LDFLAGS) -D DATABASE_MYSQL
 endif
@@ -210,13 +244,6 @@ endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_1$(EXT) example/system_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_2$(EXT) example/system_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 endif
-
-init:
-	@echo
-	@echo ===  INIT ==$(EXT)=
-	mkdir -p $(BINDIR)
-	mkdir -p $(LIBDIR)
-	mkdir -p $(OBJDIR)
 
 clean:
 	@echo
