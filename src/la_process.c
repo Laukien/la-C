@@ -557,6 +557,10 @@ namespace la {
 			process_setTempDirectory(this->obj, dir.c_str());
 		}
 
+		void Process::setWorkDirectory(const std::string &dir) {
+			process_setWorkDirectory(this->obj, dir.c_str());
+		}
+
 		void Process::setInputFromString(const std::string &str) {
 			process_setInputFromString(this->obj, str.c_str());
 		}

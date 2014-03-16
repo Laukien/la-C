@@ -84,6 +84,7 @@ namespace la {
 				bool isWait();
 				void wait();
 				void setTempDirectory(const std::string &dir);
+				void setWorkDirectory(const std::string &dir);
 				void setInputFromString(const std::string &str);
 				void setInputFromFile(const std::string &file);
 				void execute(const std::string &command);
