@@ -87,6 +87,7 @@ namespace la {
 				void setInputFromString(const std::string &str);
 				void setInputFromFile(const std::string &file);
 				void execute(const std::string &command);
+				void kill();
 				PROCESS_ID getId();
 				PROCESS_EXIT getExit();
 				PROCESS_STATUS getStatus();
