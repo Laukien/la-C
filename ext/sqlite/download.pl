@@ -14,5 +14,5 @@ my $stop = index($page, "');", $start);
 die("ERROR: invalid format\n") if ($stop == -1);
 my $url = "http://sqlite.org/" . substr($page, $start, $stop - $start);
 print("download " . $url . "\n");
-my $file = "sqlite.zip";
+my $file = "sqlite3.zip";
 getstore($url, $file);

@@ -19,7 +19,7 @@ endif
 
 all:
 	perl download.pl
-	unzip -o sqlite.zip
+	unzip -o sqlite3.zip
 	cp sqlite-*/sqlite3.h .
 	cp sqlite-*/sqlite3.c .
 	$(CC) $(CFLAGS) -c -o sqlite3.o sqlite3.c
