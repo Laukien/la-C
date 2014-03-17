@@ -413,6 +413,8 @@ void process_execute(PROCESS *self, const char *command) {
 void process_kill(PROCESS *self) {
 	assert(self);
 	
+	if (process_getStatus(self) != PROCESS_STATUS_RUNNING) return;
+
 	unsigned int count = 0;
 
 #ifdef __WIN32
