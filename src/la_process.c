@@ -463,20 +463,22 @@ PROCESS_STATUS process_getStatus(PROCESS *self) {
 			GetExitCodeProcess(self->pi.hProcess, &self->exit);
 			self->status = PROCESS_STATUS_FINISHED;
 		} else if (rc == WAIT_FAILED) {
-			self->status = PROCESS_STATUS_ERROR;
+			self->status = PROCESS_STATUS_ERROR; /* check if there is a bug */
 		}
 #else
 		int stat;
-		waitpid(self->id, &stat, WNOHANG);
-		if (WIFEXITED(stat)) {
-			if (WEXITSTATUS(stat) == 255) {
-				self->status = PROCESS_STATUS_ERROR;
-			} else {
-				self->exit = WEXITSTATUS(stat);
-				self->status = PROCESS_STATUS_FINISHED;
+		int rc = waitpid(self->id, &stat, WNOHANG);
+		if (rc) {
+			if (WIFEXITED(stat)) {
+				if (WEXITSTATUS(stat) == 255) {
+					self->status = PROCESS_STATUS_ERROR;
+				} else {
+					self->exit = WEXITSTATUS(stat);
+					self->status = PROCESS_STATUS_FINISHED;
+				}
+			} else if (WIFSTOPPED(stat)) {
+				self->status = PROCESS_STATUS_TERMINATED;
 			}
-		} else if (WIFSTOPPED(stat)) {
-			self->status = PROCESS_STATUS_TERMINATED;
 		}
 #endif
 		
