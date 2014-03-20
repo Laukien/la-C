@@ -463,10 +463,10 @@ PROCESS_STATUS process_getStatus(PROCESS *self) {
 			GetExitCodeProcess(self->pi.hProcess, &self->exit);
 			self->status = PROCESS_STATUS_FINISHED;
 		} else if (rc == WAIT_FAILED) {
-			self->status = PROCESS_STATUS_ERROR; /* check if there is a bug */
+			self->status = PROCESS_STATUS_ERROR;
 		}
 #else
-		int stat;
+		int stat = 0;                           /* set '0' to prevent a valgrind-error */
 		int rc = waitpid(self->id, &stat, WNOHANG);
 		if (rc) {
 			if (WIFEXITED(stat)) {
