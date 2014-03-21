@@ -143,6 +143,8 @@ unsigned int number_toUnsignedInteger(const char *str) {
 }
 
 size_t number_getIntegerLength(int num) {
+	if (num == 0) return 1;
+
 	/* get size (log10) */
 	size_t size = 0;
 	int i;
@@ -156,6 +158,8 @@ size_t number_getIntegerLength(int num) {
 }
 
 size_t number_getUnsignedIntegerLength(unsigned int num) {
+	if (num == 0) return 1;
+
 	/* get size (log10) */
 	size_t size = 0;
 	int i;
