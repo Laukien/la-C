@@ -29,6 +29,7 @@
 #define NETWORK_BUFFER_SIZE 1024                /* 1 KB */
 #define NETWORK_DATA_SIZE 1024 * 1024           /* 1 MB */
 
+#include <stdlib.h>
 #include "la_system.h"
 #include "la_exception.h"
 
