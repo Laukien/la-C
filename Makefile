@@ -117,6 +117,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_exception.o src/la_exception.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_file.o src/la_file.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_list.o src/la_list.c
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_memory.o src/la_memory.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_message.o src/la_message.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_network.o src/la_network.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_number.o src/la_number.c
@@ -169,6 +170,7 @@ ifndef WIN32
 		src/la_exception.c\
 		src/la_file.c\
 		src/la_list.c\
+		src/la_memory.c\
 		src/la_message.c\
 		src/la_network.c\
 		src/la_number.c\
@@ -197,6 +199,7 @@ ifdef WITH_CPP
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/network_1$(EXT) example/network_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/parameter_1$(EXT) example/parameter_1.cc $(LIBDIR)/$(ARNAME)
 	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/string_1$(EXT) example/string_1.cc $(LIBDIR)/$(ARNAME)
+	$(CC) $(CXXFLAGS) -I src -o $(BINDIR)/system_1$(EXT) example/system_1.cc $(LIBDIR)/$(ARNAME)
 else
 ifdef WIN32
 ifdef WITH_SQLITE
@@ -229,6 +232,7 @@ endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/list_4$(EXT) example/list_4.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_1$(EXT) example/network_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/network_2$(EXT) example/network_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/memory_1$(EXT) example/memory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/number_1$(EXT) example/number_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_1$(EXT) example/parameter_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/parameter_2$(EXT) example/parameter_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
