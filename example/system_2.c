@@ -5,7 +5,7 @@
 int main(void) {
 
 	if (system_isCopyright()) {
-		printf ( "(c) 2011 - 2012 by Stephan Laukien\n" );
+		printf ( "(c) 2011 - 2014 by Stephan Laukien\n" );
 
 		printf ( "\n" );
 		printf ( "Set the environment variable 'COPYRIGHT' to 'false', 'no' or '0' to hide this copyright information.\n" );
