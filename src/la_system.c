@@ -342,27 +342,27 @@ namespace la {
 			return system_getCPUArch();
 		}
 
-		uptime::uptime() {
+		Uptime::Uptime() {
 			obj = system_getUptime();
 		}
 
-		int uptime::getDay() {
+		int Uptime::getDay() {
 			return obj.day;
 		}
 
-		int uptime::getHour() {
+		int Uptime::getHour() {
 			return obj.hour;
 		}
 
-		int uptime::getMinute() {
+		int Uptime::getMinute() {
 			return obj.minute;
 		}
 
-		int uptime::getSecond() {
+		int Uptime::getSecond() {
 			return obj.second;
 		}
 
-		int uptime::getMillisecond() {
+		int Uptime::getMillisecond() {
 			return obj.millisecond;
 		}
 	#endif

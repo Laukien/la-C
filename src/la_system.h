@@ -130,11 +130,11 @@ namespace la {
 		int getCPUArch();
 		int getBinaryArch();
 		int getCompilerArch();
-		class uptime {
+		class Uptime {
 			private:
 				SYSTEM_UPTIME obj;
 			public:
-				uptime();
+				Uptime();
 				int getDay();
 				int getHour();
 				int getMinute();
