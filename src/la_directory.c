@@ -21,6 +21,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+#undef BOOL
+#include <windows.h>
+#endif
 
 BOOL directory_create(const char *directoryname) {
 	if (directory_exists(directoryname)) return TRUE;
@@ -59,11 +63,16 @@ BOOL directory_create(const char *directoryname) {
 }
 
 BOOL directory_exists(const char *name) {
+#ifdef SYSTEM_OS_TYPE_WINDOWS
+	DWORD dwAttrib = GetFileAttributes(name);
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES && (dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+#else
 	struct stat st;
 	if (!stat(name, &st) == 0) {
 		return FALSE;
 	}
 	return (st.st_mode & S_IFDIR);
+#endif
 }
 
 char *directory_name(const char *filename) {

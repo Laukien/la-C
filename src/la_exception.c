@@ -38,13 +38,17 @@ EXCEPTION *exception_new() {
 
 	memset(self, '\0', sizeof(EXCEPTION));
 	self->id = EXCEPTION_NONE;
+	self->message = NULL;
+	self->cause = NULL;
+	self->action = NULL;
+	self->comment = NULL;
 	self->level = 0;
 
 	return self;
 }
 
 void exception_free(EXCEPTION *self) {
-	assert(self);
+	if (!self) return;
 
 	exception_reset(self);
 	free(self);
@@ -308,7 +312,12 @@ namespace la {
 		}
 
 		Exception::Exception(EXCEPTION *e) {
-			this->obj = e;
+			this->obj = exception_new();
+			exception_setId(this->obj, exception_getId(e));
+			exception_setMessage(this->obj, exception_getMessage(e));
+			exception_setCause(this->obj, exception_getCause(e));
+			exception_setAction(this->obj, exception_getAction(e));
+			exception_setComment(this->obj, exception_getComment(e));
 		}
 
 		Exception::Exception(int id, const std::string &message) {
