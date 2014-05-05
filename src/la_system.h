@@ -103,6 +103,8 @@ SYSTEM_UPTIME system_getUptime();
 BOOL system_isCopyright();
 BOOL system_isDebug();
 
+void system_sleep(unsigned long milliseconds);
+
 #ifdef __cplusplus
 }
 
@@ -145,6 +147,7 @@ namespace la {
 
 		bool isCopyright();
 		bool isDebug();
+		void sleep(unsigned long milliseconds);
 	}
 }
 #endif

@@ -15,6 +15,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#ifdef __WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 #include "la_system.h"
 
 #ifdef SYSTEM_OS_TYPE_WINDOWS
@@ -275,6 +280,14 @@ int system_getCompilerArch() {
 	return -1;
 }
 
+void system_sleep(unsigned long milliseconds) {
+#ifdef __WIN32
+	Sleep(milliseconds);
+#else
+	usleep(milliseconds * 1000);
+#endif
+}
+
 #ifdef __cplusplus
 namespace la {
 	namespace system {
@@ -373,6 +386,9 @@ namespace la {
 
 		bool isDebug() {
 			return system_isDebug();
+		}
+		void sleep(unsigned long milliseconds) {
+			system_sleep(milliseconds);
 		}
 	}
 }
