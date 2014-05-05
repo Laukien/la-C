@@ -16,10 +16,10 @@ CFLAGS += -Werror
 #WINDOWS
 ifdef WIN32
 EXT := .exe
+CFLAGS += -D__USE_MINGW_ANSI_STDIO=1
+LDFLAGS += -lws2_32 -lwsock32
 AR := i686-pc-mingw32-ar
 ARFLAGS := -rcs
-LDFLAGS += -lws2_32 -lwsock32
-CFLAGS += -D__USE_MINGW_ANSI_STDIO=1
 ifdef WITH_CPP
 CC := i686-pc-mingw32-g++
 CFLAGS += -static-libgcc
@@ -42,6 +42,7 @@ endif
 else
 EXT :=
 CFLAGS += -ggdb3
+LDFLAGS += -lpthread
 AR := ar
 ARFLAGS := -rcs
 ifdef WITH_CPP
@@ -82,7 +83,7 @@ LDFLAGS += -L$(shell pg_config --libdir) -lpq
 endif
 ifdef WITH_SQLITE
 CFLAGS += -I ext/sqlite
-LDFLAGS += ext/sqlite/libsqlite3.a -lpthread -ldl
+LDFLAGS += ext/sqlite/libsqlite3.a -ldl
 #LDFLAGS += -lsqlite3
 endif
 endif
@@ -126,6 +127,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_string.o src/la_string.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_stringbuffer.o src/la_stringbuffer.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_system.o src/la_system.c
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_thread.o src/la_thread.c
 	$(AR) $(ARFLAGS) $(LIBDIR)/$(ARNAME) $(OBJDIR)/*.o
 ifdef WITH_CPP
 	ln -fs $(ARNAME) $(LIBDIR)/libla++.a
@@ -178,7 +180,8 @@ ifndef WIN32
 		src/la_process.c\
 		src/la_string.c\
 		src/la_stringbuffer.c\
-		src/la_system.c
+		src/la_system.c\
+		src/la_thread.c
 ifdef WITH_MYSQL
 	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname,$(SONAME_MYSQL) -o $(LIBDIR)/$(SONAME_MYSQL) src/la_database.c src/la_database_mysql.c -D DATABASE_MYSQL
 endif
@@ -247,6 +250,8 @@ endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/stringbuffer_1$(EXT) example/stringbuffer_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_1$(EXT) example/system_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_2$(EXT) example/system_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_3$(EXT) example/system_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/thread_1$(EXT) example/thread_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 endif
 
 clean:
@@ -297,5 +302,6 @@ endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_string.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_stringbuffer.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_system.h
+	rm -f $(DESTDIR)$(PREFIX)/include/la_thread.h
 	ldconfig $(DESTDIR)$(PREFIX)/lib
 
