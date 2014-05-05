@@ -204,7 +204,7 @@ int thread_getStatus(THREAD *self) {
 	return self->status;
 }
 
-int thread_isRunning(THREAD *self) {
+BOOL thread_isRunning(THREAD *self) {
 	assert(self);
 	assert(self->thread);
 
@@ -225,3 +225,49 @@ int thread_getExit(THREAD *self) {
 
 	return self->exit;
 }
+
+#ifdef __cplusplus
+namespace la {
+	namespace thread {
+		Thread::Thread() {
+			this->obj = thread_new();
+		}
+
+		Thread::~Thread() {
+			thread_free(this->obj);
+		}
+
+		void Thread::setFunction(THREAD_CALLBACK function, void *argument) {
+			thread_setFunction(this->obj, function, argument);
+		}
+
+		void Thread::run() {
+			thread_run(this->obj);
+		}
+
+		void Thread::cancel() {
+			thread_cancel(this->obj);
+		}
+
+		void Thread::kill() {
+			thread_kill(this->obj);
+		}
+
+		void Thread::wait() {
+			thread_wait(this->obj);
+		}
+
+		int Thread::getStatus() {
+			return thread_getStatus(this->obj);
+		}
+
+		bool Thread::isRunning() {
+			return thread_isRunning(this->obj);
+		}
+
+		int Thread::getExit() {
+			return thread_getExit(this->obj);
+		}
+	}
+}
+#endif

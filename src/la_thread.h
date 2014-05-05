@@ -11,6 +11,15 @@
  * =====================================================================================
  */
 
+#ifndef LA_THREAD_H
+#define LA_THREAD_H
+
+#include "la_boolean.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum {
 	THREAD_STATUS_ERROR = -1,
 	THREAD_STATUS_NONE = 0,
@@ -31,6 +40,31 @@ void thread_cancel(THREAD *self);
 void thread_kill(THREAD *self);
 void thread_wait(THREAD *self);
 int thread_getStatus(THREAD *self);
-int thread_isRunning(THREAD *self);
-void *thread_getResult(THREAD *self);
+BOOL thread_isRunning(THREAD *self);
+int thread_getExit(THREAD *self);
 
+#ifdef __cplusplus
+}
+
+namespace la {
+	namespace thread {
+		class Thread {
+			private:
+				THREAD *obj;
+			public:
+				Thread();
+				~Thread();
+				void setFunction(THREAD_CALLBACK function, void *argument);
+				void run();
+				void cancel();
+				void kill();
+				void wait();
+				int getStatus();
+				bool isRunning();
+				int getExit();
+		};
+	}
+}
+#endif
+
+#endif
