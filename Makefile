@@ -48,6 +48,7 @@ ARFLAGS := -rcs
 ifdef WITH_CPP
 CC := g++
 CFLAGS += -fexceptions
+CFLAGS += -std=c++11
 ARNAME := lib$(NAME)++.$(VERSION).a
 ARNAME_MYSQL := lib$(NAME)++-mysql.$(VERSION).a
 ARNAME_POSTGRESQL := lib$(NAME)++-postgresql.$(VERSION).a
@@ -162,7 +163,7 @@ dynamic:
 ifndef WIN32
 	@echo
 	@echo === DYNAMIC ===
-	$(CC) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBDIR)/$(SONAME)\
+	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBDIR)/$(SONAME)\
 		src/la_array.c\
 		src/la_boolean.c\
 		src/la_character.c\
