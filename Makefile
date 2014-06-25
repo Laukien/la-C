@@ -1,5 +1,6 @@
 NAME := la
 VERSION := `cat VERSION`
+GCCVER := $(shell expr `gcc -dumpversion | cut -d '.' -f 2` \>=8)
 
 BINDIR := bin
 OBJDIR := obj
@@ -48,7 +49,11 @@ ARFLAGS := -rcs
 ifdef WITH_CPP
 CC := g++
 CFLAGS += -fexceptions
+ifeq "$(GCCVER)" "1"
 CFLAGS += -std=c++11
+else
+CFLAGS += -std=c++0x
+endif
 ARNAME := lib$(NAME)++.$(VERSION).a
 ARNAME_MYSQL := lib$(NAME)++-mysql.$(VERSION).a
 ARNAME_POSTGRESQL := lib$(NAME)++-postgresql.$(VERSION).a
