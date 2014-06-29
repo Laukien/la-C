@@ -1,6 +1,6 @@
 NAME := la
 VERSION := `cat VERSION`
-GCCVER := $(shell expr `gcc -dumpversion | cut -d '.' -f 2` \>=8)
+GCCVER := $(shell expr `gcc -dumpversion | cut -d '.' -f 2` \>= 8)
 
 BINDIR := bin
 OBJDIR := obj
