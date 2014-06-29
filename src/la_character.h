@@ -17,6 +17,8 @@
 #include "la_boolean.h"
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -30,7 +32,6 @@ unsigned int character_count(const char *str, const char chr);
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace character {

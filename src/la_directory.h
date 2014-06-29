@@ -19,6 +19,8 @@
 #include "la_system.h"
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -38,7 +40,6 @@ LIST *directory_list(const char *directoryname, BOOL recursive);
 
 #ifdef __cplusplus
 }
-#include <string>
 namespace la {
 	namespace directory {
 		bool create(const std::string &name);

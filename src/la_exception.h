@@ -17,6 +17,8 @@
 #include "la_boolean.h"
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -54,8 +56,6 @@ void exception_throw(EXCEPTION *e);
 
 #ifdef __cplusplus
 }
-
-#include <string>
 
 namespace la {
 	namespace exception {

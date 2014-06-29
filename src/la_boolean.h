@@ -15,6 +15,11 @@
 #define LA_BOOLEAN_H
 
 #ifdef __cplusplus
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+#include <string>
+
 extern "C" {
 #endif
 
@@ -32,11 +37,6 @@ char *boolean_toString(BOOL value);
 
 #ifdef __cplusplus
 }
-
-#include <cstdlib>
-#include <cstring>
-#include <cctype>
-#include <string>
 
 namespace la {
 	namespace boolean {

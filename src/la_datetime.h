@@ -15,6 +15,8 @@
 #define LA_DATETIME_H
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -36,7 +38,6 @@ char *datetime_getDateTimeAsString();
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace datetime {

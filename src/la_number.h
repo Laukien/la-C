@@ -14,12 +14,14 @@
 #ifndef LA_NUMBER_H
 #define LA_NUMBER_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <string.h>
 #include "la_boolean.h"
+
+#ifdef __cplusplus
+#include <string>
+
+extern "C" {
+#endif
 
 BOOL number_isNumber(const char *str);
 BOOL number_isInteger(const char *str);
@@ -34,7 +36,6 @@ char *number_unsignedIntegerToString(unsigned int num);
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace number {

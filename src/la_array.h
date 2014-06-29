@@ -18,6 +18,8 @@
 typedef struct la_array ARRAY;
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -36,7 +38,6 @@ extern "C" {
 	
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace array {
