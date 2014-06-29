@@ -34,6 +34,8 @@
 #include "la_exception.h"
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -98,8 +100,6 @@ char *network_getDataString(NETWORK *self);
 
 #ifdef __cplusplus
 }
-
-#include <string>
 
 namespace la {
 	namespace exception {

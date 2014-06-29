@@ -21,6 +21,8 @@
 #include "la_exception.h"
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -48,7 +50,6 @@ BOOL parameter_loadFromArguments(PARAMETER *self, int argc, char *argv[]);
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace exception {

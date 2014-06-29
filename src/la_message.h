@@ -17,6 +17,8 @@
 #define MESSAGE_SIZE 1024 * 4
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -27,7 +29,6 @@ void message_warn(const char *text, ...);
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace message {

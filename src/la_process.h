@@ -44,6 +44,8 @@ typedef int PROCESS_EXIT;
 #endif
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -70,7 +72,6 @@ extern "C" {
 	
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace process {

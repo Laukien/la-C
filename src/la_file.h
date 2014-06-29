@@ -25,6 +25,8 @@
 #include <string.h>
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -44,7 +46,6 @@ BOOL file_copy(const char *from, const char *to, FILE_PROCESS proc, EXCEPTION *e
 
 #ifdef __cplusplus
 }
-#include <string>
 namespace la {
 	namespace file {
 		bool exists(const std::string &filename);

@@ -20,6 +20,8 @@
 
 #ifdef __cplusplus
 #include "la_exception.h"
+#include <string>
+
 extern "C" {
 #endif
 
@@ -42,7 +44,6 @@ int list_saveToFile(LIST *self, const char *filename);
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace exception {

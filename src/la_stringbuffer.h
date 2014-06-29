@@ -15,6 +15,8 @@
 #define LA_STRINGBUFFER_H
 
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -34,7 +36,6 @@ void stringbuffer_reset(STRINGBUFFER *ptr);
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	class stringbuffer {

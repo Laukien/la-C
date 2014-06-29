@@ -21,6 +21,8 @@
 #include <regex.h>
 #endif
 #ifdef __cplusplus
+#include <string>
+
 extern "C" {
 #endif
 
@@ -53,7 +55,6 @@ char *string_toHex(const char *string);
 
 #ifdef __cplusplus
 }
-#include <string>
 
 namespace la {
 	namespace string {
