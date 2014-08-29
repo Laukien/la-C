@@ -17,8 +17,8 @@
 #ifdef __WIN32
 #ifdef BOOL
 #undef BOOL
-#include <windows.h>
 #endif
+#include <windows.h>
 #else
 #include <unistd.h>
 #endif
