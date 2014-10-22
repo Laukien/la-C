@@ -19,6 +19,11 @@
 #include "la_system.h"
 #ifdef SYSTEM_OS_TYPE_LINUX
 #include <regex.h>
+#else
+#ifdef BOOL
+#undef BOOL
+#endif
+#include <windows.h>
 #endif
 #ifdef __cplusplus
 #include <string>
@@ -52,6 +57,7 @@ char *string_regexp (const char *string, const char *pattern, int *begin, int *e
 #endif
 char *string_fromHex(const char *string);
 char *string_toHex(const char *string);
+char *string_getRandom(size_t size, BOOL upper, BOOL lower, BOOL number, BOOL special);
 
 #ifdef __cplusplus
 }
@@ -84,6 +90,7 @@ namespace la {
 	#endif
 		std::string fromHex(const std::string &string);
 		std::string toHex(const std::string &string);
+		std::string getRandom(size_t size, bool upper, bool lower, bool number, bool special);
 
 	}
 }

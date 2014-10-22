@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 #ifdef __WIN32
 #include <windows.h>
 #else
@@ -51,41 +50,6 @@ struct la_process {
 	HANDLE he;
 #endif
 };
-
-char *string_getRandom(size_t size, BOOL upper, BOOL lower, BOOL number, BOOL special) {
-	srand(time(NULL));
-
-	int start;
-	int stop;
-	if (special) {
-		start = 32;
-		stop = 126;
-	} else {
-		start = 48;
-		stop = 122;
-	}
-
-	char *res = (char *)malloc(size + 1);
-	if (!res) {
-		return NULL;
-	}
-	
-	char c;
-	size_t i;
-	for (i = 0; i < size; ++i) {
-		while (1) {
-			c = (rand() % (stop - start)) + start;
-			if (special) break;
-			if (c >= '0' && c <= '9' && number) break;
-			if (c >= 'A' && c <= 'Z' && upper) break;
-			if (c >= 'a' && c <= 'z' && lower) break;
-		}
-		res[i] = c;
-	}
-	res[size] = '\0';
-
-	return res;
-}
 
 char *process_createName() {
 	char *ts = datetime_getTimestampAsString();

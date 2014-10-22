@@ -11,14 +11,14 @@
  * =====================================================================================
  */
 
-#include "la_character.h"
-#include "la_string.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
+#include <time.h>
+#include "la_character.h"
+#include "la_string.h"
 
 char *string_toLower(const char *string) {
 	size_t len = strlen(string);	
@@ -463,6 +463,41 @@ char *string_toHex(const char *str) {
 	return result;
 }
 
+char *string_getRandom(size_t size, BOOL upper, BOOL lower, BOOL number, BOOL special) {
+	srand(time(NULL));
+
+	int start;
+	int stop;
+	if (special) {
+		start = 32;
+		stop = 126;
+	} else {
+		start = 48;
+		stop = 122;
+	}
+
+	char *res = (char *)malloc(size + 1);
+	if (!res) {
+		return NULL;
+	}
+	
+	char c;
+	size_t i;
+	for (i = 0; i < size; ++i) {
+		while (1) {
+			c = (rand() % (stop - start)) + start;
+			if (special) break;
+			if (c >= '0' && c <= '9' && number) break;
+			if (c >= 'A' && c <= 'Z' && upper) break;
+			if (c >= 'a' && c <= 'z' && lower) break;
+		}
+		res[i] = c;
+	}
+	res[size] = '\0';
+
+	return res;
+}
+
 #ifdef __cplusplus
 namespace la {
 	namespace string {
@@ -601,5 +636,14 @@ namespace la {
 		}
 
 	}
+
+	std::string getRandom(size_t size, bool upper, bool lower, bool number, bool special) {
+		char *tmp = string_getRandom(size, upper, lower, number, special);
+		std::string res = tmp;
+		free(tmp);
+
+		return res;
+	}
+
 }
 #endif
