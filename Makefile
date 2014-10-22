@@ -116,6 +116,7 @@ static:
 	@echo === STATIC ===
 	rm -f $(OBJDIR)/*
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_array.o src/la_array.c
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_atomic.o src/la_atomic.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_boolean.o src/la_boolean.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_character.o src/la_character.c
 	$(CC) $(CFLAGS) -O0 -c -o $(OBJDIR)/la_console.o src/la_console.c
@@ -170,6 +171,7 @@ ifndef WIN32
 	@echo === DYNAMIC ===
 	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBDIR)/$(SONAME)\
 		src/la_array.c\
+		src/la_atomic.c\
 		src/la_boolean.c\
 		src/la_character.c\
 		src/la_console.c\
@@ -230,6 +232,7 @@ endif
 endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/array_1$(EXT) example/array_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/array_2$(EXT) example/array_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/atomic_1$(EXT) example/atomic_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_1$(EXT) example/directory_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/directory_2$(EXT) example/directory_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/exception_1$(EXT) example/exception_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
@@ -297,6 +300,7 @@ ifdef WITH_POSTGRESQL
 	rm -f $(DESTDIR)$(PREFIX)/include/la_database_postgresql.h
 endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_array.h
+	rm -f $(DESTDIR)$(PREFIX)/include/la_atomic.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_datetime.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_directory.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_exception.h
