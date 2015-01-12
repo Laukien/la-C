@@ -17,16 +17,10 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
-#include "la_boolean.h"
-#include "la_message.h"
-#include "la_number.h"
-#include "la_string.h"
-#include "la_system.h"
-#include "la_network.h"
-#ifdef SYSTEM_OS_TYPE_WINDOWS
+#ifdef __WIN32
 	#undef BOOL
-	#include <windows.h>
 	#include <winsock2.h>
+	#include <windows.h>
 	#include <io.h>
 #else
 	#include <unistd.h>
@@ -36,6 +30,12 @@
 	#include <netdb.h>
 	#include <arpa/inet.h>
 #endif
+#include "la_boolean.h"
+#include "la_message.h"
+#include "la_number.h"
+#include "la_string.h"
+#include "la_system.h"
+#include "la_network.h"
 
 struct la_network {
 	EXCEPTION *exception;
