@@ -20,18 +20,21 @@ EXT := .exe
 CFLAGS += -D__USE_MINGW_ANSI_STDIO=1
 LDFLAGS += -lws2_32 -lwsock32
 #AR := i686-pc-mingw32-ar
-AR := i686-w64-mingw32-ar
+#AR := i686-w64-mingw32-ar
+AR := x86_64-w64-mingw32-ar
 ARFLAGS := -rcs
 ifdef WITH_CPP
 #CC := i686-pc-mingw32-g++
-CC := i686-w64-mingw32-g++
+#CC := i686-w64-mingw32-g++
+CC := x86_64-w64-mingw32-g++
 CFLAGS += -static-libgcc
 CFLAGS += -fexceptions
 ARNAME := $(NAME)++.$(VERSION).lib
 ARNAME_SQLITE := $(NAME)++-sqlite.$(VERSION).lib
 else
 #CC := i686-pc-mingw32-gcc
-CC := i686-w64-mingw32-gcc
+#CC := i686-w64-mingw32-gcc
+CC := x86_64-w64-mingw32-gcc
 ARNAME := $(NAME).$(VERSION).lib
 ARNAME_SQLITE := $(NAME)-sqlite.$(VERSION).lib
 endif
