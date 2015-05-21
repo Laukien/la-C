@@ -280,6 +280,7 @@ clean:
 install:
 	@echo
 	@echo === INSTALL ===
+ifndef WIN32
 	install -o root -g root $(LIBDIR)/$(ARNAME) $(DESTDIR)$(PREFIX)/lib
 ifdef WITH_CPP
 	ln -f -s $(DESTDIR)$(PREFIX)/lib/$(ARNAME) $(DESTDIR)$(PREFIX)/lib/lib$(NAME)++.a
@@ -294,10 +295,12 @@ else
 endif
 	install -o root -g root src/*.h $(DESTDIR)$(PREFIX)/include
 	ldconfig $(DESTDIR)$(PREFIX)/lib
+endif
 
 uninstall:
 	@echo
 	@echo === UNINSTALL ===
+ifndef WIN32
 	rm -f $(DESTDIR)$(PREFIX)/lib/libla.*
 	rm -f $(DESTDIR)$(PREFIX)/include/la_character.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_console.h
@@ -321,4 +324,4 @@ endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_system.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_thread.h
 	ldconfig $(DESTDIR)$(PREFIX)/lib
-
+endif
