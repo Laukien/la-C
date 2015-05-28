@@ -509,15 +509,10 @@ void network_writeFile(NETWORK *self, const char *filename) {
 	char buf[NETWORK_BUFFER_SIZE];
 	int rc;
 	while ((rc = read(fd, buf, NETWORK_BUFFER_SIZE))) {
-		if (rc < 0) {
-			_network_error(self, NETWORK_ERROR_READ, "error while reading file", strerror(errno), "check the file permission");
-			return;
-		}
-
 		len += rc;
 		send(socket, buf, rc, 0);
 
-		if (rc < NETWORK_BUFFER_SIZE) {
+		if (rc < 0) {
 			break;
 		}
 	}
@@ -549,11 +544,6 @@ void network_readFile(NETWORK *self, const char *filename) {
 	int rc;
 	int wc;
 	while ((rc = recv(socket, buf, NETWORK_BUFFER_SIZE, 0))) {
-		if (rc < 0) {
-			_network_error(self, NETWORK_ERROR_READ, "error while reading", strerror(errno), "check the server-client-communication");
-			return;
-		}
-
 		len += rc;
 		wc = write(fd, buf, rc);
 		if (rc != wc) {
@@ -561,7 +551,7 @@ void network_readFile(NETWORK *self, const char *filename) {
 			return;
 		}
 		
-		if (rc < NETWORK_BUFFER_SIZE) {
+		if (rc < 0) {
 			break;
 		}
 	}
