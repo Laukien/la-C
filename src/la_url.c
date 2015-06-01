@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <la_number.h>
-#include <la_string.h>
+#include "la_number.h"
+#include "la_string.h"
 #include "la_url.h"
 
 struct la_url {

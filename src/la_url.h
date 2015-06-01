@@ -1,8 +1,12 @@
 #ifndef LA_URL_H
 #define LA_URL_H
 
-#include <la_boolean.h>
-#include <la_parameter.h>
+#include "la_boolean.h"
+#include "la_parameter.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct la_url URL;
 
@@ -23,5 +27,9 @@ BOOL url_isSafeCharacter(char chr);
 char *url_decode(const char *src);
 char *url_encode(const char *src);
 PARAMETER *cgi_queryToParameter(const char *query);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
