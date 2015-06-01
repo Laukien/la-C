@@ -125,6 +125,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_atomic.o src/la_atomic.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_boolean.o src/la_boolean.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_character.o src/la_character.c
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_cgi.o src/la_cgi.c
 	$(CC) $(CFLAGS) -O0 -c -o $(OBJDIR)/la_console.o src/la_console.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_datetime.o src/la_datetime.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_directory.o src/la_directory.c
@@ -141,6 +142,7 @@ static:
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_stringbuffer.o src/la_stringbuffer.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_system.o src/la_system.c
 	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_thread.o src/la_thread.c
+	$(CC) $(CFLAGS) -c -o $(OBJDIR)/la_url.o src/la_url.c
 	$(AR) $(ARFLAGS) $(LIBDIR)/$(ARNAME) $(OBJDIR)/*.o
 ifdef WITH_CPP
 	ln -fs $(ARNAME) $(LIBDIR)/libla++.a
@@ -180,6 +182,7 @@ ifndef WIN32
 		src/la_atomic.c\
 		src/la_boolean.c\
 		src/la_character.c\
+		src/la_cgi.c\
 		src/la_console.c\
 		src/la_datetime.c\
 		src/la_directory.c\
@@ -195,7 +198,8 @@ ifndef WIN32
 		src/la_string.c\
 		src/la_stringbuffer.c\
 		src/la_system.c\
-		src/la_thread.c
+		src/la_thread.c\
+		src/la_url.c
 ifdef WITH_MYSQL
 	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname,$(SONAME_MYSQL) -o $(LIBDIR)/$(SONAME_MYSQL) src/la_database.c src/la_database_mysql.c -D DATABASE_MYSQL
 endif
@@ -268,6 +272,7 @@ endif
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_2$(EXT) example/system_2.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/system_3$(EXT) example/system_3.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 	$(CC) $(CFLAGS) -I src -o $(BINDIR)/thread_1$(EXT) example/thread_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
+	$(CC) $(CFLAGS) -I src -o $(BINDIR)/url_1$(EXT) example/url_1.c $(LIBDIR)/$(ARNAME) $(LDFLAGS)
 endif
 
 clean:
@@ -303,6 +308,7 @@ uninstall:
 ifndef WIN32
 	rm -f $(DESTDIR)$(PREFIX)/lib/libla.*
 	rm -f $(DESTDIR)$(PREFIX)/include/la_character.h
+	rm -f $(DESTDIR)$(PREFIX)/include/la_cgi.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_console.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_database.h
 ifdef WITH_POSTGRESQL
@@ -323,5 +329,6 @@ endif
 	rm -f $(DESTDIR)$(PREFIX)/include/la_stringbuffer.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_system.h
 	rm -f $(DESTDIR)$(PREFIX)/include/la_thread.h
+	rm -f $(DESTDIR)$(PREFIX)/include/la_url.h
 	ldconfig $(DESTDIR)$(PREFIX)/lib
 endif
