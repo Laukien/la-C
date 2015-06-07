@@ -464,8 +464,6 @@ char *string_toHex(const char *str) {
 }
 
 char *string_getRandom(size_t size, BOOL upper, BOOL lower, BOOL number, BOOL special) {
-	srand(time(NULL));
-
 	int start;
 	int stop;
 	if (special) {
