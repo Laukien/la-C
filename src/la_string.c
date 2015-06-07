@@ -635,15 +635,13 @@ namespace la {
 			return res;
 		}
 
+		std::string getRandom(size_t size, bool upper, bool lower, bool number, bool special) {
+			char *tmp = string_getRandom(size, upper, lower, number, special);
+			std::string res = tmp;
+			free(tmp);
+
+			return res;
+		}
 	}
-
-	std::string getRandom(size_t size, bool upper, bool lower, bool number, bool special) {
-		char *tmp = string_getRandom(size, upper, lower, number, special);
-		std::string res = tmp;
-		free(tmp);
-
-		return res;
-	}
-
 }
 #endif

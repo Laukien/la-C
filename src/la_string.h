@@ -91,7 +91,6 @@ namespace la {
 		std::string fromHex(const std::string &string);
 		std::string toHex(const std::string &string);
 		std::string getRandom(size_t size, bool upper, bool lower, bool number, bool special);
-
 	}
 }
 #endif
